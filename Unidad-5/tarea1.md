@@ -1,0 +1,37 @@
+sqlite> INSERT INTO Ejemplo ( id, texto, entero, decimal, fecha, booleano) VALUES ('1', 'Ejemplo1', '25', '10.5', '2022-05-15', '0' );
+sqlite> INSERT INTO Ejemplo ( id, texto, entero, decimal, fecha, booleano) VALUES ('2', 'Ejemplo2', '63', '45.7', '2022-06-22', '1' );
+S ('3', 'Ejemplo3', '12', '30.0', '2022-07-10', '0' );
+sqlite> INSERT INTO Ejemplo ( id, texto, entero, decimal, fecha, booleano) VALUES ('4', 'Ejemplo4', '78', '75.2', '2022-08-05', '1' );
+sqlite> INSERT INTO Ejemplo ( id, texto, entero, decimal, fecha, booleano) VALUES ('5', 'Ejemplo5', '42', '18.9', '2022-09-12', '0' );
+sqlite> INSERT INTO Ejemplo ( id, texto, entero, decimal, fecha, booleano) VALUES ('6', 'Ejemplo6', '55', '60.3', '2022-10-08', '1' );
+sqlite> INSERT INTO Ejemplo ( id, texto, entero, decimal, fecha, booleano) VALUES ('7', 'Ejemplo7', '10', '40.1', '2022-11-17', '0' );
+sqlite> INSERT INTO Ejemplo ( id, texto, entero, decimal, fecha, booleano) VALUES ('8', 'Ejemplo8', '87', '22.6', '2022-12-03', '8' );
+sqlite> INSERT INTO Ejemplo ( id, texto, entero, decimal, fecha, booleano) VALUES ('9', 'Ejemplo9', '31', '55.0', '2023-01-20', '0' );
+sqlite> INSERT INTO Ejemplo ( id, texto, entero, decimal, fecha, booleano) VALUES ( '10', 'Ejemplo10', '68', '90.4', '2023-02-14', '1' );
+sqlite> INSERT INTO Ejemplo ( id, texto, entero, decimal, fecha, booleano) VALUES ( '11', 'Ejemplo11', '15', '12.8', '2023-03-22', '0' );
+sqlite> INSERT INTO Ejemplo ( id, texto, entero, decimal, fecha, booleano) VALUES ( '12', 'Ejemplo12', '22', '33.7', '2023-05-01', '0' );
+sqlite> INSERT INTO Ejemplo ( id, texto, entero, decimal, fecha, booleano) VALUES ( '13', 'Ejemplo13', '22', '33.7', '2023-05-01', '0' );
+sqlite> INSERT INTO Ejemplo ( id, texto, entero, decimal, fecha, booleano) VALUES ( '14', 'Ejemplo14', '93', '70.2', '2023-06-18', '1' );
+sqlite> INSERT INTO Ejemplo ( id, texto, entero, decimal, fecha, booleano) VALUES ( '15', 'Ejemplo15', '37', '15.4', '2023-07-05', '0' );
+sqlite> INSERT INTO Ejemplo ( id, texto, entero, decimal, fecha, booleano) VALUES ( '16', 'Ejemplo16', '81', '82.9', '2023-08-11', '1' );
+sqlite> INSERT INTO Ejemplo ( id, texto, entero, decimal, fecha, booleano) VALUES ( '17', 'Ejemplo17', '45', '28.3', '2023-09-27', '0' );
+sqlite> INSERT INTO Ejemplo ( id, texto, entero, decimal, fecha, booleano) VALUES ( '18', 'Ejemplo18', '60', '50.6', '2023-10-15', '1' );
+sqlite> INSERT INTO Ejemplo ( id, texto, entero, decimal, fecha, booleano) VALUES ( '19', 'Ejemplo19', '5', '8.7', '2023-11-22', '0' );
+sqlite> INSERT INTO Ejemplo ( id, texto, entero, decimal, fecha, booleano) VALUES ( '20', 'Ejemplo20', '76', '65.1', '2023-12-08', '1' );
+sqlite> INSERT INTO Ejemplo ( id, texto, entero, decimal, fecha, booleano) VALUES ( '21', 'Ejemplo21', '33', '20.3', '2024-01-14', '0' );
+sqlite> INSERT INTO Ejemplo ( id, texto, entero, decimal, fecha, booleano) VALUES ( '22', 'Ejemplo22', '70', '55.8', '2024-02-29', '1' );
+sqlite> INSERT INTO Ejemplo ( id, texto, entero, decimal, fecha, booleano) VALUES ( '23', 'Ejemplo23', '13', '42.7', '2024-03-18', '0' );
+sqlite> INSERT INTO Ejemplo ( id, texto, entero, decimal, fecha, booleano) VALUES ( '24', 'Ejemplo24', '89', '78.4', '2024-04-25', '1' );
+sqlite> . mode table
+sqlite> INSERT INTO Ejemplo ( id, texto, entero, decimal, fecha, booleano) VALUES ( '25', 'Ejemplo25', '49', '15.9', '2024-05-12', '0' );
+sqlite> INSERT INTO Ejemplo ( id, texto, entero, decimal, fecha, booleano) VALUES ( '26', 'Ejemplo26', '62, '60.7', 2024-06-20', '1' );
+Error: in prepare, near "60.7": syntax error (1)
+sqlite> INSERT INTO Ejemplo ( id, texto, entero, decimal, fecha, booleano) VALUES ( '26', 'Ejemplo26', '62', '60.7', '2024-06-20', '1' );
+sqlite> INSERT INTO Ejemplo ( id, texto, entero, decimal, fecha, booleano) VALUES ( '27', 'Ejemplo27', '8', '35.2', '2024-07-07', '0' );
+sqlite> INSERT INTO Ejemplo ( id, texto, entero, decimal, fecha, booleano) VALUES ( '28', 'Ejemplo28', '95', '25.6', '2024-08-23', '1' );
+sqlite> INSERT INTO Ejemplo ( id, texto, entero, decimal, fecha, booleano) VALUES ( '29', 'Ejemplo29', '27', '50.0', '2024-09-10', '0' );
+sqlite> INSERT INTO Ejemplo ( id, texto, entero, decimal, fecha, booleano) VALUES ( '30', 'Ejemplo30', '74', '85.3', '2024-10-05', '1' );
+sqlite> INSERT INTO Ejemplo ( id, texto, entero, decimal, fecha, booleano) VALUES ( '31', 'Ejemplo31', '18', '11.8', '2024-11-12', '0' );
+sqlite> INSERT INTO Ejemplo ( id, texto, entero, decimal, fecha, booleano) VALUES ( '32', 'Ejemplo32', '83', '47.6', '2024-12-28', '1' );
+sqlite> INSERT INTO Ejemplo ( id, texto, entero, decimal, fecha, booleano) VALUES ( '33', 'Ejemplo33', '38', '32.7', '2025-01-15', '0' );
+sqlite> INSERT INTO Ejemplo ( id, texto, entero, decimal, fecha, booleano) VALUES ( '34', 'Ejemplo34', '101', '70.2', '2025-02-01', '1' );
