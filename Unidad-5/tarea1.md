@@ -12,7 +12,7 @@ sqlite> INSERT INTO Ejemplo ( id, texto, entero, decimal, fecha, booleano) VALUE
 
 sqlite> INSERT INTO Ejemplo ( id, texto, entero, decimal, fecha, booleano) VALUES ('7', 'Ejemplo7', '10', '40.1', '2022-11-17', '0' );
 
-sqlite> INSERT INTO Ejemplo ( id, texto, entero, decimal, fecha, booleano) VALUES ('8', 'Ejemplo8', '87', '22.6', '2022-12-03', '8' );
+sqlite> INSERT INTO Ejemplo ( id, texto, entero, decimal, fecha, booleano) VALUES ('8', 'Ejemplo8', '87', '22.6', '2022-12-03', '1' );
 
 sqlite> INSERT INTO Ejemplo ( id, texto, entero, decimal, fecha, booleano) VALUES ('9', 'Ejemplo9', '31', '55.0', '2023-01-20', '0' );
 
@@ -20,7 +20,7 @@ sqlite> INSERT INTO Ejemplo ( id, texto, entero, decimal, fecha, booleano) VALUE
 
 sqlite> INSERT INTO Ejemplo ( id, texto, entero, decimal, fecha, booleano) VALUES ( '11', 'Ejemplo11', '15', '12.8', '2023-03-22', '0' );
 
-sqlite> INSERT INTO Ejemplo ( id, texto, entero, decimal, fecha, booleano) VALUES ( '12', 'Ejemplo12', '22', '33.7', '2023-05-01', '0' );
+sqlite> INSERT INTO Ejemplo ( id, texto, entero, decimal, fecha, booleano) VALUES ( '12', 'Ejemplo12', '22', '33.7', '2023-05-01', '1' );
 
 sqlite> INSERT INTO Ejemplo ( id, texto, entero, decimal, fecha, booleano) VALUES ( '13', 'Ejemplo13', '22', '33.7', '2023-05-01', '0' );
 
@@ -48,8 +48,6 @@ sqlite> INSERT INTO Ejemplo ( id, texto, entero, decimal, fecha, booleano) VALUE
 
 sqlite> INSERT INTO Ejemplo ( id, texto, entero, decimal, fecha, booleano) VALUES ( '25', 'Ejemplo25', '49', '15.9', '2024-05-12', '0' );
 
-sqlite> INSERT INTO Ejemplo ( id, texto, entero, decimal, fecha, booleano) VALUES ( '26', 'Ejemplo26', '62, '60.7', 2024-06-20', '1' );
-
 sqlite> INSERT INTO Ejemplo ( id, texto, entero, decimal, fecha, booleano) VALUES ( '26', 'Ejemplo26', '62', '60.7', '2024-06-20', '1' );
 
 sqlite> INSERT INTO Ejemplo ( id, texto, entero, decimal, fecha, booleano) VALUES ( '27', 'Ejemplo27', '8', '35.2', '2024-07-07', '0' );
@@ -70,13 +68,34 @@ sqlite> INSERT INTO Ejemplo ( id, texto, entero, decimal, fecha, booleano) VALUE
 
 INSERT INTO Ejemplo ( id, texto, entero, decimal, fecha, booleano) VALUES ( '35', 'Ejemplo35', '52', '18.4', '2025-03-20', '0' );
 
-INSERT INTO Ejemplo ( id, texto, entero, decimal, fecha, booleano) VALUES ( '36', 'Ejemplo36', '67', '83.9', '2025-04-20', '1' );
+INSERT INTO Ejemplo ( id, texto, entero, decimal, fecha, booleano) VALUES ( '36', 'Ejemplo36', '67', '83.9', '2025-04-06', '1' );
 
-INSERT INTO Ejemplo ( id, texto, entero, decimal, fecha, booleano) VALUES ( '37', 'Ejemplo37', '43', '38.3', '2025-05-13', '0' );
+INSERT INTO Ejemplo ( id, texto, entero, decimal, fecha, booleano) VALUES ( '37', 'Ejemplo37', '43', '28.3', '2025-05-13', '0' );
+
 INSERT INTO Ejemplo ( id, texto, entero, decimal, fecha, booleano) VALUES ( '38', 'Ejemplo38', '58', '50.6', 2025-06-30', '1' );
 
-INSERT INTO Ejemplo ( id, texto, entero, decimal, fecha, booleano) VALUES ( '39', 'Ejemplo39', '9', 8.7', '2025-07-17', '0' );
+INSERT INTO Ejemplo ( id, texto, entero, decimal, fecha, booleano) VALUES ( '39', 'Ejemplo39', '9', '8.7', '2025-07-17', '0' );
 
 INSERT INTO Ejemplo ( id, texto, entero, decimal, fecha, booleano) VALUES ( '40', 'Ejemplo40', '82', '65.1', '2025-08-23', '1' );
+
+INSERT INTO Ejemplo ( id, texto, entero, decimal, fecha, booleano) VALUES ( '41', 'Ejemplo41', '26', '20.3', 2025-09-09', '0' );
+
+INSERT INTO Ejemplo ( id, texto, entero, decimal, fecha, booleano) VALUES ( '42', Ejemplo42', '73', '55.8', '2025-10-26', '1' );
+
+INSERT INTO Ejemplo ( id, texto, entero, decimal, fecha, booleano) VALUES ( '43', 'Ejemplo43', '14', '42.7', '2025-11-13', '0' );
+
+INSERT INTO Ejemplo ( id, texto, entero, decimal, fecha, booleano) VALUES ( '44', 'Ejemplo44', '90', '78.4', '2025-12-30', '1' );
+
+INSERT INTO Ejemplo ( id, texto, entero, decimal, fecha, booleano) VALUES ( '45', 'Ejemplo45', '50', '15.9', '2026-01-16', '0' );
+
+INSERT INTO Ejemplo ( id, texto, entero, decimal, fecha, booleano) VALUES ( '46', 'Ejemplo46', '63', '60.7', '2026-02-03', '1' ); 
+
+INSERT INTO Ejemplo ( id, texto, entero, decimal, fecha, booleano) VALUES ( '47', 'Ejemplo47', '7', '35.2', '2026-03-22', '0' );
+
+INSERT INTO Ejemplo ( id, texto, entero, decimal, fecha, booleano) VALUES ( '48', 'Ejemplo48', '96', '25.6', '2026-04-08', '1' ); 
+
+INSERT INTO Ejemplo ( id, texto, entero, decimal, fecha, booleano) VALUES ( '49', 'Ejemplo49', '28', '50.0', 2026-05-25', '0' );
+
+INSERT INTO Ejemplo ( id, texto, entero, decimal, fecha, booleano) VALUES ( '50', 'Ejemplo50', '75', '85.3', 2026-06-11', '1' );
 
 INSERT INTO Ejemplo ( id, texto, entero, decimal, fecha, booleano) VALUES ( '41', 'Ejemplo41', '26', '20.3', 2025-09-09', '0' ); 
