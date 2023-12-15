@@ -11,8 +11,10 @@ Asimismo, crearemos la tabla que la llamaremos Ejemplo, en ella deberemos de cre
 ``` sql 
 CREATE TABLE Ejemplo (
   id INTEGER PRIMARY KEY,
-  texto TEXT, entero INTEGER,
-  decimal REAL, fecha DATE,
+  texto TEXT,
+  entero INTEGER,
+  decimal REAL,
+  fecha DATE,
   booleano BOOLEAN );
 ````
 
