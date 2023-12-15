@@ -1,12 +1,16 @@
 <h1 align="center"> TAREA 1 SQLITE3 </h1>
 
+<div align="center">
+<img src="https://sqlite.org/forum/logo?id=603c155e" />
+</div>
+
 Para empezar tenemos que crear la tarea en la cuál podremos hacer la práctica:
 
 ```sql
 sqlite3 tarea1.db
 ````
 
-Asimismo, crearemos la tabla que la llamaremos Ejemplo, en ella deberemos de crear una serie de columnas y cada una de ellas tendrá que ser de un tipo. Por tanto crearemos una columna para el "id", donde este será INTEGER y además será la PRIMARY KEY de la tabla, seguidamente crearemos la columna "texto" siento esta de tipo TEXT, la columna "entero" de tipo INTEGER, la columna decimal de tipo REAL, la columna "fecha" de tipo DATE y por último la llamada "booleano" de tipo BOOLEAN.
+Asimismo, crearemos la tabla que la llamaremos "Ejemplo", en ella deberemos de crear una serie de columnas y cada una de ellas tendrá que ser de un tipo. Por tanto crearemos una columna "id", donde este será INTEGER y además será la PRIMARY KEY de la tabla, seguidamente crearemos la columna "texto" siento esta de tipo TEXT, la columna "entero" de tipo INTEGER, la columna "decimal" de tipo REAL, la columna "fecha" de tipo DATE y por último la llamada "booleano" de tipo BOOLEAN.
 
 ``` sql 
 CREATE TABLE Ejemplo (
@@ -91,6 +95,5 @@ DELETE FROM Ejemplo WHERE decimal < 50;
 - **Actualiza el campo fecha de todas las entradas a la fecha actual.**
 ```sql
 UPDATE Ejemplo SET fecha = '2023-12-15';
-
 ```
 ![se pone fecha actual](images/tabla8.png)
