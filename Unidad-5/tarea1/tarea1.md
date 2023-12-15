@@ -78,7 +78,7 @@ DELETE FROM Ejemplo WHERE entero = 50;
 
 - **Incrementa en 10 el valor del campo entero para las entradas donde el campo booleano es igual a False.**
 ```sql
-- UPDATE Ejemplo SET entero = entero + 10 WHERE booleano = 0
+UPDATE Ejemplo SET entero = entero + 10 WHERE booleano = 0
 ```
 ![se suma 10 a los enteros](images/tabla6.png)
 
