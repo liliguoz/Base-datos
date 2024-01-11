@@ -414,7 +414,7 @@ WHERE id_vehiculo = 3;
 | 20 | Nissan     | Murano     | 2019 | 20             |
 +----+------------+------------+------+----------------+
 ```
-- 
+- Cambiar el modelo de todos los vehículos Nissan a "Micra".
 
 ```sql
 UPDATE vehículos
