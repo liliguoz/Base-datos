@@ -294,7 +294,7 @@ SELECT * FROM vehículos WHERE año = '2019';
 - Seleccionar propietarios que tienen vehículos de la marca "Toyota".
 
 ```sql
-select * from vehículos where marca = 'Toyota';
+SELECT * FROM vehículos WHERE marca = 'Toyota';
 ```
 ```sql
 +----+--------+------------+------+----------------+
