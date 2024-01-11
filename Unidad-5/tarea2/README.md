@@ -334,14 +334,10 @@ SELECT * FROM propietarios WHERE dni = '12345678A';
 ```
 - Listar vehículos que pertenecen al propietario con ID 5.
 ```sql
-SELECT * FROM propietarios WHERE dni = '12345678A';
+SELECT * FROM vehículos WHERE id_propietarios = 5;
 ```
 ```sql
-+----+--------+----------+-----------+
-| id | nombre | apellido |    dni    |
-+----+--------+----------+-----------+
-| 1  | Juan   | Perez    | 12345678A |
-+----+--------+----------+-----------+
+
 ```
 
 ## Paso 3:
@@ -453,19 +449,19 @@ WHERE marca = 'Nissan';
 ```sql
 UPDATE propietarios
 SET apellido = 'Gomez'
-WHERE id_propietario = 7;
+WHERE id = 7;
 ```
 ```sql
 +----+----------+-----------+-----------+
 | id |  nombre  | apellido  |    dni    |
 +----+----------+-----------+-----------+
-| 1  | Margaret | Perez     | 12345678A |
+| 1  | Juan     | Perez     | 12345678A |
 | 2  | María    | Lopez     | 87456321B |
 | 3  | Carlos   | Ruiz      | 11111111C |
 | 4  | Laura    | Gomez     | 22222222D |
 | 5  | Pedro    | Martinez  | 33333333E |
 | 6  | Ana      | Fernandez | 44444444F |
-| 7  | Diego    | Sanchez   | 55555555G |
+| 7  | Diego    | Gomez     | 55555555G |
 | 8  | Sofia    | Torres    | 66666666H |
 | 9  | Javier   | Leon      | 77777777I |
 | 10 | Lucia    | Castillo  | 88888888J |
