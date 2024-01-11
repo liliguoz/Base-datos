@@ -337,7 +337,11 @@ SELECT * FROM propietarios WHERE dni = '12345678A';
 SELECT * FROM vehículos WHERE id_propietarios = 5;
 ```
 ```sql
-
++----+-------+--------+------+----------------+
+| id | marca | modelo | año  | id_propietario |
++----+-------+--------+------+----------------+
+| 5  | Honda | Civic  | 2016 | 5              |
++----+-------+--------+------+----------------+
 ```
 
 ## Paso 3:
