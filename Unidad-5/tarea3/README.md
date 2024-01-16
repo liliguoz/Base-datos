@@ -465,9 +465,15 @@ WHERE departamento = 'Recursos Humanos' AND salario BETWEEN 45000 AND 55000;
 ```
 
 ```sql
-SELECT nombre, salario
-FROM empleados
-WHERE departamento = 'Recursos Humanos' AND salario BETWEEN 45000 AND 55000;
+┌──────────┬─────────┐
+│  nombre  │ salario │
+├──────────┼─────────┤
+│ Ana      │ 48000.0 │
+│ Javier   │ 48000.0 │
+│ Elena    │ 55000.0 │
+│ Patricia │ 47000.0 │
+│ Roberto  │ 49000.0 │
+└──────────┴─────────┘
 ```
 
 Empleados con salarios en orden descendente, limitando a los primeros 5 resultados.
