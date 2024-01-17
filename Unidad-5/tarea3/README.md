@@ -310,15 +310,19 @@ SELECT nombre, LENGTH(nombre) AS longitud_del_nombre FROM empleados;
 - **Funciones de Agregación (COUNT)**: Cuenta el número total de empleados en cada departamento.
 
 ```sql
-SELECT COUNT(*) AS total_empleados FROM empleados;
+SELECT departamento, COUNT(*) AS total_empleados
+FROM empleados
+GROUP BY departamento;
 ```
 
 ```sql
-┌─────────────────┐
-│ total_empleados │
-├─────────────────┤
-│ 20              │
-└─────────────────┘
+┌──────────────────┬─────────────────┐
+│   departamento   │ total_empleados │
+├──────────────────┼─────────────────┤
+│ Recursos Humanos │ 6               │
+│ TI               │ 7               │
+│ Ventas           │ 7               │
+└──────────────────┴─────────────────┘
 ```
 
 - **Funciones de Fecha y Hora (CURRENT_TIME)**: Muestra la hora actual.
