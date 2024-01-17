@@ -6,7 +6,7 @@
 
 ## Paso 1:
 
-Para empezar crearemos la base de datos. Para ellos deberemos de crearla usando una serie de comandos:
+Para empezar crearemos la base de datos. Para ellos deberemos de crearla usando un serie de comandos:
 
 ```sql
 nano empleados-dump.sql
@@ -55,7 +55,7 @@ sqlite3 tarea3.db
 Una vez hecho esto, para poder leer los comandos que insertamos en el fichero que creamos en el paso 1 deberemos utilizar el siguiente comando:
 
 ```sql
-.read empleados-dump.sql
+.READ empleados-dump.sql
 ```
 
 ## Paso 3:
@@ -158,6 +158,10 @@ SELECT AVG(salario) AS promedio_salarios FROM empleados;
 ```
 
 - **Funciones de Agregación**: Convierte la cadena '123' a un valor entero.
+
+``sql
+
+```
 
 - **Funciones de Manipulación de Cadenas**: Concatena el nombre y el departamento de cada empleado.
 
