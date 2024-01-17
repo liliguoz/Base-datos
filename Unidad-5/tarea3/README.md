@@ -55,7 +55,7 @@ sqlite3 tarea3.db
 Una vez hecho esto, para poder leer los comandos que insertamos en el fichero que creamos en el paso 1 deberemos utilizar el siguiente comando:
 
 ```sql
-.READ empleados-dump.sql
+.read empleados-dump.sql
 ```
 
 ## Paso 3:
@@ -159,8 +159,16 @@ SELECT AVG(salario) AS promedio_salarios FROM empleados;
 
 - **Funciones de Agregación**: Convierte la cadena '123' a un valor entero.
 
-``sql
+```sql
+SELECT CAST('123' AS INTEGER) AS entero;
+```
 
+```sql
+┌────────┐
+│ entero │
+├────────┤
+│ 123    │
+└────────┘
 ```
 
 - **Funciones de Manipulación de Cadenas**: Concatena el nombre y el departamento de cada empleado.
@@ -231,6 +239,41 @@ FROM empleados;
 ```
 
 - **Funciones de Control de Flujo (CASE)**: Categoriza a los empleados según sus salarios.
+
+```sql
+SELECT nombre, salario, CASE
+WHEN salario >= 50000 THEN 'salario-alto'
+WHEN salario < 50000 THEN 'salario-bajo'
+END AS categoría_salario FROM empleados;
+```
+
+```sql
+┌───────────┬─────────┬───────────────────┐
+│  nombre   │ salario │ categoría_salario │
+├───────────┼─────────┼───────────────────┤
+│ Juan      │ 50000.0 │ salario-alto      │
+│ María     │ 60000.0 │ salario-alto      │
+│ Carlos    │ 55000.0 │ salario-alto      │
+│ Ana       │ 48000.0 │ salario-bajo      │
+│ Pedro     │ 70000.0 │ salario-alto      │
+│ Laura     │ 52000.0 │ salario-alto      │
+│ Javier    │ 48000.0 │ salario-bajo      │
+│ Carmen    │ 65000.0 │ salario-alto      │
+│ Miguel    │ 51000.0 │ salario-alto      │
+│ Elena     │ 55000.0 │ salario-alto      │
+│ Diego     │ 72000.0 │ salario-alto      │
+│ Sofía     │ 49000.0 │ salario-bajo      │
+│ Andrés    │ 60000.0 │ salario-alto      │
+│ Isabel    │ 53000.0 │ salario-alto      │
+│ Raúl      │ 68000.0 │ salario-alto      │
+│ Patricia  │ 47000.0 │ salario-bajo      │
+│ Alejandro │ 71000.0 │ salario-alto      │
+│ Natalia   │ 54000.0 │ salario-alto      │
+│ Roberto   │ 49000.0 │ salario-bajo      │
+│ Beatriz   │ 63000.0 │ salario-alto      │
+└───────────┴─────────┴───────────────────┘
+```
+
 
 - **Funciones de Agregación (SUM)**: Calcula la suma total de salarios de todos los empleados.
 
@@ -346,7 +389,7 @@ SELECT CURRENT_TIME AS tiempo_actual FROM empleados LIMIT 1;
 - **Funciones de Conversión (CAST)**: Convierte el salario a un valor de punto flotante.
 
 ```sql 
-SELECT nombre, CAST(salario AS FLOAT) AS salario_flotante
+SELECT nombre, CAST(salario AS REAL) AS salario_flotante
 FROM empleados;
 ```
 
@@ -557,36 +600,32 @@ ORDER BY nombre ASC;
 Empleados con salarios únicos (eliminando duplicados) en orden ascendente.
 
 ```sql
-SELECT DISTINCT nombre, salario
+SELECT DISTINCT salario
 FROM empleados
 ORDER BY salario ASC;
 ```
 
 ```sql
-┌───────────┬─────────┐
-│  nombre   │ salario │
-├───────────┼─────────┤
-│ Patricia  │ 47000.0 │
-│ Ana       │ 48000.0 │
-│ Javier    │ 48000.0 │
-│ Sofía     │ 49000.0 │
-│ Roberto   │ 49000.0 │
-│ Juan      │ 50000.0 │
-│ Miguel    │ 51000.0 │
-│ Laura     │ 52000.0 │
-│ Isabel    │ 53000.0 │
-│ Natalia   │ 54000.0 │
-│ Carlos    │ 55000.0 │
-│ Elena     │ 55000.0 │
-│ María     │ 60000.0 │
-│ Andrés    │ 60000.0 │
-│ Beatriz   │ 63000.0 │
-│ Carmen    │ 65000.0 │
-│ Raúl      │ 68000.0 │
-│ Pedro     │ 70000.0 │
-│ Alejandro │ 71000.0 │
-│ Diego     │ 72000.0 │
-└───────────┴─────────┘
+┌─────────┐
+│ salario │
+├─────────┤
+│ 47000.0 │
+│ 48000.0 │
+│ 49000.0 │
+│ 50000.0 │
+│ 51000.0 │
+│ 52000.0 │
+│ 53000.0 │
+│ 54000.0 │
+│ 55000.0 │
+│ 60000.0 │
+│ 63000.0 │
+│ 65000.0 │
+│ 68000.0 │
+│ 70000.0 │
+│ 71000.0 │
+│ 72000.0 │
+└─────────┘
 ```
 
 Empleados cuyos nombres terminan con 'o' o 'a' y están en el departamento 'Ventas'.
