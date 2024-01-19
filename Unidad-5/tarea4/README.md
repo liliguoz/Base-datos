@@ -133,9 +133,9 @@ Se nos crearan las siguientes tablas:
 
 - Realiza el diagrama MR de la BBDD supermercado.
 
-- Indica si la BBDD esta normalizada hasta la 3ª forma normal, justificando la respuesta.
-
 ![Modelo relacional](img/MR_tarea4.drawio.png)
+
+- Indica si la BBDD esta normalizada hasta la 3ª forma normal, justificando la respuesta.
 
 Esta base de datos cumple la 3FNº porque cumple con las siguientes reglas:
 
