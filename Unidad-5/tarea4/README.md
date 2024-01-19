@@ -286,11 +286,26 @@ GROUP BY categoria;
 - Listar los productos que no han sido vendidos.
 
 ```sql
-
+SELECT *
+FROM productos
+WHERE id NOT IN (SELECT p.id FROM productos AS p, ventas AS v WHERE p.id=v.id_producto);
 ```
 
 ```sql
-
+┌────┬────────────────────┬───────────┬────────┐
+│ id │       nombre       │ categoria │ precio │
+├────┼────────────────────┼───────────┼────────┤
+│ 3  │ Pan                │ Panadería │ 1.2    │
+│ 7  │ Yogurt             │ Lácteos   │ 2.0    │
+│ 9  │ Queso              │ Lácteos   │ 4.0    │
+│ 11 │ Papel Higiénico    │ Hogar     │ 1.5    │
+│ 12 │ Cepillo de Dientes │ Higiene   │ 2.0    │
+│ 13 │ Detergente         │ Limpieza  │ 2.8    │
+│ 15 │ Aceite de Oliva    │ Cocina    │ 4.5    │
+│ 17 │ Sopa enlatada      │ Conservas │ 2.3    │
+│ 19 │ Botellas de Agua   │ Bebidas   │ 1.0    │
+│ 20 │ Cerveza            │ Bebidas   │ 3.8    │
+└────┴────────────────────┴───────────┴────────┘
 ```
 
 - Calcular el precio promedio de los productos en la categoría "Snacks".
@@ -331,8 +346,8 @@ WHERE p.id = v.id_producto and v.cantidad > 5;
 
 ```sql
 SELECT p.nombre, v.cantidad, v.fecha
-   ...> FROM productos AS p, ventas AS v
-   ...> WHERE p.id = v.id_producto;
+FROM productos AS p, ventas AS v
+WHERE p.id = v.id_producto;
 ```
 
 ```sql
@@ -399,8 +414,8 @@ GROUP BY fecha;
 
 ```sql
 SELECT nombre 
-   ...> FROM productos
-   ...> WHERE nombre LIKE 'P%';
+FROM productos
+WHERE nombre LIKE 'P%';
 ```
 
 ```sql
@@ -416,15 +431,87 @@ SELECT nombre
 - Obtener el producto más vendido en términos de cantidad.
 
 ```sql
-
+SELECT p.nombre, MAX(cantidad) AS cantidad_máxima
+FROM productos AS p, ventas AS v
+WHERE p.id=v.id_producto;
 ```
 
 ```sql
-
+┌────────┬─────────────────┐
+│ nombre │ cantidad_máxima │
+├────────┼─────────────────┤
+│ Huevos │ 10              │
+└────────┴─────────────────┘
 ```
 
 - Mostrar los productos que fueron vendidos en la fecha '2024-01-18'.
 
 ```sql
-
+SELECT p.nombre, v.fecha
+FROM productos AS p, ventas AS v
+WHERE p.id=v.id_producto AND fecha='2024-01-18';
 ```
+
+```sql
+┌─────────┬────────────┐
+│ nombre  │   fecha    │
+├─────────┼────────────┤
+│ Huevos  │ 2024-01-18 │
+│ Tomates │ 2024-01-18 │
+│ Cereal  │ 2024-01-18 │
+└─────────┴────────────┘
+```
+
+- Calcular el total de ventas para cada producto.
+
+```sql
+SELECT p.nombre, v.cantidad
+FROM productos AS p, ventas AS v
+WHERE p.id=v.id_producto;
+```
+
+```sql
+┌───────────────┬──────────┐
+│    nombre     │ cantidad │
+├───────────────┼──────────┤
+│ Arroz         │ 5        │
+│ Leche         │ 3        │
+│ Manzanas      │ 2        │
+│ Pollo         │ 1        │
+│ Huevos        │ 10       │
+│ Tomates       │ 4        │
+│ Cereal        │ 2        │
+│ Galletas      │ 7        │
+│ Café          │ 3        │
+│ Jabón de Baño │ 6        │
+└───────────────┴──────────┘
+```
+
+- Encontrar los productos con un precio entre 3 y 4.
+
+```sql
+SELECT nombre, precio
+FROM productos
+WHERE precio between 3 and 4;
+```
+
+```sql
+┌──────────┬────────┐
+│  nombre  │ precio │
+├──────────┼────────┤
+│ Manzanas │ 3.0    │
+│ Queso    │ 4.0    │
+│ Cereal   │ 3.5    │
+│ Cerveza  │ 3.8    │
+└──────────┴────────┘
+```
+
+- Listar los productos y sus categorías ordenados alfabéticamente por categoría.
+
+```sql
+SELECT nombre, categoria
+FROM productos
+ORDER BY categoria ASC;
+```
+
+``
