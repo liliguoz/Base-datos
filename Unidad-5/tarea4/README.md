@@ -544,11 +544,17 @@ ORDER BY categoria ASC;
 - Calcular el precio total de los productos vendidos en la fecha '2024-01-19'.
 
 ```sql
-
+SELECT SUM(p.precio * v.cantidad) AS precio_total
+FROM productos AS p, ventas AS v
+WHERE v.fecha = '2024-01-19' and p.id=v.id_producto;
 ```
 
 ```sql
-
+┌──────────────┐
+│ precio_total │
+├──────────────┤
+│ 26.9         │
+└──────────────┘
 ```
 
 - Mostrar los productos que no pertenecen a la categoría "Higiene".
@@ -678,12 +684,14 @@ WHERE nombre LIKE '%o';
 - Encontrar los productos que han sido vendidos en más de una fecha.
 
 ```sql
-
+SELECT p.id, p.nombre, v.fecha 
+FROM productos AS p, ventas AS v 
+WHERE p.id = v.id_producto 
+GROUP BY p.id 
+HAVING COUNT(DISTINCT fecha) > 1;
 ```
 
-```sql
-
-```
+En este caso no se encuentra ningún producto.
 
 - Listar los productos cuya categoría comienza con la letra 'L'.
 
