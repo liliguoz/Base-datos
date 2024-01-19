@@ -137,11 +137,10 @@ Se nos crearan las siguientes tablas:
 
 - Indica si la BBDD esta normalizada hasta la 3ª forma normal, justificando la respuesta.
 
-Esta base de datos cumple la 3FNº porque cumple con las siguientes reglas:
+    - Una Relación está en 1FN si y sólo si cada atributo es atómico.
 
- - Una Relación está en 1FN si y sólo si cada atributo es atómico.
- - Una Relación esta en 2FN si y sólo si está en 1FN y todos los atributos que NO forman parte de la Clave Principal tienen dependencia funcional completa de ella. En este caso la PK de la tabla de **productos** la hereda la tabla **ventas** para convertirse en la FK.
- - Una Relación esta en 3FN si y sólo si está en 2FN y no existen dependencias transitivas. Todas las dependencias funcionales deben ser respecto a la clave principal.
+    - Una Relación esta en 2FN si y sólo si está en 1FN y todos los atributos que NO forman parte de la Clave Principal tienen dependencia funcional completa de ella. En este caso la PK de la tabla de **productos** la hereda la tabla **ventas** para convertirse en la FK.
+    - Una Relación esta en 3FN si y sólo si está en 2FN y no existen dependencias transitivas. Todas las dependencias funcionales deben ser respecto a la clave principal.
 
 ## Paso 4:
 
