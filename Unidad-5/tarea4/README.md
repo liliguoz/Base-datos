@@ -150,34 +150,17 @@ Realiza las siguientes consultas, y muestra el resultado obtenido:
 - Mostrar todos los productos de la categoría "Bebidas".
 
 ```sql
-SELECT categoria FROM productos;
+SELECT id, nombre, precio FROM productos WHERE categoria = 'Bebidas';
 ```
 
 ```sql
-┌───────────┐
-│ categoria │
-├───────────┤
-│ Alimentos │
-│ Lácteos   │
-│ Panadería │
-│ Frutas    │
-│ Carnes    │
-│ Lácteos   │
-│ Lácteos   │
-│ Verduras  │
-│ Lácteos   │
-│ Desayuno  │
-│ Hogar     │
-│ Higiene   │
-│ Limpieza  │
-│ Snacks    │
-│ Cocina    │
-│ Bebidas   │
-│ Conservas │
-│ Higiene   │
-│ Bebidas   │
-│ Bebidas   │
-└───────────┘
+┌────┬──────────────────┬────────┐
+│ id │      nombre      │ precio │
+├────┼──────────────────┼────────┤
+│ 16 │ Café             │ 5.0    │
+│ 19 │ Botellas de Agua │ 1.0    │
+│ 20 │ Cerveza          │ 3.8    │
+└────┴──────────────────┴────────┘
 ```
 
 - Listar los productos ordenados por precio de forma descendente.
@@ -258,11 +241,16 @@ SELECT nombre FROM productos WHERE nombre LIKE '%a%';
 - Obtener la cantidad total de productos vendidos en todas las fechas.
 
 ```sql
-
+SELECT SUM(cantidad) AS cantidad_total_vendida
+FROM ventas;
 ```
 
 ```sql
-
+┌────────────────────────┐
+│ cantidad_total_vendida │
+├────────────────────────┤
+│ 43                     │
+└────────────────────────┘
 ```
 
 - Encontrar el producto más caro en cada categoría.
@@ -391,11 +379,20 @@ WHERE precio <= 2;
 - Calcular la cantidad total de ventas para cada fecha.
 
 ```sql
-
+SELECT fecha, SUM(cantidad) AS cantidad_total_vendida
+FROM ventas
+GROUP BY fecha;
 ```
 
 ```sql
-
+┌────────────┬────────────────────────┐
+│   fecha    │ cantidad_total_vendida │
+├────────────┼────────────────────────┤
+│ 2024-01-17 │ 11                     │
+│ 2024-01-18 │ 16                     │
+│ 2024-01-19 │ 10                     │
+│ 2024-01-20 │ 6                      │
+└────────────┴────────────────────────┘
 ```
 
 - Listar los productos cuyo nombre comienza con la letra 'P'.
@@ -421,6 +418,12 @@ SELECT nombre
 ```sql
 
 ```
+
+```sql
+
+```
+
+- Mostrar los productos que fueron vendidos en la fecha '2024-01-18'.
 
 ```sql
 
