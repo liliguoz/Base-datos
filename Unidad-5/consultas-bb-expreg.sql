@@ -44,9 +44,16 @@ No hay titulos que empiezan con H
 
 -- Libros escritos por autores cuyos nombres terminan con "ing".
 
-select a.nombre
-from libro as l, autor as a 
-where l.autor_id=a.id and nombre regexp 'ing$';
+select nombre from autor where nombre regexp 'ing$'
+
+/**
+┌──────────────┐
+│    nombre    │
+├──────────────┤
+│ J.K. Rowling │
+│ Stephen King │
+└──────────────┘
+**/
 
 -- Libros con títulos que contienen la palabra "and" en cualquier posición.
 
