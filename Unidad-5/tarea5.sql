@@ -187,7 +187,8 @@ select nombre from autor where nombre regexp '^A';
 
 -- Seleccionar los libros cuyo título contiene la palabra "SQL":
 
-/**┌───────────────────────────────────┐
+/**
+┌───────────────────────────────────┐
 │              titulo               │
 ├───────────────────────────────────┤
 │ The Great Gatsby                  │
