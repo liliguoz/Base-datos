@@ -153,21 +153,73 @@ select * from Pedidos where fecha_pedido regexp '2024-02';
 
 -- Obtener la cantidad total de productos en todos los pedidos por producto.
 
-select sum(cantidad) as total_pedidos from Pedidos
+select pr.nombre, pe.cantidad from productos as pr, pedidos as pe where pr.id=pe.id_producto;
 
 /**
-┌───────────────┐
-│ total_pedidos │
-├───────────────┤
-│ 54            │
-└───────────────┘
+┌───────────────────────────────────┬──────────┐
+│              nombre               │ cantidad │
+├───────────────────────────────────┼──────────┤
+│ Laptop                            │ 2        │
+│ Smartphone                        │ 1        │
+│ TV LED                            │ 3        │
+│ Tablet                            │ 1        │
+│ Auriculares Bluetooth             │ 2        │
+│ Impresora                         │ 1        │
+│ Cámara Digital                    │ 3        │
+│ Reproductor de Audio              │ 2        │
+│ Altavoces Inalámbricos            │ 1        │
+│ Reloj Inteligente                 │ 2        │
+│ Teclado Inalámbrico               │ 1        │
+│ Ratón Óptico                      │ 3        │
+│ Monitor LED                       │ 1        │
+│ Mochila para Portátil             │ 2        │
+│ Disco Duro Externo                │ 1        │
+│ Router Wi-Fi                      │ 3        │
+│ Lámpara LED                       │ 2        │
+│ Batería Externa                   │ 1        │
+│ Estuche para Auriculares          │ 2        │
+│ Tarjeta de Memoria                │ 1        │
+│ Cargador Inalámbrico              │ 3        │
+│ Kit de Limpieza para Computadoras │ 1        │
+│ Funda para Tablet                 │ 2        │
+│ Soporte para Teléfono             │ 1        │
+│ Hub USB                           │ 3        │
+│ Webcam HD                         │ 2        │
+│ Funda para Laptop                 │ 1        │
+│ Adaptador HDMI                    │ 2        │
+└───────────────────────────────────┴──────────┘
 **/
 
 -- Obtener los clientes que han realizado más de un pedido.
 
+select c.nombre, p.cantidad from clientes as c, pedidos as p where c.id=p.id_cliente and p.cantidad > 1;
+
+/**
+┌─────────────────┬──────────┐
+│     nombre      │ cantidad │
+├─────────────────┼──────────┤
+│ Juan Pérez      │ 2        │
+│ Carlos López    │ 3        │
+│ Luisa Martínez  │ 2        │
+│ Laura García    │ 3        │
+│ Miguel Martín   │ 2        │
+│ David Torres    │ 2        │
+│ Javier López    │ 3        │
+│ Daniel Muñoz    │ 2        │
+│ Alejandro Muñoz │ 3        │
+│ Raquel Herrera  │ 2        │
+│ Marina Díaz     │ 2        │
+│ Beatriz Romero  │ 3        │
+│ Clara Sánchez   │ 2        │
+│ Lucía Díaz      │ 3        │
+│ Mario Serrano   │ 2        │
+│ Roberto Ruiz    │ 2        │
+└─────────────────┴──────────┘
+**/
+
 -- Obtener los productos que tienen un precio registrado.
 
-select * from Productos where precio;
+select * from Productos where precio != '';
 
 /**
 ┌────┬───────────────────────────────────┬────────┐
@@ -232,7 +284,54 @@ select nombre from Productos where nombre regexp '^A|B';
 **/
 
 -- Obtener la cantidad total de productos en todos los pedidos por cliente ordenado por cliente.
+
+select id_cliente, sum(cantidad) as 'cantidad_total' from Pedidos group by id_cliente order by id_cliente;
+
+/**
+┌────────────┬────────────────┐
+│ id_cliente │ cantidad_total │
+├────────────┼────────────────┤
+│ 1          │ 2              │
+│ 2          │ 1              │
+│ 3          │ 3              │
+│ 4          │ 1              │
+│ 5          │ 2              │
+│ 6          │ 1              │
+│ 7          │ 3              │
+│ 8          │ 2              │
+│ 9          │ 1              │
+│ 10         │ 2              │
+│ 11         │ 1              │
+│ 12         │ 3              │
+│ 13         │ 1              │
+│ 14         │ 2              │
+│ 15         │ 1              │
+│ 16         │ 3              │
+│ 17         │ 2              │
+│ 18         │ 1              │
+│ 19         │ 2              │
+│ 20         │ 1              │
+│ 21         │ 3              │
+│ 22         │ 1              │
+│ 23         │ 2              │
+│ 24         │ 1              │
+│ 25         │ 3              │
+│ 26         │ 2              │
+│ 27         │ 1              │
+│ 28         │ 2              │
+│ 29         │ 1              │
+│ 30         │ 3              │
+└────────────┴────────────────┘
+**/
+
 -- Obtener los clientes que han realizado más de un pedido en febrero de 2024.
+
+ select c.* from Clientes as c, Pedidos as p where p.id_cliente=c.id and p.fecha_pedido regexp '^2024-02' group by id_cliente having COUNT(p.id_cliente)>1;
+
+/**
+No hay
+**/
+
 -- Obtener los productos con precio entre 100 y 500.
 
 select * from Productos where precio between 100 and 500;
@@ -252,6 +351,46 @@ select * from Productos where precio between 100 and 500;
 **/
 
 -- Obtener la cantidad total de productos en todos los pedidos por cliente ordenado por cantidad descendente.
+
+select id_cliente, SUM(cantidad) as "cantidad_cliente" from Pedidos group by id_cliente order by id_cliente desc;
+
+/**
+┌────────────┬──────────────────┐
+│ id_cliente │ cantidad_cliente │
+├────────────┼──────────────────┤
+│ 30         │ 3                │
+│ 29         │ 1                │
+│ 28         │ 2                │
+│ 27         │ 1                │
+│ 26         │ 2                │
+│ 25         │ 3                │
+│ 24         │ 1                │
+│ 23         │ 2                │
+│ 22         │ 1                │
+│ 21         │ 3                │
+│ 20         │ 1                │
+│ 19         │ 2                │
+│ 18         │ 1                │
+│ 17         │ 2                │
+│ 16         │ 3                │
+│ 15         │ 1                │
+│ 14         │ 2                │
+│ 13         │ 1                │
+│ 12         │ 3                │
+│ 11         │ 1                │
+│ 10         │ 2                │
+│ 9          │ 1                │
+│ 8          │ 2                │
+│ 7          │ 3                │
+│ 6          │ 1                │
+│ 5          │ 2                │
+│ 4          │ 1                │
+│ 3          │ 3                │
+│ 2          │ 1                │
+│ 1          │ 2                │
+└────────────┴──────────────────┘
+**/
+
 -- Obtener los clientes que tienen una 'a' en cualquier posición de su nombre.
 
 select nombre from Clientes where nombre regexp 'a';
@@ -290,9 +429,78 @@ select nombre from Clientes where nombre regexp 'a';
 **/
 
 -- Obtener el precio máximo de los productos.
+
+select max(precio) as precio_max from productos; 
+
+/**
+┌────────────┐
+│ precio_max │
+├────────────┤
+│ 1200.0     │
+└────────────┘
+**/
+
 -- Obtener los pedidos realizados por el cliente con ID 1 en febrero de 2024.
+
+select * from Pedidos where id_cliente=1 and fecha_pedido regexp '2024-02';
+
+/**
+┌───────────┬────────────┬─────────────┬──────────┬──────────────┐
+│ id_pedido │ id_cliente │ id_producto │ cantidad │ fecha_pedido │
+├───────────┼────────────┼─────────────┼──────────┼──────────────┤
+│ 1         │ 1          │ 1           │ 2        │ 2024-02-01   │
+└───────────┴────────────┴─────────────┴──────────┴──────────────┘
+**/
+
 -- Obtener la cantidad total de productos en todos los pedidos por producto ordenado por total de productos descendente.
+
+select id_producto, sum(cantidad) as "cantidad_total" from Pedidos group by id_producto order by cantidad_total DESC;
+
+/**
+┌─────────────┬────────────────┐
+│ id_producto │ cantidad_total │
+├─────────────┼────────────────┤
+│ 30          │ 3              │
+│ 25          │ 3              │
+│ 21          │ 3              │
+│ 16          │ 3              │
+│ 12          │ 3              │
+│ 7           │ 3              │
+│ 3           │ 3              │
+│ 28          │ 2              │
+│ 26          │ 2              │
+│ 23          │ 2              │
+│ 19          │ 2              │
+│ 17          │ 2              │
+│ 14          │ 2              │
+│ 10          │ 2              │
+│ 8           │ 2              │
+│ 5           │ 2              │
+│ 1           │ 2              │
+│ 29          │ 1              │
+│ 27          │ 1              │
+│ 24          │ 1              │
+│ 22          │ 1              │
+│ 20          │ 1              │
+│ 18          │ 1              │
+│ 15          │ 1              │
+│ 13          │ 1              │
+│ 11          │ 1              │
+│ 9           │ 1              │
+│ 6           │ 1              │
+│ 4           │ 1              │
+│ 2           │ 1              │
+└─────────────┴────────────────┘
+**/
+ 
 -- Obtener los productos que no tienen un precio registrado.
+
+select * from Productos where precio='';
+
+/**
+No hay resultado
+**/
+
 -- Obtener la fecha del último pedido realizado.
 
 select fecha_pedido from Pedidos order by fecha_pedido desc limit 1;
@@ -370,9 +578,86 @@ select nombre from Productos where nombre regexp 'o';
 **/
 
 -- Obtener la cantidad total de productos en todos los pedidos por cliente ordenado por cliente.
+
+select id_cliente, sum(cantidad) as "cantidad_productos" from Pedidos group by id_cliente order by id_cliente;
+
+/**
+┌────────────┬────────────────────┐
+│ id_cliente │ cantidad_productos │
+├────────────┼────────────────────┤
+│ 1          │ 2                  │
+│ 2          │ 1                  │
+│ 3          │ 3                  │
+│ 4          │ 1                  │
+│ 5          │ 2                  │
+│ 6          │ 1                  │
+│ 7          │ 3                  │
+│ 8          │ 2                  │
+│ 9          │ 1                  │
+│ 10         │ 2                  │
+│ 11         │ 1                  │
+│ 12         │ 3                  │
+│ 13         │ 1                  │
+│ 14         │ 2                  │
+│ 15         │ 1                  │
+│ 16         │ 3                  │
+│ 17         │ 2                  │
+│ 18         │ 1                  │
+│ 19         │ 2                  │
+│ 20         │ 1                  │
+│ 21         │ 3                  │
+│ 22         │ 1                  │
+│ 23         │ 2                  │
+│ 24         │ 1                  │
+│ 25         │ 3                  │
+│ 26         │ 2                  │
+│ 27         │ 1                  │
+│ 28         │ 2                  │
+│ 29         │ 1                  │
+│ 30         │ 3                  │
+└────────────┴────────────────────┘
+**/
+
 -- Obtener los clientes cuyos nombres no contienen la letra 'i':
+
+select nombre from Clientes where nombre NOT regexp 'i';
+
+/**
+┌─────────────────┐
+│     nombre      │
+├─────────────────┤
+│ Juan Pérez      │
+│ María Gómez     │
+│ Carlos López    │
+│ Ana Rodríguez   │
+│ Pedro Sánchez   │
+│ Laura García    │
+│ Elena González  │
+│ Carmen Vargas   │
+│ Isabel Serrano  │
+│ Alejandro Muñoz │
+│ Raquel Herrera  │
+│ Carlos Gómez    │
+│ Clara Sánchez   │
+│ Andrés Martínez │
+│ Lucía Díaz      │
+│ Eva Torres      │
+└─────────────────┘
+**/
+
 -- Obtener los pedidos realizados por el cliente con ID 2 en febrero de 2024.
--- Obtener el precio mínimo de los productos.
+
+select * from pedidos where id_cliente = 2 and fecha_pedido regexp '2024-02';
+
+/**
+┌───────────┬────────────┬─────────────┬──────────┬──────────────┐
+│ id_pedido │ id_cliente │ id_producto │ cantidad │ fecha_pedido │
+├───────────┼────────────┼─────────────┼──────────┼──────────────┤
+│ 2         │ 2          │ 2           │ 1        │ 2024-02-02   │
+└───────────┴────────────┴─────────────┴──────────┴──────────────┘
+**/
+
+-- Obtener el precio mínimo de los productos.-
 
 select min(precio) as precio_mínimo from Productos;
 
@@ -385,7 +670,57 @@ select min(precio) as precio_mínimo from Productos;
 **/
 
 -- Obtener los clientes que han realizado al menos un pedido en febrero de 2024.
+
+select id_cliente, cantidad, fecha_pedido from pedidos where cantidad >= 1 and fecha_pedido regexp '2024-02';
+
+/**
+┌────────────┬──────────┬──────────────┐
+│ id_cliente │ cantidad │ fecha_pedido │
+├────────────┼──────────┼──────────────┤
+│ 1          │ 2        │ 2024-02-01   │
+│ 2          │ 1        │ 2024-02-02   │
+│ 3          │ 3        │ 2024-02-03   │
+│ 4          │ 1        │ 2024-02-04   │
+│ 5          │ 2        │ 2024-02-05   │
+│ 6          │ 1        │ 2024-02-06   │
+│ 7          │ 3        │ 2024-02-07   │
+│ 8          │ 2        │ 2024-02-08   │
+│ 9          │ 1        │ 2024-02-09   │
+│ 10         │ 2        │ 2024-02-10   │
+│ 11         │ 1        │ 2024-02-11   │
+│ 12         │ 3        │ 2024-02-12   │
+│ 13         │ 1        │ 2024-02-13   │
+│ 14         │ 2        │ 2024-02-14   │
+│ 15         │ 1        │ 2024-02-15   │
+│ 16         │ 3        │ 2024-02-16   │
+│ 17         │ 2        │ 2024-02-17   │
+│ 18         │ 1        │ 2024-02-18   │
+│ 19         │ 2        │ 2024-02-19   │
+│ 20         │ 1        │ 2024-02-20   │
+│ 21         │ 3        │ 2024-02-21   │
+│ 22         │ 1        │ 2024-02-22   │
+│ 23         │ 2        │ 2024-02-23   │
+│ 24         │ 1        │ 2024-02-24   │
+│ 25         │ 3        │ 2024-02-25   │
+│ 26         │ 2        │ 2024-02-26   │
+│ 27         │ 1        │ 2024-02-27   │
+│ 28         │ 2        │ 2024-02-28   │
+│ 29         │ 1        │ 2024-02-29   │
+└────────────┴──────────┴──────────────┘
+**/
+
 -- Obtener la fecha del último pedido realizado por el cliente con ID 3.
+
+select fecha_pedido from pedidos where id_cliente = 3 order by fecha_pedido desc limit 1;
+
+/**
+┌──────────────┐
+│ fecha_pedido │
+├──────────────┤
+│ 2024-02-03   │
+└──────────────┘
+**/
+
 -- Obtener los productos que tienen una 'a' al final del nombre.
 
 select nombre from productos where nombre regexp 'a$';
@@ -401,7 +736,95 @@ select nombre from productos where nombre regexp 'a$';
 **/
 
 -- Obtener los clientes cuyos nombres tienen al menos 4 vocales (mayúsculas|minúsculas).
+
+select nombre from clientes where nombre regexp '([aeiouAEIOU].*){4,}';
+
+/**
+┌─────────────────┐
+│     nombre      │
+├─────────────────┤
+│ Ana Rodríguez   │
+│ Luisa Martínez  │
+│ Laura García    │
+│ Miguel Martín   │
+│ Elena González  │
+│ David Torres    │
+│ Sofía Ruiz      │
+│ Javier López    │
+│ Carmen Vargas   │
+│ Daniel Muñoz    │
+│ Isabel Serrano  │
+│ Alejandro Muñoz │
+│ Raquel Herrera  │
+│ Francisco Mora  │
+│ Marina Díaz     │
+│ Antonio Jiménez │
+│ Beatriz Romero  │
+│ Mario Serrano   │
+│ Eva Torres      │
+│ Roberto Ruiz    │
+│ Celia García    │
+└─────────────────┘
+**/
+
 -- Obtener los productos cuyo precio tenga al menos 4 números sin contrar los decimales.
+
+select * from Productos where precio regexp '\d{4,}\.';
+
+/**
+┌────┬────────┬────────┐
+│ id │ nombre │ precio │
+├────┼────────┼────────┤
+│ 1  │ Laptop │ 1200.0 │
+└────┴────────┴────────┘
+**/
+
 -- Obtener los clientes cuyos nombres tienen al menos una 'a' seguida de una 'e'.
+
+select nombre from clientes where nombre regexp 'ae';
+
+/**
+No hay resultado
+**/
+
 -- Obtener los productos cuyos nombres terminan con una consonante.
+
+select nombre from Productos where nombre NOT regexp '[aeiouAEIOU]$';
+
+/**
+┌───────────────────────────────────┐
+│              nombre               │
+├───────────────────────────────────┤
+│ Laptop                            │
+│ TV LED                            │
+│ Tablet                            │
+│ Auriculares Bluetooth             │
+│ Cámara Digital                    │
+│ Altavoces Inalámbricos            │
+│ Monitor LED                       │
+│ Mochila para Portátil             │
+│ Lámpara LED                       │
+│ Estuche para Auriculares          │
+│ Kit de Limpieza para Computadoras │
+│ Funda para Tablet                 │
+│ Hub USB                           │
+│ Webcam HD                         │
+│ Funda para Laptop                 │
+└───────────────────────────────────┘
+**/
+
 -- Obtener los productos cuyos nombres empiezan con una vocal.
+
+select nombre from productos where nombre regexp '^[AEIOUaeiou]';
+
+/**
+┌──────────────────────────┐
+│          nombre          │
+├──────────────────────────┤
+│ Auriculares Bluetooth    │
+│ Impresora                │
+│ Altavoces Inalámbricos   │
+│ Estuche para Auriculares │
+│ Adaptador HDMI           │
+└──────────────────────────┘
+**/
