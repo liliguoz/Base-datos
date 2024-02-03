@@ -620,27 +620,21 @@ select id_cliente, sum(cantidad) as "cantidad_productos" from Pedidos group by i
 
 -- Obtener los clientes cuyos nombres no contienen la letra 'i':
 
-select nombre from Clientes where nombre NOT regexp 'i';
+select nombre from Clientes where nombre NOT regexp '[iIíÍ]';
 
 /**
 ┌─────────────────┐
 │     nombre      │
 ├─────────────────┤
 │ Juan Pérez      │
-│ María Gómez     │
 │ Carlos López    │
-│ Ana Rodríguez   │
 │ Pedro Sánchez   │
-│ Laura García    │
 │ Elena González  │
 │ Carmen Vargas   │
-│ Isabel Serrano  │
 │ Alejandro Muñoz │
 │ Raquel Herrera  │
 │ Carlos Gómez    │
 │ Clara Sánchez   │
-│ Andrés Martínez │
-│ Lucía Díaz      │
 │ Eva Torres      │
 └─────────────────┘
 **/
