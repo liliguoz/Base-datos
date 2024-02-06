@@ -95,8 +95,43 @@ where cl.id_cliente=v.id_cliente and v.id_coche=c.id_coche and c.precio > 30000;
 -- Consulta para obtener el modelo y el año de los coches vendidos en 2023 y llevados a reparar.
 -- Consulta para contar el número de coches vendidos por cliente.
 -- Consulta para obtener el nombre y el precio de los coches vendidos a clientes mayores de 35 años.
+
+select cl.nombre, c.precio
+from clientes as cl, ventas as v, coches as c
+where cl.id_cliente=v.id_cliente and v.id_coche=c.id_coche and cl.edad > 35;
+
+/**
+┌─────────────────┬─────────┐
+│     nombre      │ precio  │
+├─────────────────┼─────────┤
+│ Pedro Rodríguez │ 32000.0 │
+│ Isabel Díaz     │ 35000.0 │
+└─────────────────┴─────────┘
+**/
+
 -- Consulta para calcular el precio total de los coches vendidos a clientes que viven en una calle (en la dirección).
 -- Consulta para obtener el nombre y la dirección de los clientes que han comprado coches de más de 30000 euros y llevado a reparar sus coches en 2024.
 -- Consulta para calcular el precio medio de los coches vendidos en 2023 y llevados a reparar por clientes menores de 30 años.
 -- Consulta para obtener el modelo y el año de los coches vendidos por clientes que tienen una dirección que contiene la palabra "Avenida".
+
+select c.modelo, c.año 
+from clientes as cl, coches as c, ventas as v
+where cl.id_cliente=v.id_cliente and v.id_coche=c.id_coche and cl.direccion regexp 'Avenida';
+
+/**
+┌────────────────┬──────┐
+│     modelo     │ año  │
+├────────────────┼──────┤
+│ Hatchback 2021 │ 2021 │
+│ Coupé 2022     │ 2022 │
+│ Compacto 2021  │ 2021 │
+│ Deportivo 2023 │ 2023 │
+│ Eléctrico 2021 │ 2021 │
+└────────────────┴──────┘
+**/
+
 -- Consulta para contar el número de reparaciones realizadas en 2024 por cada cliente.
+
+select count() as num_reparaciones 
+from 
+where
