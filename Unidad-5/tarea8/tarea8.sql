@@ -161,24 +161,16 @@ where cl.id_cliente=v.id_cliente and c.id_coche=v.id_coche and c.marca regexp 'F
 
 -- Consulta para contar el número de coches vendidos por año.
 
-select count(id_coche) as num_vendido_año, fecha_venta
-from ventas
-group by fecha_venta;
+select strftime('%Y', fecha_venta) as año, COUNT(id_coche) as num_ventas_año 
+from ventas 
+group by año;
 
 /**
-┌─────────────────┬─────────────┐
-│ num_vendido_año │ fecha_venta │
-├─────────────────┼─────────────┤
-│ 1               │ 2023-01-15  │
-│ 1               │ 2023-02-20  │
-│ 1               │ 2023-03-25  │
-│ 1               │ 2023-04-10  │
-│ 1               │ 2023-05-05  │
-│ 1               │ 2023-06-15  │
-│ 1               │ 2023-07-20  │
-│ 1               │ 2023-08-25  │
-│ 1               │ 2023-10-05  │
-└─────────────────┴─────────────┘
+┌──────┬────────────────┐
+│ año  │ num_ventas_año │
+├──────┼────────────────┤
+│ 2023 │ 9              │
+└──────┴────────────────┘
 **/
 
 -- Consulta para obtener el nombre y la edad de los clientes que han comprado coches de más de 30000 euros y llevado a reparar sus coches.
