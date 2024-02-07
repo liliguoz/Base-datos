@@ -93,26 +93,8 @@ where r.id_coche=c.id_coche and r.id_cliente=cl.id_cliente and r.fecha_reparaci�
 
 -- Consulta para calcular el total gastado en reparaciones por cada cliente.
 
-select cl.nombre, sum(c.precio) as total_reparación 
-from clientes as cl, coches as c, reparacion as r
-where cl.id_cliente=r.id_cliente and c.id_coche=r.id_coche and c.id_coche in (select id_coche from reparacion)
-group by cl.nombre;
-
-/**
-┌─────────────────┬──────────────────┐
-│     nombre      │ total_reparación │
-├─────────────────┼──────────────────┤
-│ Ana Martínez    │ 54000.0          │
-│ Carlos López    │ 60000.0          │
-│ Elena Torres    │ 68000.0          │
-│ Francisco Ruiz  │ 61000.0          │
-│ Isabel Díaz     │ 60000.0          │
-│ Juan Pérez      │ 55000.0          │
-│ Laura Sánchez   │ 62000.0          │
-│ María Gómez     │ 52000.0          │
-│ Miguel González │ 60000.0          │
-│ Pedro Rodríguez │ 48000.0          │
-└─────────────────┴──────────────────┘
+/** 
+No hay gastos en reparaciones
 **/
 
 -- Consulta para obtener el nombre y la edad de los clientes que han comprado coches de más de 30000 euros.
