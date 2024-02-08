@@ -648,6 +648,7 @@ select inv.Total, cus.FirstName, cus.Country, emp.FirstName from invoices as inv
 
 --Escribe una consulta que liste todas las canciones de una playlist.
 
+select playlistId from playlist_track;
 /**
 
 **/
