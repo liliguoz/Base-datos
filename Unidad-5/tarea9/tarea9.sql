@@ -187,17 +187,18 @@ select a.nombre, c.materia from alumnos as a, clases as c join inscripciones as 
 
 -- Contar cuántos alumnos están inscritos en cada clase.
 
-select c.materia, count(a.id) as alumnos_inscritos from alumnos as a, clases as c join inscripciones as i on i.id_alumno=a.id and i.id_clase=c.id group by a.id;
+select c.id, count(a.id) as alumnos_inscritos from alumnos as a, clases as c join inscripciones as i on i.id_alumno=a.id and i.id_clase=c.id group by a.id;
 
 /**
-┌─────────────┬───────────────────┐
-│   materia   │ alumnos_inscritos │
-├─────────────┼───────────────────┤
-│ Matemáticas │ 2                 │
-│ Literatura  │ 2                 │
-│ Química     │ 2                 │
-│ Arte        │ 2                 │
-│ Economía    │ 1                 │
-│ Derecho     │ 1                 │
-└─────────────┴───────────────────┘
+┌────┬───────────────────┐
+│ id │ alumnos_inscritos │
+├────┼───────────────────┤
+│ 1  │ 2                 │
+│ 3  │ 2                 │
+│ 5  │ 2                 │
+│ 7  │ 2                 │
+│ 9  │ 1                 │
+│ 10 │ 1                 │
+└────┴───────────────────┘
+
 **/
