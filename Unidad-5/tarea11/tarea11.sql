@@ -1,3 +1,4 @@
+------------------------------Consultas SQL sobre una tabla------------------------------
 --Devuelve un listado con el código de oficina y la ciudad donde hay oficinas.
 
 select codigo_oficina, ciudad from oficina;
@@ -413,6 +414,8 @@ select * from cliente where ciudad = 'Madrid' and codigo_empleado_rep_ventas bet
 │ 36             │ Flores S.L.                 │ Antonio         │ Romero            │ 654352981 │ 685249700 │ Avenida España    │                  │ Madrid │ Fuenlabrada │ Spain │ 29643         │ 18                         │ 6000           │
 └────────────────┴─────────────────────────────┴─────────────────┴───────────────────┴───────────┴───────────┴───────────────────┴──────────────────┴────────┴─────────────┴───────┴───────────────┴────────────────────────────┴────────────────┘
 **/
+
+---------------------------------------Consultas multitabla (Where para unir tablas)----------------------------------------------------
 
 --Obtén un listado con el nombre de cada cliente y el nombre y apellido de su representante de ventas.
 
@@ -2217,5 +2220,1204 @@ join detalle_pedido as dp on p.codigo_producto=dp.codigo_producto left join gama
 **/
 
 --Devuelve las oficinas donde no trabajan ninguno de los empleados que hayan sido los representantes de ventas de algún cliente que haya realizado la compra de algún producto de la gama Frutales.
+
+
+/**
+
+**/
+
 --Devuelve un listado con los clientes que han realizado algún pedido pero no han realizado ningún pago.
+
+select c.* from cliente as c
+INNER JOIN pedido as p ON c.codigo_cliente=p.codigo_cliente
+LEFT JOIN pago as pa ON c.codigo_cliente=pa.codigo_cliente
+where pa.codigo_cliente is null
+group by c.codigo_cliente;
+
+/**
+┌────────────────┬────────────────┬─────────────────┬───────────────────┬───────────┬───────────┬──────────────────┬──────────────────┬────────┬─────────────┬───────┬───────────────┬────────────────────────────┬────────────────┐
+│ codigo_cliente │ nombre_cliente │ nombre_contacto │ apellido_contacto │ telefono  │    fax    │ linea_direccion1 │ linea_direccion2 │ ciudad │   region    │ pais  │ codigo_postal │ codigo_empleado_rep_ventas │ limite_credito │
+├────────────────┼────────────────┼─────────────────┼───────────────────┼───────────┼───────────┼──────────────────┼──────────────────┼────────┼─────────────┼───────┼───────────────┼────────────────────────────┼────────────────┤
+│ 36             │ Flores S.L.    │ Antonio         │ Romero            │ 654352981 │ 685249700 │ Avenida España   │                  │ Madrid │ Fuenlabrada │ Spain │ 29643         │ 18                         │ 6000           │
+└────────────────┴────────────────┴─────────────────┴───────────────────┴───────────┴───────────┴──────────────────┴──────────────────┴────────┴─────────────┴───────┴───────────────┴────────────────────────────┴────────────────┘
+**/
+
 --Devuelve un listado con los datos de los empleados que no tienen clientes asociados y el nombre de su jefe asociado.
+
+select e.*, jefe.nombre as nombre_jefe from empleado as e left join empleado as jefe on e.codigo_jefe = jefe.codigo_empleado
+where e.codigo_empleado not in (select distinct codigo_empleado_rep_ventas from cliente where codigo_empleado_rep_ventas is not null);
+
+/**
+┌─────────────────┬─────────────┬────────────┬───────────┬───────────┬───────────────────────────┬────────────────┬─────────────┬───────────────────────┬─────────────┐
+│ codigo_empleado │   nombre    │ apellido1  │ apellido2 │ extension │           email           │ codigo_oficina │ codigo_jefe │        puesto         │ nombre_jefe │
+├─────────────────┼─────────────┼────────────┼───────────┼───────────┼───────────────────────────┼────────────────┼─────────────┼───────────────────────┼─────────────┤
+│ 1               │ Marcos      │ Magaña     │ Perez     │ 3897      │ marcos@jardineria.es      │ TAL-ES         │             │ Director General      │             │
+│ 2               │ Ruben       │ López      │ Martinez  │ 2899      │ rlopez@jardineria.es      │ TAL-ES         │ 1           │ Subdirector Marketing │ Marcos      │
+│ 3               │ Alberto     │ Soria      │ Carrasco  │ 2837      │ asoria@jardineria.es      │ TAL-ES         │ 2           │ Subdirector Ventas    │ Ruben       │
+│ 4               │ Maria       │ Solís      │ Jerez     │ 2847      │ msolis@jardineria.es      │ TAL-ES         │ 2           │ Secretaria            │ Ruben       │
+│ 6               │ Juan Carlos │ Ortiz      │ Serrano   │ 2845      │ cortiz@jardineria.es      │ TAL-ES         │ 3           │ Representante Ventas  │ Alberto     │
+│ 7               │ Carlos      │ Soria      │ Jimenez   │ 2444      │ csoria@jardineria.es      │ MAD-ES         │ 3           │ Director Oficina      │ Alberto     │
+│ 10              │ Hilario     │ Rodriguez  │ Huertas   │ 2444      │ hrodriguez@jardineria.es  │ MAD-ES         │ 7           │ Representante Ventas  │ Carlos      │
+│ 13              │ David       │ Palma      │ Aceituno  │ 2519      │ dpalma@jardineria.es      │ BCN-ES         │ 11          │ Representante Ventas  │ Emmanuel    │
+│ 14              │ Oscar       │ Palma      │ Aceituno  │ 2519      │ opalma@jardineria.es      │ BCN-ES         │ 11          │ Representante Ventas  │ Emmanuel    │
+│ 15              │ Francois    │ Fignon     │           │ 9981      │ ffignon@gardening.com     │ PAR-FR         │ 3           │ Director Oficina      │ Alberto     │
+│ 17              │ Laurent     │ Serra      │           │ 9982      │ lserra@gardening.com      │ PAR-FR         │ 15          │ Representante Ventas  │ Francois    │
+│ 20              │ Hilary      │ Washington │           │ 7565      │ hwashington@gardening.com │ BOS-USA        │ 3           │ Director Oficina      │ Alberto     │
+│ 21              │ Marcus      │ Paxton     │           │ 7565      │ mpaxton@gardening.com     │ BOS-USA        │ 20          │ Representante Ventas  │ Hilary      │
+│ 23              │ Nei         │ Nishikori  │           │ 8734      │ nnishikori@gardening.com  │ TOK-JP         │ 3           │ Director Oficina      │ Alberto     │
+│ 24              │ Narumi      │ Riko       │           │ 8734      │ nriko@gardening.com       │ TOK-JP         │ 23          │ Representante Ventas  │ Nei         │
+│ 25              │ Takuma      │ Nomura     │           │ 8735      │ tnomura@gardening.com     │ TOK-JP         │ 23          │ Representante Ventas  │ Nei         │
+│ 26              │ Amy         │ Johnson    │           │ 3321      │ ajohnson@gardening.com    │ LON-UK         │ 3           │ Director Oficina      │ Alberto     │
+│ 27              │ Larry       │ Westfalls  │           │ 3322      │ lwestfalls@gardening.com  │ LON-UK         │ 26          │ Representante Ventas  │ Amy         │
+│ 28              │ John        │ Walton     │           │ 3322      │ jwalton@gardening.com     │ LON-UK         │ 26          │ Representante Ventas  │ Amy         │
+│ 29              │ Kevin       │ Fallmer    │           │ 3210      │ kfalmer@gardening.com     │ SYD-AU         │ 3           │ Director Oficina      │ Alberto     │
+└─────────────────┴─────────────┴────────────┴───────────┴───────────┴───────────────────────────┴────────────────┴─────────────┴───────────────────────┴─────────────┘
+**/
+
+-----------------------------CONSULTAS RESUMEN (COUNT,AVG,...)-----------------------------
+
+--¿Cuántos empleados hay en la compañía?
+
+select count(*) as total_empleados from empleado;
+
+/**
+┌─────────────────┐
+│ total_empleados │
+├─────────────────┤
+│ 31              │
+└─────────────────┘
+**/
+--¿Cuántos clientes tiene cada país?
+
+select pais, count(*) as cliente_por_pais from cliente group by pais;
+
+/**
+┌────────────────┬──────────────────┐
+│      pais      │ cliente_por_pais │
+├────────────────┼──────────────────┤
+│ Australia      │ 2                │
+│ France         │ 2                │
+│ Spain          │ 27               │
+│ USA            │ 4                │
+│ United Kingdom │ 1                │
+└────────────────┴──────────────────┘
+**/
+
+--¿Cuál fue el pago medio en 2009?
+
+ select AVG(total) as media_2009 from pago where fecha_pago regexp '2009';
+
+ /**
+┌──────────────────┐
+│    media_2009    │
+├──────────────────┤
+│ 4504.07692307692 │
+└──────────────────┘
+**/
+
+--¿Cuántos pedidos hay en cada estado? Ordena el resultado de forma descendente por el número de pedidos.
+
+select estado, COUNT(estado) as total_pedido from pedido group by estado;
+
+/**
+┌───────────┬──────────────┐
+│  estado   │ total_pedido │
+├───────────┼──────────────┤
+│ Entregado │ 61           │
+│ Pendiente │ 30           │
+│ Rechazado │ 24           │
+└───────────┴──────────────┘
+**/
+
+--Calcula el precio de venta del producto más caro y más barato en una misma consulta.
+
+select max(precio_venta) as precio_maximo, min(precio_venta) as precio_min from producto;
+
+/**
+┌───────────────┬────────────┐
+│ precio_maximo │ precio_min │
+├───────────────┼────────────┤
+│ 462           │ 1          │
+└───────────────┴────────────┘
+**/
+
+--Calcula el número de clientes que tiene la empresa.
+
+select count(*) as total_clientes from cliente;
+
+/**
+┌────────────────┐
+│ total_clientes │
+├────────────────┤
+│ 36             │
+└────────────────┘
+**/
+
+--¿Cuántos clientes existen con domicilio en la ciudad de Madrid?
+
+select ciudad, COUNT(codigo_cliente) as total_clientes from cliente where ciudad = 'Madrid' group by ciudad;
+
+/**
+┌────────┬────────────────┐
+│ ciudad │ total_clientes │
+├────────┼────────────────┤
+│ Madrid │ 11             │
+└────────┴────────────────┘
+**/
+
+--¿Calcula cuántos clientes tiene cada una de las ciudades que empiezan por M?
+
+select ciudad, COUNT(codigo_cliente) as "Numero clientes" from cliente where ciudad regexp '^M' group by ciudad;
+
+/**
+┌──────────────────────┬─────────────────┐
+│        ciudad        │ Numero clientes │
+├──────────────────────┼─────────────────┤
+│ Madrid               │ 11              │
+│ Miami                │ 2               │
+│ Montornes del valles │ 1               │
+└──────────────────────┴─────────────────┘
+**/
+
+--Devuelve el nombre de los representantes de ventas y el número de clientes al que atiende cada uno.
+
+select e.nombre, COUNT(c.codigo_cliente) as clientes_representante from cliente as c, empleado as e where e.codigo_empleado=c.codigo_empleado_rep_ventas group by c.codigo_empleado_rep_ventas;
+
+/**
+┌─────────────────┬────────────────────────┐
+│     nombre      │ clientes_representante │
+├─────────────────┼────────────────────────┤
+│ Felipe          │ 5                      │
+│ Mariano         │ 4                      │
+│ Lucio           │ 2                      │
+│ Emmanuel        │ 5                      │
+│ José Manuel     │ 5                      │
+│ Lionel          │ 2                      │
+│ Michael         │ 2                      │
+│ Walter Santiago │ 2                      │
+│ Lorena          │ 2                      │
+│ Julian          │ 5                      │
+│ Mariko          │ 2                      │
+└─────────────────┴────────────────────────┘
+**/
+
+--Calcula el número de clientes que no tiene asignado representante de ventas.
+
+select COUNT(codigo_cliente) as clientes_sin_representantes from cliente where codigo_empleado_rep_ventas is null;
+
+/**
+┌─────────────────────────────┐
+│ clientes_sin_representantes │
+├─────────────────────────────┤
+│ 0                           │
+└─────────────────────────────┘
+**/
+
+--Calcula la fecha del primer y último pago realizado por cada uno de los clientes. El listado deberá mostrar el nombre y los apellidos de cada cliente.
+
+select
+c.nombre_cliente,
+MIN(p.fecha_pago) AS primera_fecha_pago,
+MAX(p.fecha_pago) AS ultima_fecha_pago
+from cliente AS c left join pago AS p ON c.codigo_cliente = p.codigo_cliente group by c.codigo_cliente, c.nombre_cliente;
+
+/**
+┌────────────────────────────────┬────────────────────┬───────────────────┐
+│         nombre_cliente         │ primera_fecha_pago │ ultima_fecha_pago │
+├────────────────────────────────┼────────────────────┼───────────────────┤
+│ GoldFish Garden                │ 2008-11-10         │ 2008-12-10        │
+│ Gardening Associates           │ 2009-01-16         │ 2009-02-19        │
+│ Gerudo Valley                  │ 2007-01-08         │ 2007-01-08        │
+│ Tendo Garden                   │ 2006-01-18         │ 2006-01-18        │
+│ Lasas S.A.                     │                    │                   │
+│ Beragua                        │ 2009-01-13         │ 2009-01-13        │
+│ Club Golf Puerta del hierro    │                    │                   │
+│ Naturagua                      │ 2009-01-06         │ 2009-01-06        │
+│ DaraDistribuciones             │                    │                   │
+│ Madrileña de riegos            │                    │                   │
+│ Lasas S.A.                     │                    │                   │
+│ Camunas Jardines S.L.          │ 2008-08-04         │ 2008-08-04        │
+│ Dardena S.A.                   │ 2008-07-15         │ 2008-07-15        │
+│ Jardin de Flores               │ 2009-01-15         │ 2009-02-15        │
+│ Flores Marivi                  │ 2009-02-16         │ 2009-02-16        │
+│ Flowers, S.A                   │                    │                   │
+│ Naturajardin                   │                    │                   │
+│ Golf S.A.                      │ 2009-03-06         │ 2009-03-06        │
+│ Americh Golf Management SL     │                    │                   │
+│ Aloha                          │                    │                   │
+│ El Prat                        │                    │                   │
+│ Sotogrande                     │ 2009-03-26         │ 2009-03-26        │
+│ Vivero Humanes                 │                    │                   │
+│ Fuenla City                    │                    │                   │
+│ Jardines y Mansiones Cactus SL │ 2008-03-18         │ 2008-03-18        │
+│ Jardinerías Matías SL          │ 2009-02-08         │ 2009-02-08        │
+│ Agrojardin                     │ 2009-01-13         │ 2009-01-13        │
+│ Top Campo                      │                    │                   │
+│ Jardineria Sara                │ 2009-01-16         │ 2009-01-16        │
+│ Campohermoso                   │                    │                   │
+│ france telecom                 │                    │                   │
+│ Musée du Louvre                │                    │                   │
+│ Tutifruti S.A                  │ 2007-10-06         │ 2007-10-06        │
+│ Flores S.L.                    │                    │                   │
+│ The Magic Garden               │                    │                   │
+│ El Jardin Viviente S.L         │ 2006-05-26         │ 2006-05-26        │
+└────────────────────────────────┴────────────────────┴───────────────────┘
+**/
+
+--Calcula el número de productos diferentes que hay en cada uno de los pedidos.
+
+select count(distinct(codigo_producto)) as total_productos from producto;
+
+/**
+┌─────────────────┐
+│ total_productos │
+├─────────────────┤
+│ 276             │
+└─────────────────┘
+**/
+
+--Calcula la suma de la cantidad total de todos los productos que aparecen en cada uno de los pedidos.
+
+select dp.codigo_pedido, sum(dp.cantidad) as total_pedido from detalle_pedido as dp group by dp.codigo_pedido;
+
+/**
+┌───────────────┬──────────────┐
+│ codigo_pedido │ total_pedido │
+├───────────────┼──────────────┤
+│ 1             │ 113          │
+│ 2             │ 164          │
+│ 3             │ 232          │
+│ 4             │ 179          │
+│ 8             │ 14           │
+│ 9             │ 625          │
+│ 10            │ 40           │
+│ 11            │ 260          │
+│ 12            │ 290          │
+│ 13            │ 22           │
+│ 14            │ 21           │
+│ 15            │ 21           │
+│ 16            │ 22           │
+│ 17            │ 25           │
+│ 18            │ 16           │
+│ 19            │ 41           │
+│ 20            │ 22           │
+│ 21            │ 30           │
+│ 22            │ 1            │
+│ 23            │ 194          │
+│ 24            │ 19           │
+│ 25            │ 29           │
+│ 26            │ 27           │
+│ 27            │ 84           │
+│ 28            │ 12           │
+│ 29            │ 40           │
+│ 30            │ 33           │
+│ 31            │ 32           │
+│ 32            │ 40           │
+│ 33            │ 905          │
+│ 34            │ 112          │
+│ 35            │ 178          │
+│ 36            │ 28           │
+│ 37            │ 245          │
+│ 38            │ 7            │
+│ 39            │ 9            │
+│ 40            │ 12           │
+│ 41            │ 10           │
+│ 42            │ 4            │
+│ 43            │ 9            │
+│ 44            │ 5            │
+│ 45            │ 10           │
+│ 46            │ 12           │
+│ 47            │ 14           │
+│ 48            │ 147          │
+│ 49            │ 65           │
+│ 50            │ 71           │
+│ 51            │ 200          │
+│ 52            │ 10           │
+│ 53            │ 10           │
+│ 54            │ 69           │
+│ 55            │ 20           │
+│ 56            │ 22           │
+│ 57            │ 17           │
+│ 58            │ 364          │
+│ 59            │ 10           │
+│ 60            │ 10           │
+│ 61            │ 10           │
+│ 62            │ 10           │
+│ 63            │ 10           │
+│ 64            │ 10           │
+│ 65            │ 10           │
+│ 66            │ 10           │
+│ 67            │ 10           │
+│ 68            │ 10           │
+│ 74            │ 91           │
+│ 75            │ 130          │
+│ 76            │ 374          │
+│ 77            │ 49           │
+│ 78            │ 153          │
+│ 79            │ 50           │
+│ 80            │ 162          │
+│ 81            │ 30           │
+│ 82            │ 34           │
+│ 83            │ 30           │
+│ 89            │ 47           │
+│ 90            │ 41           │
+│ 91            │ 101          │
+│ 92            │ 62           │
+│ 93            │ 79           │
+│ 94            │ 124          │
+│ 95            │ 20           │
+│ 96            │ 36           │
+│ 97            │ 36           │
+│ 98            │ 62           │
+│ 99            │ 45           │
+│ 100           │ 60           │
+│ 101           │ 209          │
+│ 102           │ 55           │
+│ 103           │ 64           │
+│ 104           │ 122          │
+│ 105           │ 48           │
+│ 106           │ 278          │
+│ 107           │ 158          │
+│ 108           │ 112          │
+│ 109           │ 69           │
+│ 110           │ 21           │
+│ 111           │ 10           │
+│ 112           │ 10           │
+│ 113           │ 10           │
+│ 114           │ 10           │
+│ 115           │ 10           │
+│ 116           │ 78           │
+│ 117           │ 24           │
+│ 118           │ 10           │
+│ 119           │ 10           │
+│ 120           │ 10           │
+│ 121           │ 10           │
+│ 122           │ 10           │
+│ 123           │ 10           │
+│ 124           │ 10           │
+│ 125           │ 10           │
+│ 126           │ 10           │
+│ 127           │ 10           │
+│ 128           │ 33           │
+└───────────────┴──────────────┘
+**/
+
+--Devuelve un listado de los 20 productos más vendidos y el número total de unidades que se han vendido de cada uno. El listado deberá estar ordenado por el número total de unidades vendidas.
+
+select p.codigo_producto, p.nombre, COUNT(dp.codigo_producto) as total_vendido from detalle_pedido as dp, producto as p where p.codigo_producto=dp.codigo_producto group by p.codigo_producto order by total_vendido DESC LIMIT 20;
+
+/**
+┌─────────────────┬────────────────────────────────┬───────────────┐
+│ codigo_producto │             nombre             │ total_vendido │
+├─────────────────┼────────────────────────────────┼───────────────┤
+│ FR-67           │ Cerezo                         │ 28            │
+│ 30310           │ Azadón                         │ 8             │
+│ OR-227          │ Chamaerops Humilis             │ 7             │
+│ FR-11           │ Limonero 30/40                 │ 7             │
+│ 22225           │ Rastrillo de Jardín            │ 7             │
+│ 11679           │ Sierra de Poda 400MM           │ 7             │
+│ OR-247          │ Trachycarpus Fortunei          │ 6             │
+│ OR-208          │ Tuja orientalis \"Aurea nana\" │ 6             │
+│ OR-157          │ Acer Pseudoplatanus            │ 6             │
+│ AR-009          │ Thymus Vulgaris                │ 6             │
+│ 21636           │ Pala                           │ 6             │
+│ FR-94           │ Melocotonero                   │ 5             │
+│ FR-85           │ Kaki                           │ 5             │
+│ FR-87           │ Manzano                        │ 4             │
+│ FR-53           │ Peral Blanq. de Aranjuez       │ 4             │
+│ FR-108          │ Peral                          │ 4             │
+│ FR-100          │ Nectarina                      │ 4             │
+│ FR-1            │ Expositor Cítricos Mix         │ 4             │
+│ AR-006          │ Petrosilium Hortense (Peregil) │ 4             │
+│ AR-001          │ Ajedrea                        │ 4             │
+└─────────────────┴────────────────────────────────┴───────────────┘
+**/
+
+--La facturación que ha tenido la empresa en toda la historia, indicando la base imponible, el IGIC y el total facturado. La base imponible se calcula sumando el coste del producto por el número de unidades vendidas de la tabla detalle_pedido. El IGIC es el 7 % de la base imponible, y el total la suma de los dos campos anteriores.
+select SUM(dp.precio_unidad * dp.cantidad) as base_imponible,
+SUM(dp.precio_unidad * dp.cantidad * 0.07) as igic, SUM(dp.precio_unidad * dp.cantidad * 1.07) as total_precio_unidad from detalle_pedido as dp;
+
+/**
+┌────────────────┬──────────┬─────────────────────┐
+│ base_imponible │   igic   │ total_precio_unidad │
+├────────────────┼──────────┼─────────────────────┤
+│ 217738         │ 15241.66 │ 232979.66           │
+└────────────────┴──────────┴─────────────────────┘
+**/
+
+--La misma información que en la pregunta anterior, pero agrupada por código de producto.
+
+select codigo_producto, precio_unidad + cantidad as base_imponible, (precio_unidad + cantidad) * 0.07 as IGIC, (precio_unidad + cantidad) + ((precio_unidad + cantidad) * 0.07) as total_facturado from detalle_pedido;
+
+/**
+┌─────────────────┬────────────────┬───────┬─────────────────┐
+│ codigo_producto │ base_imponible │ IGIC  │ total_facturado │
+├─────────────────┼────────────────┼───────┼─────────────────┤
+│ FR-67           │ 80             │ 5.6   │ 85.6            │
+│ OR-127          │ 44             │ 3.08  │ 47.08           │
+│ OR-141          │ 29             │ 2.03  │ 31.03           │
+│ OR-241          │ 34             │ 2.38  │ 36.38           │
+│ OR-99           │ 37             │ 2.59  │ 39.59           │
+│ FR-4            │ 32             │ 2.24  │ 34.24           │
+│ FR-40           │ 15             │ 1.05  │ 16.05           │
+│ OR-140          │ 54             │ 3.78  │ 57.78           │
+│ OR-141          │ 25             │ 1.75  │ 26.75           │
+│ OR-159          │ 18             │ 1.26  │ 19.26           │
+│ OR-227          │ 131            │ 9.17  │ 140.17          │
+│ OR-247          │ 467            │ 32.69 │ 499.69          │
+│ FR-48           │ 129            │ 9.03  │ 138.03          │
+│ OR-122          │ 37             │ 2.59  │ 39.59           │
+│ OR-123          │ 16             │ 1.12  │ 17.12           │
+│ OR-213          │ 296            │ 20.72 │ 316.72          │
+│ OR-217          │ 80             │ 5.6   │ 85.6            │
+│ OR-218          │ 49             │ 3.43  │ 52.43           │
+│ FR-31           │ 20             │ 1.4   │ 21.4            │
+│ FR-34           │ 50             │ 3.5   │ 53.5            │
+│ FR-40           │ 51             │ 3.57  │ 54.57           │
+│ OR-152          │ 9              │ 0.63  │ 9.63            │
+│ OR-155          │ 10             │ 0.7   │ 10.7            │
+│ OR-156          │ 26             │ 1.82  │ 27.82           │
+│ OR-157          │ 48             │ 3.36  │ 51.36           │
+│ OR-222          │ 80             │ 5.6   │ 85.6            │
+│ FR-106          │ 14             │ 0.98  │ 14.98           │
+│ FR-108          │ 33             │ 2.31  │ 35.31           │
+│ FR-11           │ 110            │ 7.7   │ 117.7           │
+│ AR-001          │ 81             │ 5.67  │ 86.67           │
+│ AR-008          │ 451            │ 31.57 │ 482.57          │
+│ FR-106          │ 88             │ 6.16  │ 94.16           │
+│ FR-69           │ 106            │ 7.42  │ 113.42          │
+│ FR-82           │ 75             │ 5.25  │ 80.25           │
+│ FR-91           │ 105            │ 7.35  │ 112.35          │
+│ OR-234          │ 69             │ 4.83  │ 73.83           │
+│ AR-006          │ 181            │ 12.67 │ 193.67          │
+│ OR-247          │ 88             │ 6.16  │ 94.16           │
+│ AR-009          │ 291            │ 20.37 │ 311.37          │
+│ 11679           │ 19             │ 1.33  │ 20.33           │
+│ 21636           │ 26             │ 1.82  │ 27.82           │
+│ FR-11           │ 105            │ 7.35  │ 112.35          │
+│ FR-100          │ 19             │ 1.33  │ 20.33           │
+│ FR-13           │ 70             │ 4.9   │ 74.9            │
+│ FR-84           │ 17             │ 1.19  │ 18.19           │
+│ OR-101          │ 8              │ 0.56  │ 8.56            │
+│ OR-156          │ 16             │ 1.12  │ 17.12           │
+│ OR-203          │ 19             │ 1.33  │ 20.33           │
+│ 30310           │ 24             │ 1.68  │ 25.68           │
+│ FR-36           │ 19             │ 1.33  │ 20.33           │
+│ 11679           │ 19             │ 1.33  │ 20.33           │
+│ 22225           │ 17             │ 1.19  │ 18.19           │
+│ FR-37           │ 14             │ 0.98  │ 14.98           │
+│ FR-64           │ 27             │ 1.89  │ 28.89           │
+│ OR-136          │ 23             │ 1.61  │ 24.61           │
+│ 22225           │ 16             │ 1.12  │ 17.12           │
+│ FR-22           │ 6              │ 0.42  │ 6.42            │
+│ OR-159          │ 16             │ 1.12  │ 17.12           │
+│ 30310           │ 21             │ 1.47  │ 22.47           │
+│ FR-23           │ 14             │ 0.98  │ 14.98           │
+│ FR-75           │ 33             │ 2.31  │ 35.31           │
+│ FR-84           │ 18             │ 1.26  │ 19.26           │
+│ OR-208          │ 24             │ 1.68  │ 25.68           │
+│ 11679           │ 28             │ 1.96  │ 29.96           │
+│ 30310           │ 20             │ 1.4   │ 21.4            │
+│ 21636           │ 19             │ 1.33  │ 20.33           │
+│ FR-18           │ 26             │ 1.82  │ 27.82           │
+│ FR-53           │ 11             │ 0.77  │ 11.77           │
+│ OR-240          │ 7              │ 0.49  │ 7.49            │
+│ AR-002          │ 111            │ 7.77  │ 118.77          │
+│ FR-107          │ 72             │ 5.04  │ 77.04           │
+│ FR-85           │ 74             │ 5.18  │ 79.18           │
+│ OR-249          │ 35             │ 2.45  │ 37.45           │
+│ 22225           │ 18             │ 1.26  │ 19.26           │
+│ FR-1            │ 11             │ 0.77  │ 11.77           │
+│ FR-23           │ 9              │ 0.63  │ 9.63            │
+│ OR-241          │ 30             │ 2.1   │ 32.1            │
+│ FR-77           │ 84             │ 5.88  │ 89.88           │
+│ FR-9            │ 34             │ 2.38  │ 36.38           │
+│ FR-94           │ 40             │ 2.8   │ 42.8            │
+│ FR-15           │ 34             │ 2.38  │ 36.38           │
+│ OR-188          │ 29             │ 2.03  │ 31.03           │
+│ OR-218          │ 39             │ 2.73  │ 41.73           │
+│ OR-101          │ 28             │ 1.96  │ 29.96           │
+│ OR-102          │ 28             │ 1.96  │ 29.96           │
+│ OR-186          │ 46             │ 3.22  │ 49.22           │
+│ FR-11           │ 107            │ 7.49  │ 114.49          │
+│ OR-213          │ 269            │ 18.83 │ 287.83          │
+│ OR-247          │ 463            │ 32.41 │ 495.41          │
+│ FR-82           │ 74             │ 5.18  │ 79.18           │
+│ FR-9            │ 32             │ 2.24  │ 34.24           │
+│ FR-94           │ 51             │ 3.57  │ 54.57           │
+│ OR-129          │ 113            │ 7.91  │ 120.91          │
+│ OR-160          │ 19             │ 1.33  │ 20.33           │
+│ AR-004          │ 11             │ 0.77  │ 11.77           │
+│ FR-108          │ 34             │ 2.38  │ 36.38           │
+│ FR-12           │ 21             │ 1.47  │ 22.47           │
+│ FR-72           │ 35             │ 2.45  │ 37.45           │
+│ FR-89           │ 55             │ 3.85  │ 58.85           │
+│ OR-120          │ 10             │ 0.7   │ 10.7            │
+│ AR-009          │ 27             │ 1.89  │ 28.89           │
+│ FR-102          │ 21             │ 1.47  │ 22.47           │
+│ FR-4            │ 35             │ 2.45  │ 37.45           │
+│ 11679           │ 15             │ 1.05  │ 16.05           │
+│ 21636           │ 19             │ 1.33  │ 20.33           │
+│ 22225           │ 16             │ 1.12  │ 17.12           │
+│ OR-128          │ 129            │ 9.03  │ 138.03          │
+│ OR-193          │ 25             │ 1.75  │ 26.75           │
+│ FR-17           │ 425            │ 29.75 │ 454.75          │
+│ FR-29           │ 128            │ 8.96  │ 136.96          │
+│ OR-214          │ 222            │ 15.54 │ 237.54          │
+│ OR-247          │ 612            │ 42.84 │ 654.84          │
+│ FR-3            │ 63             │ 4.41  │ 67.41           │
+│ FR-7            │ 41             │ 2.87  │ 43.87           │
+│ OR-172          │ 38             │ 2.66  │ 40.66           │
+│ OR-174          │ 42             │ 2.94  │ 44.94           │
+│ 21636           │ 26             │ 1.82  │ 27.82           │
+│ FR-47           │ 63             │ 4.41  │ 67.41           │
+│ OR-165          │ 13             │ 0.91  │ 13.91           │
+│ OR-181          │ 46             │ 3.22  │ 49.22           │
+│ OR-225          │ 82             │ 5.74  │ 87.74           │
+│ 30310           │ 16             │ 1.12  │ 17.12           │
+│ FR-1            │ 9              │ 0.63  │ 9.63            │
+│ OR-147          │ 13             │ 0.91  │ 13.91           │
+│ OR-203          │ 13             │ 0.91  │ 13.91           │
+│ OR-99           │ 28             │ 1.96  │ 29.96           │
+│ FR-105          │ 74             │ 5.18  │ 79.18           │
+│ FR-57           │ 211            │ 14.77 │ 225.77          │
+│ OR-176          │ 48             │ 3.36  │ 51.36           │
+│ 11679           │ 19             │ 1.33  │ 20.33           │
+│ 21636           │ 16             │ 1.12  │ 17.12           │
+│ 22225           │ 15             │ 1.05  │ 16.05           │
+│ 30310           │ 18             │ 1.26  │ 19.26           │
+│ AR-001          │ 5              │ 0.35  │ 5.35            │
+│ AR-002          │ 9              │ 0.63  │ 9.63            │
+│ AR-003          │ 6              │ 0.42  │ 6.42            │
+│ AR-004          │ 6              │ 0.42  │ 6.42            │
+│ AR-005          │ 4              │ 0.28  │ 4.28            │
+│ AR-006          │ 2              │ 0.14  │ 2.14            │
+│ AR-007          │ 10             │ 0.7   │ 10.7            │
+│ AR-008          │ 6              │ 0.42  │ 6.42            │
+│ AR-009          │ 7              │ 0.49  │ 7.49            │
+│ AR-010          │ 5              │ 0.35  │ 5.35            │
+│ FR-1            │ 11             │ 0.77  │ 11.77           │
+│ FR-10           │ 15             │ 1.05  │ 16.05           │
+│ FR-100          │ 20             │ 1.4   │ 21.4            │
+│ FR-101          │ 18             │ 1.26  │ 19.26           │
+│ FR-102          │ 19             │ 1.33  │ 20.33           │
+│ FR-103          │ 26             │ 1.82  │ 27.82           │
+│ OR-234          │ 114            │ 7.98  │ 121.98          │
+│ OR-236          │ 94             │ 6.58  │ 100.58          │
+│ OR-237          │ 69             │ 4.83  │ 73.83           │
+│ OR-204          │ 60             │ 4.2   │ 64.2            │
+│ OR-205          │ 20             │ 1.4   │ 21.4            │
+│ OR-206          │ 10             │ 0.7   │ 10.7            │
+│ OR-225          │ 22             │ 1.54  │ 23.54           │
+│ OR-226          │ 53             │ 3.71  │ 56.71           │
+│ OR-227          │ 108            │ 7.56  │ 115.56          │
+│ OR-209          │ 60             │ 4.2   │ 64.2            │
+│ OR-210          │ 119            │ 8.33  │ 127.33          │
+│ OR-211          │ 129            │ 9.03  │ 138.03          │
+│ FR-2            │ 8              │ 0.56  │ 8.56            │
+│ FR-85           │ 71             │ 4.97  │ 75.97           │
+│ FR-86           │ 13             │ 0.91  │ 13.91           │
+│ OR-116          │ 13             │ 0.91  │ 13.91           │
+│ 11679           │ 17             │ 1.19  │ 18.19           │
+│ FR-100          │ 55             │ 3.85  │ 58.85           │
+│ FR-18           │ 9              │ 0.63  │ 9.63            │
+│ FR-79           │ 25             │ 1.75  │ 26.75           │
+│ OR-116          │ 15             │ 1.05  │ 16.05           │
+│ OR-123          │ 8              │ 0.56  │ 8.56            │
+│ OR-168          │ 12             │ 0.84  │ 12.84           │
+│ OR-115          │ 16             │ 1.12  │ 17.12           │
+│ OR-213          │ 268            │ 18.76 │ 286.76          │
+│ OR-227          │ 70             │ 4.9   │ 74.9            │
+│ OR-243          │ 66             │ 4.62  │ 70.62           │
+│ OR-247          │ 463            │ 32.41 │ 495.41          │
+│ OR-129          │ 116            │ 8.12  │ 124.12          │
+│ OR-130          │ 28             │ 1.96  │ 29.96           │
+│ OR-179          │ 7              │ 0.49  │ 7.49            │
+│ OR-196          │ 13             │ 0.91  │ 13.91           │
+│ OR-207          │ 8              │ 0.56  │ 8.56            │
+│ OR-250          │ 13             │ 0.91  │ 13.91           │
+│ FR-69           │ 97             │ 6.79  │ 103.79          │
+│ FR-81           │ 52             │ 3.64  │ 55.64           │
+│ FR-84           │ 15             │ 1.05  │ 16.05           │
+│ FR-94           │ 15             │ 1.05  │ 16.05           │
+│ OR-102          │ 83             │ 5.81  │ 88.81           │
+│ OR-139          │ 84             │ 5.88  │ 89.88           │
+│ OR-172          │ 84             │ 5.88  │ 89.88           │
+│ OR-177          │ 165            │ 11.55 │ 176.55          │
+│ FR-67           │ 85             │ 5.95  │ 90.95           │
+│ OR-227          │ 98             │ 6.86  │ 104.86          │
+│ OR-247          │ 50             │ 3.5   │ 53.5            │
+│ AR-006          │ 61             │ 4.27  │ 65.27           │
+│ FR-87           │ 46             │ 3.22  │ 49.22           │
+│ OR-157          │ 56             │ 3.92  │ 59.92           │
+│ AR-009          │ 251            │ 17.57 │ 268.57          │
+│ FR-79           │ 62             │ 4.34  │ 66.34           │
+│ FR-87           │ 46             │ 3.22  │ 49.22           │
+│ FR-94           │ 44             │ 3.08  │ 47.08           │
+│ OR-196          │ 35             │ 2.45  │ 37.45           │
+│ 22225           │ 46             │ 3.22  │ 49.22           │
+│ 30310           │ 27             │ 1.89  │ 28.89           │
+│ FR-53           │ 33             │ 2.31  │ 35.31           │
+│ FR-85           │ 126            │ 8.82  │ 134.82          │
+│ OR-157          │ 52             │ 3.64  │ 55.64           │
+│ OR-208          │ 34             │ 2.38  │ 36.38           │
+│ OR-240          │ 56             │ 3.92  │ 59.92           │
+│ FR-11           │ 140            │ 9.8   │ 149.8           │
+│ FR-36           │ 56             │ 3.92  │ 59.92           │
+│ OR-136          │ 93             │ 6.51  │ 99.51           │
+│ OR-208          │ 34             │ 2.38  │ 36.38           │
+│ OR-227          │ 98             │ 6.86  │ 104.86          │
+│ OR-208          │ 34             │ 2.38  │ 36.38           │
+│ FR-108          │ 35             │ 2.45  │ 37.45           │
+│ FR-3            │ 22             │ 1.54  │ 23.54           │
+│ FR-42           │ 20             │ 1.4   │ 21.4            │
+│ FR-66           │ 54             │ 3.78  │ 57.78           │
+│ FR-87           │ 26             │ 1.82  │ 27.82           │
+│ OR-157          │ 18             │ 1.26  │ 19.26           │
+│ AR-001          │ 20             │ 1.4   │ 21.4            │
+│ AR-002          │ 11             │ 0.77  │ 11.77           │
+│ AR-003          │ 13             │ 0.91  │ 13.91           │
+│ FR-100          │ 63             │ 4.41  │ 67.41           │
+│ FR-101          │ 27             │ 1.89  │ 28.89           │
+│ FR-102          │ 53             │ 3.71  │ 56.71           │
+│ FR-108          │ 35             │ 2.45  │ 37.45           │
+│ FR-11           │ 120            │ 8.4   │ 128.4           │
+│ FR-12           │ 51             │ 3.57  │ 54.57           │
+│ FR-54           │ 34             │ 2.38  │ 36.38           │
+│ FR-58           │ 62             │ 4.34  │ 66.34           │
+│ FR-60           │ 35             │ 2.45  │ 37.45           │
+│ 11679           │ 26             │ 1.82  │ 27.82           │
+│ FR-11           │ 133            │ 9.31  │ 142.31          │
+│ FR-4            │ 108            │ 7.56  │ 115.56          │
+│ FR-10           │ 16             │ 1.12  │ 17.12           │
+│ FR-75           │ 38             │ 2.66  │ 40.66           │
+│ FR-82           │ 75             │ 5.25  │ 80.25           │
+│ FR-43           │ 14             │ 0.98  │ 14.98           │
+│ FR-6            │ 23             │ 1.61  │ 24.61           │
+│ FR-71           │ 32             │ 2.24  │ 34.24           │
+│ FR-90           │ 74             │ 5.18  │ 79.18           │
+│ FR-41           │ 20             │ 1.4   │ 21.4            │
+│ FR-54           │ 23             │ 1.61  │ 24.61           │
+│ OR-156          │ 20             │ 1.4   │ 21.4            │
+│ FR-33           │ 22             │ 1.54  │ 23.54           │
+│ FR-56           │ 24             │ 1.68  │ 25.68           │
+│ FR-60           │ 40             │ 2.8   │ 42.8            │
+│ FR-8            │ 24             │ 1.68  │ 25.68           │
+│ FR-85           │ 76             │ 5.32  │ 81.32           │
+│ OR-157          │ 25             │ 1.75  │ 26.75           │
+│ OR-227          │ 94             │ 6.58  │ 100.58          │
+│ FR-87           │ 42             │ 2.94  │ 44.94           │
+│ FR-94           │ 49             │ 3.43  │ 52.43           │
+│ AR-006          │ 51             │ 3.57  │ 54.57           │
+│ AR-009          │ 160            │ 11.2  │ 171.2           │
+│ 22225           │ 44             │ 3.08  │ 47.08           │
+│ 30310           │ 35             │ 2.45  │ 37.45           │
+│ FR-53           │ 20             │ 1.4   │ 21.4            │
+│ OR-208          │ 56             │ 3.92  │ 59.92           │
+│ FR-85           │ 79             │ 5.53  │ 84.53           │
+│ OR-157          │ 123            │ 8.61  │ 131.61          │
+│ OR-227          │ 85             │ 5.95  │ 90.95           │
+│ OR-240          │ 33             │ 2.31  │ 35.31           │
+│ AR-009          │ 232            │ 16.24 │ 248.24          │
+│ OR-136          │ 65             │ 4.55  │ 69.55           │
+│ 30310           │ 155            │ 10.85 │ 165.85          │
+│ FR-11           │ 115            │ 8.05  │ 123.05          │
+│ FR-53           │ 61             │ 4.27  │ 65.27           │
+│ OR-208          │ 63             │ 4.41  │ 67.41           │
+│ FR-22           │ 12             │ 0.84  │ 12.84           │
+│ FR-36           │ 21             │ 1.47  │ 22.47           │
+│ FR-45           │ 22             │ 1.54  │ 23.54           │
+│ OR-104          │ 30             │ 2.1   │ 32.1            │
+│ OR-119          │ 15             │ 1.05  │ 16.05           │
+│ OR-125          │ 8              │ 0.56  │ 8.56            │
+│ OR-130          │ 20             │ 1.4   │ 21.4            │
+│ AR-010          │ 7              │ 0.49  │ 7.49            │
+│ FR-1            │ 21             │ 1.47  │ 22.47           │
+│ FR-16           │ 46             │ 3.22  │ 49.22           │
+│ 21636           │ 19             │ 1.33  │ 20.33           │
+│ AR-001          │ 33             │ 2.31  │ 35.31           │
+│ AR-005          │ 19             │ 1.33  │ 20.33           │
+│ FR-33           │ 21             │ 1.47  │ 22.47           │
+│ OR-200          │ 14             │ 0.98  │ 14.98           │
+│ FR-78           │ 17             │ 1.19  │ 18.19           │
+│ FR-80           │ 33             │ 2.31  │ 35.31           │
+│ OR-146          │ 21             │ 1.47  │ 22.47           │
+│ OR-179          │ 10             │ 0.7   │ 10.7            │
+│ AR-004          │ 16             │ 1.12  │ 17.12           │
+│ OR-150          │ 20             │ 1.4   │ 21.4            │
+│ FR-67           │ 80             │ 5.6   │ 85.6            │
+│ FR-67           │ 80             │ 5.6   │ 85.6            │
+│ FR-67           │ 80             │ 5.6   │ 85.6            │
+│ FR-67           │ 80             │ 5.6   │ 85.6            │
+│ FR-67           │ 80             │ 5.6   │ 85.6            │
+│ FR-67           │ 80             │ 5.6   │ 85.6            │
+│ FR-67           │ 80             │ 5.6   │ 85.6            │
+│ FR-67           │ 80             │ 5.6   │ 85.6            │
+│ FR-67           │ 80             │ 5.6   │ 85.6            │
+│ FR-67           │ 80             │ 5.6   │ 85.6            │
+│ FR-67           │ 80             │ 5.6   │ 85.6            │
+│ FR-67           │ 80             │ 5.6   │ 85.6            │
+│ FR-67           │ 80             │ 5.6   │ 85.6            │
+│ FR-67           │ 80             │ 5.6   │ 85.6            │
+│ FR-67           │ 80             │ 5.6   │ 85.6            │
+│ FR-67           │ 80             │ 5.6   │ 85.6            │
+│ FR-67           │ 80             │ 5.6   │ 85.6            │
+│ FR-67           │ 80             │ 5.6   │ 85.6            │
+│ FR-67           │ 80             │ 5.6   │ 85.6            │
+│ FR-67           │ 80             │ 5.6   │ 85.6            │
+│ FR-67           │ 80             │ 5.6   │ 85.6            │
+│ FR-67           │ 80             │ 5.6   │ 85.6            │
+│ FR-67           │ 80             │ 5.6   │ 85.6            │
+│ FR-67           │ 80             │ 5.6   │ 85.6            │
+│ FR-67           │ 80             │ 5.6   │ 85.6            │
+│ FR-67           │ 80             │ 5.6   │ 85.6            │
+└─────────────────┴────────────────┴───────┴─────────────────┘
+**/
+
+--La misma información que en la pregunta anterior, pero agrupada por código de producto filtrada por los códigos que empiecen por OR.
+
+select codigo_producto, SUM(precio_unidad + cantidad) as base_imponible, SUM((precio_unidad + cantidad) * 0.07) as IGIC, SUM((precio_unidad + cantidad) + ((precio_unidad + cantidad) * 0.07)) as total_facturado from detalle_pedido 
+where codigo_producto regexp 'OR' group by codigo_producto;
+
+/**
+┌─────────────────┬────────────────┬────────┬─────────────────┐
+│ codigo_producto │ base_imponible │  IGIC  │ total_facturado │
+├─────────────────┼────────────────┼────────┼─────────────────┤
+│ OR-101          │ 36             │ 2.52   │ 38.52           │
+│ OR-102          │ 111            │ 7.77   │ 118.77          │
+│ OR-104          │ 30             │ 2.1    │ 32.1            │
+│ OR-115          │ 16             │ 1.12   │ 17.12           │
+│ OR-116          │ 28             │ 1.96   │ 29.96           │
+│ OR-119          │ 15             │ 1.05   │ 16.05           │
+│ OR-120          │ 10             │ 0.7    │ 10.7            │
+│ OR-122          │ 37             │ 2.59   │ 39.59           │
+│ OR-123          │ 24             │ 1.68   │ 25.68           │
+│ OR-125          │ 8              │ 0.56   │ 8.56            │
+│ OR-127          │ 44             │ 3.08   │ 47.08           │
+│ OR-128          │ 129            │ 9.03   │ 138.03          │
+│ OR-129          │ 229            │ 16.03  │ 245.03          │
+│ OR-130          │ 48             │ 3.36   │ 51.36           │
+│ OR-136          │ 181            │ 12.67  │ 193.67          │
+│ OR-139          │ 84             │ 5.88   │ 89.88           │
+│ OR-140          │ 54             │ 3.78   │ 57.78           │
+│ OR-141          │ 54             │ 3.78   │ 57.78           │
+│ OR-146          │ 21             │ 1.47   │ 22.47           │
+│ OR-147          │ 13             │ 0.91   │ 13.91           │
+│ OR-150          │ 20             │ 1.4    │ 21.4            │
+│ OR-152          │ 9              │ 0.63   │ 9.63            │
+│ OR-155          │ 10             │ 0.7    │ 10.7            │
+│ OR-156          │ 62             │ 4.34   │ 66.34           │
+│ OR-157          │ 322            │ 22.54  │ 344.54          │
+│ OR-159          │ 34             │ 2.38   │ 36.38           │
+│ OR-160          │ 19             │ 1.33   │ 20.33           │
+│ OR-165          │ 13             │ 0.91   │ 13.91           │
+│ OR-168          │ 12             │ 0.84   │ 12.84           │
+│ OR-172          │ 122            │ 8.54   │ 130.54          │
+│ OR-174          │ 42             │ 2.94   │ 44.94           │
+│ OR-176          │ 48             │ 3.36   │ 51.36           │
+│ OR-177          │ 165            │ 11.55  │ 176.55          │
+│ OR-179          │ 17             │ 1.19   │ 18.19           │
+│ OR-181          │ 46             │ 3.22   │ 49.22           │
+│ OR-186          │ 46             │ 3.22   │ 49.22           │
+│ OR-188          │ 29             │ 2.03   │ 31.03           │
+│ OR-193          │ 25             │ 1.75   │ 26.75           │
+│ OR-196          │ 48             │ 3.36   │ 51.36           │
+│ OR-200          │ 14             │ 0.98   │ 14.98           │
+│ OR-203          │ 32             │ 2.24   │ 34.24           │
+│ OR-204          │ 60             │ 4.2    │ 64.2            │
+│ OR-205          │ 20             │ 1.4    │ 21.4            │
+│ OR-206          │ 10             │ 0.7    │ 10.7            │
+│ OR-207          │ 8              │ 0.56   │ 8.56            │
+│ OR-208          │ 245            │ 17.15  │ 262.15          │
+│ OR-209          │ 60             │ 4.2    │ 64.2            │
+│ OR-210          │ 119            │ 8.33   │ 127.33          │
+│ OR-211          │ 129            │ 9.03   │ 138.03          │
+│ OR-213          │ 833            │ 58.31  │ 891.31          │
+│ OR-214          │ 222            │ 15.54  │ 237.54          │
+│ OR-217          │ 80             │ 5.6    │ 85.6            │
+│ OR-218          │ 88             │ 6.16   │ 94.16           │
+│ OR-222          │ 80             │ 5.6    │ 85.6            │
+│ OR-225          │ 104            │ 7.28   │ 111.28          │
+│ OR-226          │ 53             │ 3.71   │ 56.71           │
+│ OR-227          │ 684            │ 47.88  │ 731.88          │
+│ OR-234          │ 183            │ 12.81  │ 195.81          │
+│ OR-236          │ 94             │ 6.58   │ 100.58          │
+│ OR-237          │ 69             │ 4.83   │ 73.83           │
+│ OR-240          │ 96             │ 6.72   │ 102.72          │
+│ OR-241          │ 64             │ 4.48   │ 68.48           │
+│ OR-243          │ 66             │ 4.62   │ 70.62           │
+│ OR-247          │ 2143           │ 150.01 │ 2293.01         │
+│ OR-249          │ 35             │ 2.45   │ 37.45           │
+│ OR-250          │ 13             │ 0.91   │ 13.91           │
+│ OR-99           │ 65             │ 4.55   │ 69.55           │
+└─────────────────┴────────────────┴────────┴─────────────────┘
+**/
+
+--Lista las ventas totales de los productos que hayan facturado más de 3000 euros. Se mostrará el nombre, unidades vendidas, total facturado y total facturado con impuestos (7% IGIC).
+
+select p.nombre as nombre_producto, sum(dp.cantidad) as unidades_vendidas, sum(dp.precio_unidad * dp.cantidad) as total_facturado, sum(dp.precio_unidad * dp.cantidad * 1.07) as total_facturado_con_impuestos
+from detalle_pedido as dp join producto as p on dp.codigo_producto = p.codigo_producto
+group by p.codigo_producto, p.nombre having total_facturado > 3000;
+
+/**
+┌───────────────────────┬───────────────────┬─────────────────┬───────────────────────────────┐
+│    nombre_producto    │ unidades_vendidas │ total_facturado │ total_facturado_con_impuestos │
+├───────────────────────┼───────────────────┼─────────────────┼───────────────────────────────┤
+│ Limonero 30/40        │ 131               │ 13092           │ 14008.44                      │
+│ Cerezo                │ 285               │ 19950           │ 21346.5                       │
+│ Kaki                  │ 76                │ 5320            │ 5692.4                        │
+│ Beucarnea Recurvata   │ 80                │ 3120            │ 3338.4                        │
+│ Beucarnea Recurvata   │ 70                │ 4130            │ 4419.1                        │
+│ Bismarckia Nobilis    │ 35                │ 9310            │ 9961.7                        │
+│ Chamaerops Humilis    │ 236               │ 15104           │ 16161.28                      │
+│ Dracaena Drago        │ 55                │ 3520            │ 3766.4                        │
+│ Trachycarpus Fortunei │ 279               │ 73510           │ 78655.7                       │
+└───────────────────────┴───────────────────┴─────────────────┴───────────────────────────────┘
+**/
+
+--Muestre la suma total de todos los pagos que se realizaron para cada uno de los años que aparecen en la tabla pagos.
+
+select strftime('%Y', fecha_pago) as año, SUM(total) AS suma_total_pagos from pago group by año;
+
+/**
+┌──────┬──────────────────┐
+│ año  │ suma_total_pagos │
+├──────┼──────────────────┤
+│ 2006 │ 24965            │
+│ 2007 │ 85170            │
+│ 2008 │ 29252            │
+│ 2009 │ 58553            │
+└──────┴──────────────────┘
+**/
+
+-----------------------------------Subconsultas en SQL-------------------------------------------
+
+--Devuelve el nombre del cliente con mayor límite de crédito.
+
+select nombre_cliente, MAX(limite_credito) as mayor_limite_credito from cliente;
+
+/**
+┌────────────────┬──────────────────────┐
+│ nombre_cliente │ mayor_limite_credito │
+├────────────────┼──────────────────────┤
+│ Tendo Garden   │ 600000               │
+└────────────────┴──────────────────────┘
+**/
+
+--Devuelve el nombre del producto que tenga el precio de venta más caro.
+
+select nombre, MAX(precio_venta) as producto_mas_caro from producto;
+
+/**
+┌───────────────────────┬───────────────────┐
+│        nombre         │ producto_mas_caro │
+├───────────────────────┼───────────────────┤
+│ Trachycarpus Fortunei │ 462               │
+└───────────────────────┴───────────────────┘
+**/
+
+--Devuelve el nombre del producto del que se han vendido más unidades. (Tenga en cuenta que tendrá que calcular cuál es el número total de unidades que se han vendido de cada producto a partir de los datos de la tabla detalle_pedido)
+
+select nombre as mas_vendido from producto
+where codigo_producto = ( select codigo_producto from detalle_pedido group by codigo_producto order by sum(cantidad) desc limit 1);
+
+/**
+┌─────────────────┐
+│   mas_vendido   │
+├─────────────────┤
+│ Thymus Vulgaris │
+└─────────────────┘
+**/
+
+--Los clientes cuyo límite de crédito sea mayor que los pagos que haya realizado. (Sin utilizar INNER JOIN).
+
+select nombre_cliente, limite_credito from cliente where limite_credito > (select SUM(total) from pago where pago.codigo_cliente = cliente.codigo_cliente);
+
+/**
+┌────────────────────────────────┬────────────────┐
+│         nombre_cliente         │ limite_credito │
+├────────────────────────────────┼────────────────┤
+│ Tendo Garden                   │ 600000         │
+│ Beragua                        │ 20000          │
+│ Naturagua                      │ 32000          │
+│ Camunas Jardines S.L.          │ 16481          │
+│ Dardena S.A.                   │ 321000         │
+│ Jardin de Flores               │ 40000          │
+│ Golf S.A.                      │ 30000          │
+│ Sotogrande                     │ 60000          │
+│ Jardines y Mansiones Cactus SL │ 76000          │
+│ Jardinerías Matías SL          │ 100500         │
+│ Tutifruti S.A                  │ 10000          │
+│ El Jardin Viviente S.L         │ 8000           │
+└────────────────────────────────┴────────────────┘
+**/
+
+--Devuelve el producto que más unidades tiene en stock.
+
+select *, MAX(cantidad_en_stock) as cantidad_maxima from producto;   
+
+/**
+┌─────────────────┬─────────────┬──────────┬─────────────┬───────────────────────┬─────────────┬───────────────────┬──────────────┬──────────────────┬─────────────────┐
+│ codigo_producto │   nombre    │   gama   │ dimensiones │       proveedor       │ descripcion │ cantidad_en_stock │ precio_venta │ precio_proveedor │ cantidad_maxima │
+├─────────────────┼─────────────┼──────────┼─────────────┼───────────────────────┼─────────────┼───────────────────┼──────────────┼──────────────────┼─────────────────┤
+│ FR-23           │ Rosal copa  │ Frutales │             │ Frutales Talavera S.A │             │ 400               │ 8            │ 6                │ 400             │
+└─────────────────┴─────────────┴──────────┴─────────────┴───────────────────────┴─────────────┴───────────────────┴──────────────┴──────────────────┴─────────────────┘
+*/*/
+
+--Devuelve el producto que menos unidades tiene en stock.
+
+select *, MIN(cantidad_en_stock) as cantidad_minima from producto; 
+
+/**
+┌─────────────────┬───────────────┬──────────────┬─────────────┬──────────────────┬─────────────┬───────────────────┬──────────────┬──────────────────┬─────────────────┐
+│ codigo_producto │    nombre     │     gama     │ dimensiones │    proveedor     │ descripcion │ cantidad_en_stock │ precio_venta │ precio_proveedor │ cantidad_minima │
+├─────────────────┼───────────────┼──────────────┼─────────────┼──────────────────┼─────────────┼───────────────────┼──────────────┼──────────────────┼─────────────────┤
+│ OR-214          │ Brahea Armata │ Ornamentales │ 45 - 60     │ Viveros EL OASIS │             │ 0                 │ 10           │ 8                │ 0               │
+└─────────────────┴───────────────┴──────────────┴─────────────┴──────────────────┴─────────────┴───────────────────┴──────────────┴──────────────────┴─────────────────┘
+**/
+
+--Devuelve el nombre, los apellidos y el email de los empleados que están a cargo de Alberto Soria.
+
+select nombre, apellido1, apellido2, email from empleado where codigo_jefe = (select codigo_empleado from empleado where nombre = 'Alberto' and apellido1 = 'Soria');
+
+/**
+┌─────────────┬────────────┬───────────┬───────────────────────────┐
+│   nombre    │ apellido1  │ apellido2 │           email           │
+├─────────────┼────────────┼───────────┼───────────────────────────┤
+│ Felipe      │ Rosas      │ Marquez   │ frosas@jardineria.es      │
+│ Juan Carlos │ Ortiz      │ Serrano   │ cortiz@jardineria.es      │
+│ Carlos      │ Soria      │ Jimenez   │ csoria@jardineria.es      │
+│ Emmanuel    │ Magaña     │ Perez     │ manu@jardineria.es        │
+│ Francois    │ Fignon     │           │ ffignon@gardening.com     │
+│ Michael     │ Bolton     │           │ mbolton@gardening.com     │
+│ Hilary      │ Washington │           │ hwashington@gardening.com │
+│ Nei         │ Nishikori  │           │ nnishikori@gardening.com  │
+│ Amy         │ Johnson    │           │ ajohnson@gardening.com    │
+│ Kevin       │ Fallmer    │           │ kfalmer@gardening.com     │
+└─────────────┴────────────┴───────────┴───────────────────────────┘
+**/
+
+--Devuelve el nombre del cliente con mayor límite de crédito.
+
+select nombre_cliente, MAX(limite_credito) as maximo from cliente; 
+
+/**
+┌────────────────┬────────┐
+│ nombre_cliente │ maximo │
+├────────────────┼────────┤
+│ Tendo Garden   │ 600000 │
+└────────────────┴────────┘
+**/
+
+--Devuelve el nombre del producto que tenga el precio de venta más caro.
+
+select nombre, MAX(precio_venta) as precio_max from producto;
+
+/**
+┌───────────────────────┬────────────┐
+│        nombre         │ precio_max │
+├───────────────────────┼────────────┤
+│ Trachycarpus Fortunei │ 462        │
+└───────────────────────┴────────────┘
+**/
+
+--Devuelve el producto que menos unidades tiene en stock.
+
+select nombre, MIN(cantidad_en_stock) as stock_min from producto;  
+
+/**
+┌───────────────┬───────────┐
+│    nombre     │ stock_min │
+├───────────────┼───────────┤
+│ Brahea Armata │ 0         │
+└───────────────┴───────────┘
+**/
+
+--Devuelve el nombre, apellido1 y cargo de los empleados que no representen a ningún cliente.
+
+select nombre, apellido1, puesto from empleado 
+where codigo_empleado not in (select distinct codigo_empleado from cliente);
+
+--Devuelve un listado que muestre solamente los clientes que no han realizado ningún pago.
+
+select nombre_cliente from cliente where codigo_cliente in (select distinct codigo_cliente from pago);
+
+/**
+┌─────────────────────────────┐
+│       nombre_cliente        │
+├─────────────────────────────┤
+│ Lasas S.A.                  │
+│ Club Golf Puerta del hierro │
+│ DaraDistribuciones          │
+│ Madrileña de riegos         │
+│ Lasas S.A.                  │
+│ Flowers, S.A                │
+│ Naturajardin                │
+│ Americh Golf Management SL  │
+│ Aloha                       │
+│ El Prat                     │
+│ Vivero Humanes              │
+│ Fuenla City                 │
+│ Top Campo                   │
+│ Campohermoso                │
+│ france telecom              │
+│ Musée du Louvre             │
+│ Flores S.L.                 │
+│ The Magic Garden            │
+└─────────────────────────────┘
+**/
+
+--Devuelve un listado que muestre solamente los clientes que sí han realizado algún pago.
+
+SELECT nombre_cliente FROM cliente WHERE codigo_cliente in (select distinct codigo_cliente FROM pago);
+
+/**
+┌────────────────────────────────┐
+│         nombre_cliente         │
+├────────────────────────────────┤
+│ GoldFish Garden                │
+│ Gardening Associates           │
+│ Gerudo Valley                  │
+│ Tendo Garden                   │
+│ Beragua                        │
+│ Naturagua                      │
+│ Camunas Jardines S.L.          │
+│ Dardena S.A.                   │
+│ Jardin de Flores               │
+│ Flores Marivi                  │
+│ Golf S.A.                      │
+│ Sotogrande                     │
+│ Jardines y Mansiones Cactus SL │
+│ Jardinerías Matías SL          │
+│ Agrojardin                     │
+│ Jardineria Sara                │
+│ Tutifruti S.A                  │
+│ El Jardin Viviente S.L         │
+└────────────────────────────────┘
+**/
+
+--Devuelve un listado de los productos que nunca han aparecido en un pedido.
+
+select distinct nombre from producto where codigo_producto not in (select distinct codigo_producto FROM detalle_pedido);
+
+/**
+┌─────────────────────────────────────────────────────────────┐
+│                           nombre                            │
+├─────────────────────────────────────────────────────────────┤
+│ Olea-Olivos                                                 │
+│ Calamondin Mini                                             │
+│ Camelia Blanco, Chrysler Rojo, Soraya Naranja,              │
+│ Landora Amarillo, Rose Gaujard bicolor blanco-rojo          │
+│ Kordes Perfect bicolor rojo-amarillo, Roundelay rojo fuerte │
+│ Albaricoquero Corbato                                       │
+│ Albaricoquero Moniqui                                       │
+│ Albaricoquero Kurrot                                        │
+│ Cerezo Burlat                                               │
+│ Cerezo Picota                                               │
+│ Ciruelo R. Claudia Verde                                    │
+│ Ciruelo Golden Japan                                        │
+│ Ciruelo Claudia Negra                                       │
+│ Higuera Verdal                                              │
+│ Higuera Breva                                               │
+│ Melocotonero Spring Crest                                   │
+│ Melocotonero Federica                                       │
+│ Parra Uva de Mesa                                           │
+│ Mandarino -Plantón joven                                    │
+│ Peral Castell                                               │
+│ Peral Williams                                              │
+│ Peral Conference                                            │
+│ Olivo Cipresino                                             │
+│ Albaricoquero                                               │
+│ Cerezo                                                      │
+│ Ciruelo                                                     │
+│ Granado                                                     │
+│ Higuera                                                     │
+│ Manzano                                                     │
+│ Melocotonero                                                │
+│ Membrillero                                                 │
+│ Arbustos Mix Maceta                                         │
+│ Mimosa Injerto CLASICA Dealbata                             │
+│ Mimosa Semilla Bayleyana                                    │
+│ Mimosa Semilla Espectabilis                                 │
+│ Mimosa Semilla Longifolia                                   │
+│ Mimosa Semilla Floribunda 4 estaciones                      │
+│ Abelia Floribunda                                           │
+│ Callistemom (Mix)                                           │
+│ Corylus Avellana \"Contorta\"                               │
+│ Escallonia (Mix)                                            │
+│ Evonimus Emerald Gayeti                                     │
+│ Evonimus Pulchellus                                         │
+│ Hibiscus Syriacus  \"Helene\" -Blanco-C.rojo                │
+│ Hibiscus Syriacus \"Pink Giant\" Rosa                       │
+│ Lonicera Nitida \"Maigrum\"                                 │
+│ Prunus pisardii                                             │
+│ Weigelia \"Bristol Ruby\"                                   │
+│ Leptospermum formado PIRAMIDE                               │
+│ Leptospermum COPA                                           │
+│ Nerium oleander-CALIDAD \"GARDEN\"                          │
+│ Nerium Oleander Arbusto GRANDE                              │
+│ Nerium oleander COPA  Calibre 6/8                           │
+│ ROSAL TREPADOR                                              │
+│ Solanum Jazminoide                                          │
+│ Wisteria Sinensis  azul, rosa, blanca                       │
+│ Wisteria Sinensis INJERTADAS DECÃ“                          │
+│ Bougamvillea Sanderiana Tutor                               │
+│ Bougamvillea Sanderiana Espaldera                           │
+│ Bougamvillea Sanderiana, 3 tut. piramide                    │
+│ Expositor Árboles clima mediterráneo                        │
+│ Expositor Árboles borde del mar                             │
+│ Brachychiton Acerifolius                                    │
+│ Cassia Corimbosa                                            │
+│ Cassia Corimbosa                                            │
+│ Chitalpa Summer Bells                                       │
+│ Erytrina Kafra                                              │
+│ Eucalyptus Citriodora                                       │
+│ Eucalyptus Ficifolia                                        │
+│ Hibiscus Syriacus  Var. Injertadas 1 Tallo                  │
+│ Lagunaria Patersonii                                        │
+│ Lagunaria Patersonii                                        │
+│ Morus Alba                                                  │
+│ Platanus Acerifolia                                         │
+│ Salix Babylonica  Pendula                                   │
+│ Tamarix  Ramosissima Pink Cascade                           │
+│ Tecoma Stands                                               │
+│ Tecoma Stands                                               │
+│ Tipuana Tipu                                                │
+│ Pleioblastus distichus-Bambú enano                          │
+│ Sasa palmata                                                │
+│ Phylostachys aurea                                          │
+│ Phylostachys Bambusa Spectabilis                            │
+│ Phylostachys biseti                                         │
+│ Pseudosasa japonica (Metake)                                │
+│ Pseudosasa japonica (Metake)                                │
+│ Cedrus Deodara \"Feeling Blue\" Novedad                     │
+│ Juniperus chinensis \"Blue Alps\"                           │
+│ Juniperus Chinensis Stricta                                 │
+│ Juniperus squamata \"Blue Star\"                            │
+│ Juniperus x media Phitzeriana verde                         │
+│ Bismarckia Nobilis                                          │
+│ Brahea Armata                                               │
+│ Brahea Edulis                                               │
+│ Butia Capitata                                              │
+│ Chamaerops Humilis                                          │
+│ Chamaerops Humilis \"Cerifera\"                             │
+│ Chrysalidocarpus Lutescens -ARECA                           │
+│ Cordyline Australis -DRACAENA                               │
+│ Cycas Revoluta                                              │
+│ Dracaena Drago                                              │
+│ Livistonia Decipiens                                        │
+│ Rhaphis Excelsa                                             │
+│ Sabal Minor                                                 │
+│ Trachycarpus Fortunei                                       │
+│ Washingtonia Robusta                                        │
+│ Zamia Furfuracaea                                           │
+└─────────────────────────────────────────────────────────────┘
+**/
+
+--Devuelve el nombre, apellidos, puesto y teléfono de la oficina de aquellos empleados que no sean representante de ventas de ningún cliente.
+--Devuelve las oficinas donde no trabajan ninguno de los empleados que hayan sido los representantes de ventas de algún cliente que haya realizado la compra de algún producto de la gama Frutales.
+--Devuelve un listado con los clientes que han realizado algún pedido pero no han realizado ningún pago.
+--Devuelve un listado que muestre solamente los clientes que no han realizado ningún pago.
+--Devuelve un listado que muestre solamente los clientes que sí han realizado algún pago.
+--Devuelve un listado de los productos que nunca han aparecido en un pedido.
+--Devuelve un listado de los productos que han aparecido en un pedido alguna vez.
