@@ -3415,9 +3415,484 @@ select distinct nombre from producto where codigo_producto not in (select distin
 **/
 
 --Devuelve el nombre, apellidos, puesto y teléfono de la oficina de aquellos empleados que no sean representante de ventas de ningún cliente.
+
+select e.nombrem e.apellido1, e.puesto from empleado as E
+
+/**
+
+**/
+
 --Devuelve las oficinas donde no trabajan ninguno de los empleados que hayan sido los representantes de ventas de algún cliente que haya realizado la compra de algún producto de la gama Frutales.
+
+
+/**
+
+**/
+
 --Devuelve un listado con los clientes que han realizado algún pedido pero no han realizado ningún pago.
+
+/**
+
+**/
+
 --Devuelve un listado que muestre solamente los clientes que no han realizado ningún pago.
+
+select nombre_cliente from cliente where codigo_cliente not in (select distinct codigo_cliente from pago);
+
+/**
+┌─────────────────────────────┐
+│       nombre_cliente        │
+├─────────────────────────────┤
+│ Lasas S.A.                  │
+│ Club Golf Puerta del hierro │
+│ DaraDistribuciones          │
+│ Madrileña de riegos         │
+│ Lasas S.A.                  │
+│ Flowers, S.A                │
+│ Naturajardin                │
+│ Americh Golf Management SL  │
+│ Aloha                       │
+│ El Prat                     │
+│ Vivero Humanes              │
+│ Fuenla City                 │
+│ Top Campo                   │
+│ Campohermoso                │
+│ france telecom              │
+│ Musée du Louvre             │
+│ Flores S.L.                 │
+│ The Magic Garden            │
+└─────────────────────────────┘
+**/
+
 --Devuelve un listado que muestre solamente los clientes que sí han realizado algún pago.
+
+select nombre_cliente from cliente where codigo_cliente in (select distinct codigo_cliente from pago);
+
+/**
+┌────────────────────────────────┐
+│         nombre_cliente         │
+├────────────────────────────────┤
+│ GoldFish Garden                │
+│ Gardening Associates           │
+│ Gerudo Valley                  │
+│ Tendo Garden                   │
+│ Beragua                        │
+│ Naturagua                      │
+│ Camunas Jardines S.L.          │
+│ Dardena S.A.                   │
+│ Jardin de Flores               │
+│ Flores Marivi                  │
+│ Golf S.A.                      │
+│ Sotogrande                     │
+│ Jardines y Mansiones Cactus SL │
+│ Jardinerías Matías SL          │
+│ Agrojardin                     │
+│ Jardineria Sara                │
+│ Tutifruti S.A                  │
+│ El Jardin Viviente S.L         │
+└────────────────────────────────┘
+**/
+
 --Devuelve un listado de los productos que nunca han aparecido en un pedido.
+
+select distinct nombre from producto where codigo_producto not in (select distinct codigo_producto from detalle_pedido);
+
+/**
+┌─────────────────────────────────────────────────────────────┐
+│                           nombre                            │
+├─────────────────────────────────────────────────────────────┤
+│ Olea-Olivos                                                 │
+│ Calamondin Mini                                             │
+│ Camelia Blanco, Chrysler Rojo, Soraya Naranja,              │
+│ Landora Amarillo, Rose Gaujard bicolor blanco-rojo          │
+│ Kordes Perfect bicolor rojo-amarillo, Roundelay rojo fuerte │
+│ Albaricoquero Corbato                                       │
+│ Albaricoquero Moniqui                                       │
+│ Albaricoquero Kurrot                                        │
+│ Cerezo Burlat                                               │
+│ Cerezo Picota                                               │
+│ Ciruelo R. Claudia Verde                                    │
+│ Ciruelo Golden Japan                                        │
+│ Ciruelo Claudia Negra                                       │
+│ Higuera Verdal                                              │
+│ Higuera Breva                                               │
+│ Melocotonero Spring Crest                                   │
+│ Melocotonero Federica                                       │
+│ Parra Uva de Mesa                                           │
+│ Mandarino -Plantón joven                                    │
+│ Peral Castell                                               │
+│ Peral Williams                                              │
+│ Peral Conference                                            │
+│ Olivo Cipresino                                             │
+│ Albaricoquero                                               │
+│ Cerezo                                                      │
+│ Ciruelo                                                     │
+│ Granado                                                     │
+│ Higuera                                                     │
+│ Manzano                                                     │
+│ Melocotonero                                                │
+│ Membrillero                                                 │
+│ Arbustos Mix Maceta                                         │
+│ Mimosa Injerto CLASICA Dealbata                             │
+│ Mimosa Semilla Bayleyana                                    │
+│ Mimosa Semilla Espectabilis                                 │
+│ Mimosa Semilla Longifolia                                   │
+│ Mimosa Semilla Floribunda 4 estaciones                      │
+│ Abelia Floribunda                                           │
+│ Callistemom (Mix)                                           │
+│ Corylus Avellana \"Contorta\"                               │
+│ Escallonia (Mix)                                            │
+│ Evonimus Emerald Gayeti                                     │
+│ Evonimus Pulchellus                                         │
+│ Hibiscus Syriacus  \"Helene\" -Blanco-C.rojo                │
+│ Hibiscus Syriacus \"Pink Giant\" Rosa                       │
+│ Lonicera Nitida \"Maigrum\"                                 │
+│ Prunus pisardii                                             │
+│ Weigelia \"Bristol Ruby\"                                   │
+│ Leptospermum formado PIRAMIDE                               │
+│ Leptospermum COPA                                           │
+│ Nerium oleander-CALIDAD \"GARDEN\"                          │
+│ Nerium Oleander Arbusto GRANDE                              │
+│ Nerium oleander COPA  Calibre 6/8                           │
+│ ROSAL TREPADOR                                              │
+│ Solanum Jazminoide                                          │
+│ Wisteria Sinensis  azul, rosa, blanca                       │
+│ Wisteria Sinensis INJERTADAS DECÃ“                          │
+│ Bougamvillea Sanderiana Tutor                               │
+│ Bougamvillea Sanderiana Espaldera                           │
+│ Bougamvillea Sanderiana, 3 tut. piramide                    │
+│ Expositor Árboles clima mediterráneo                        │
+│ Expositor Árboles borde del mar                             │
+│ Brachychiton Acerifolius                                    │
+│ Cassia Corimbosa                                            │
+│ Cassia Corimbosa                                            │
+│ Chitalpa Summer Bells                                       │
+│ Erytrina Kafra                                              │
+│ Eucalyptus Citriodora                                       │
+│ Eucalyptus Ficifolia                                        │
+│ Hibiscus Syriacus  Var. Injertadas 1 Tallo                  │
+│ Lagunaria Patersonii                                        │
+│ Lagunaria Patersonii                                        │
+│ Morus Alba                                                  │
+│ Platanus Acerifolia                                         │
+│ Salix Babylonica  Pendula                                   │
+│ Tamarix  Ramosissima Pink Cascade                           │
+│ Tecoma Stands                                               │
+│ Tecoma Stands                                               │
+│ Tipuana Tipu                                                │
+│ Pleioblastus distichus-Bambú enano                          │
+│ Sasa palmata                                                │
+│ Phylostachys aurea                                          │
+│ Phylostachys Bambusa Spectabilis                            │
+│ Phylostachys biseti                                         │
+│ Pseudosasa japonica (Metake)                                │
+│ Pseudosasa japonica (Metake)                                │
+│ Cedrus Deodara \"Feeling Blue\" Novedad                     │
+│ Juniperus chinensis \"Blue Alps\"                           │
+│ Juniperus Chinensis Stricta                                 │
+│ Juniperus squamata \"Blue Star\"                            │
+│ Juniperus x media Phitzeriana verde                         │
+│ Bismarckia Nobilis                                          │
+│ Brahea Armata                                               │
+│ Brahea Edulis                                               │
+│ Butia Capitata                                              │
+│ Chamaerops Humilis                                          │
+│ Chamaerops Humilis \"Cerifera\"                             │
+│ Chrysalidocarpus Lutescens -ARECA                           │
+│ Cordyline Australis -DRACAENA                               │
+│ Cycas Revoluta                                              │
+│ Dracaena Drago                                              │
+│ Livistonia Decipiens                                        │
+│ Rhaphis Excelsa                                             │
+│ Sabal Minor                                                 │
+│ Trachycarpus Fortunei                                       │
+│ Washingtonia Robusta                                        │
+│ Zamia Furfuracaea                                           │
+└─────────────────────────────────────────────────────────────┘
+**/
+
 --Devuelve un listado de los productos que han aparecido en un pedido alguna vez.
+
+select distinct nombre from producto where codigo_producto in (select distinct codigo_producto from detalle_pedido);
+
+/**
+┌─────────────────────────────────────────────────────────────┐
+│                           nombre                            │
+├─────────────────────────────────────────────────────────────┤
+│ Sierra de Poda 400MM                                        │
+│ Pala                                                        │
+│ Rastrillo de Jardín                                         │
+│ Azadón                                                      │
+│ Ajedrea                                                     │
+│ Lavándula Dentata                                           │
+│ Mejorana                                                    │
+│ Melissa                                                     │
+│ Mentha Sativa                                               │
+│ Petrosilium Hortense (Peregil)                              │
+│ Salvia Mix                                                  │
+│ Thymus Citriodra (Tomillo limón)                            │
+│ Thymus Vulgaris                                             │
+│ Santolina Chamaecyparys                                     │
+│ Expositor Cítricos Mix                                      │
+│ Limonero 2 años injerto                                     │
+│ Nectarina                                                   │
+│ Nogal                                                       │
+│ Olea-Olivos                                                 │
+│ Peral                                                       │
+│ Limonero 30/40                                              │
+│ Kunquat                                                     │
+│ Kunquat  EXTRA con FRUTA                                    │
+│ Calamondin Copa                                             │
+│ Calamondin Copa EXTRA Con FRUTA                             │
+│ Rosal bajo 1Âª -En maceta-inicio brotación                  │
+│ ROSAL TREPADOR                                              │
+│ Naranjo -Plantón joven 1 año injerto                        │
+│ Pitimini rojo                                               │
+│ Rosal copa                                                  │
+│ Cerezo Napoleón                                             │
+│ Naranjo 2 años injerto                                      │
+│ Ciruelo Santa Rosa                                          │
+│ Ciruelo Friar                                               │
+│ Ciruelo Reina C. De Ollins                                  │
+│ Granado Mollar de Elche                                     │
+│ Higuera Napolitana                                          │
+│ Naranjo calibre 8/10                                        │
+│ Manzano Starking Delicious                                  │
+│ Manzano Reineta                                             │
+│ Manzano Golden Delicious                                    │
+│ Membrillero Gigante de Wranja                               │
+│ Melocotonero Amarillo de Agosto                             │
+│ Melocotonero Paraguayo                                      │
+│ Nogal Común                                                 │
+│ Peral Blanq. de Aranjuez                                    │
+│ Níspero Tanaca                                              │
+│ Kaki Rojo Brillante                                         │
+│ Albaricoquero                                               │
+│ Mandarino 2 años injerto                                    │
+│ Cerezo                                                      │
+│ Mandarino calibre 8/10                                      │
+│ Ciruelo                                                     │
+│ Granado                                                     │
+│ Higuera                                                     │
+│ Limonero -Plantón joven                                     │
+│ Kaki                                                        │
+│ Manzano                                                     │
+│ Limonero calibre 8/10                                       │
+│ Níspero                                                     │
+│ Melocotonero                                                │
+│ Expositor Mimosa Semilla Mix                                │
+│ Mimosa Semilla Bayleyana                                    │
+│ Mimosa Semilla Cyanophylla                                  │
+│ Forsytia Intermedia \"Lynwood\"                             │
+│ Hibiscus Syriacus  \"Diana\" -Blanco Puro                   │
+│ Laurus Nobilis Arbusto - Ramificado Bajo                    │
+│ Lonicera Nitida                                             │
+│ Lonicera Pileata                                            │
+│ Philadelphus \"Virginal\"                                   │
+│ Viburnum Tinus \"Eve Price\"                                │
+│ Camelia japonica                                            │
+│ Camelia japonica ejemplar                                   │
+│ Callistemom COPA                                            │
+│ Nerium oleander ARBOL Calibre 8/10                          │
+│ Landora Amarillo, Rose Gaujard bicolor blanco-rojo          │
+│ Kordes Perfect bicolor rojo-amarillo, Roundelay rojo fuerte │
+│ Bougamvillea Sanderiana Tutor                               │
+│ Bougamvillea roja, naranja                                  │
+│ Expositor Árboles clima continental                         │
+│ Acer Negundo                                                │
+│ Acer platanoides                                            │
+│ Acer Pseudoplatanus                                         │
+│ Brachychiton Discolor                                       │
+│ Brachychiton Rupestris                                      │
+│ Erytrina Kafra                                              │
+│ Eucalyptus Ficifolia                                        │
+│ Lagunaria patersonii  calibre 8/10                          │
+│ Morus Alba  calibre 8/10                                    │
+│ Prunus pisardii                                             │
+│ Robinia Pseudoacacia Casque Rouge                           │
+│ Sesbania Punicea                                            │
+│ Tamarix  Ramosissima Pink Cascade                           │
+│ Sasa palmata                                                │
+│ Phylostachys biseti                                         │
+│ Cedrus Deodara                                              │
+│ Juniperus horizontalis Wiltonii                             │
+│ Pinus Canariensis                                           │
+│ Pinus Halepensis                                            │
+│ Pinus Pinea -Pino Piñonero                                  │
+│ Thuja Esmeralda                                             │
+│ Tuja Occidentalis Woodwardii                                │
+│ Tuja orientalis \"Aurea nana\"                              │
+│ Archontophoenix Cunninghamiana                              │
+│ Beucarnea Recurvata                                         │
+│ Bismarckia Nobilis                                          │
+│ Brahea Armata                                               │
+│ Brahea Edulis                                               │
+│ Butia Capitata                                              │
+│ Chamaerops Humilis                                          │
+│ Dracaena Drago                                              │
+│ Jubaea Chilensis                                            │
+│ Livistonia Australis                                        │
+│ Phoenix Canariensis                                         │
+│ Rhaphis Humilis                                             │
+│ Trachycarpus Fortunei                                       │
+│ Washingtonia Robusta                                        │
+│ Yucca Jewel                                                 │
+│ Mimosa DEALBATA Gaulois Astier                              │
+└─────────────────────────────────────────────────────────────┘
+**/
+
+------------------------------------Consultas variadas en SQL-----------------------------------------
+--Devuelve el listado de clientes indicando el nombre del cliente y cuántos pedidos ha realizado. Tenga en cuenta que pueden existir clientes que no han realizado ningún pedido.
+
+select c.nombre_cliente, count(p.codigo_pedido) as pedidos from cliente as c left join pedido as p on c.codigo_cliente = p.codigo_cliente group by c.nombre_cliente;
+
+/**
+┌────────────────────────────────┬─────────┐
+│         nombre_cliente         │ pedidos │
+├────────────────────────────────┼─────────┤
+│ Agrojardin                     │ 5       │
+│ Aloha                          │ 0       │
+│ Americh Golf Management SL     │ 0       │
+│ Beragua                        │ 5       │
+│ Campohermoso                   │ 0       │
+│ Camunas Jardines S.L.          │ 5       │
+│ Club Golf Puerta del hierro    │ 0       │
+│ DaraDistribuciones             │ 0       │
+│ Dardena S.A.                   │ 5       │
+│ El Jardin Viviente S.L         │ 5       │
+│ El Prat                        │ 0       │
+│ Flores Marivi                  │ 10      │
+│ Flores S.L.                    │ 5       │
+│ Flowers, S.A                   │ 0       │
+│ Fuenla City                    │ 0       │
+│ Gardening Associates           │ 9       │
+│ Gerudo Valley                  │ 5       │
+│ GoldFish Garden                │ 11      │
+│ Golf S.A.                      │ 5       │
+│ Jardin de Flores               │ 5       │
+│ Jardineria Sara                │ 10      │
+│ Jardinerías Matías SL          │ 5       │
+│ Jardines y Mansiones Cactus SL │ 5       │
+│ Lasas S.A.                     │ 0       │
+│ Madrileña de riegos            │ 0       │
+│ Musée du Louvre                │ 0       │
+│ Naturagua                      │ 5       │
+│ Naturajardin                   │ 0       │
+│ Sotogrande                     │ 5       │
+│ Tendo Garden                   │ 5       │
+│ The Magic Garden               │ 0       │
+│ Top Campo                      │ 0       │
+│ Tutifruti S.A                  │ 5       │
+│ Vivero Humanes                 │ 0       │
+│ france telecom                 │ 0       │
+└────────────────────────────────┴─────────┘
+**/
+
+--Devuelve un listado con los nombres de los clientes y el total pagado por cada uno de ellos. Tenga en cuenta que pueden existir clientes que no han realizado ningún pago.
+
+--Devuelve el nombre de los clientes que hayan hecho pedidos en 2008 ordenados alfabéticamente de menor a mayor.
+
+--Devuelve el nombre del cliente, el nombre y primer apellido de su representante de ventas y el número de teléfono de la oficina del representante de ventas, de aquellos clientes que no hayan realizado ningún pago.
+
+
+/**
+
+**/
+
+--Devuelve el listado de clientes donde aparezca el nombre del cliente, el nombre y primer apellido de su representante de ventas y la ciudad donde está su oficina.
+
+select c.nombre_cliente, p.fecha_pedido from cliente as c join pedido as p on c.codigo_cliente=p.codigo_cliente where fecha_pedido regexp '2008' order by fecha_pedido asc;
+
+/**
+┌────────────────────────────────┬──────────────┐
+│         nombre_cliente         │ fecha_pedido │
+├────────────────────────────────┼──────────────┤
+│ Tutifruti S.A                  │ 2008-01-04   │
+│ Flores S.L.                    │ 2008-03-05   │
+│ Gerudo Valley                  │ 2008-03-10   │
+│ Jardines y Mansiones Cactus SL │ 2008-03-17   │
+│ Jardines y Mansiones Cactus SL │ 2008-03-17   │
+│ Tutifruti S.A                  │ 2008-03-20   │
+│ Tendo Garden                   │ 2008-06-20   │
+│ El Jardin Viviente S.L         │ 2008-06-28   │
+│ Jardines y Mansiones Cactus SL │ 2008-07-12   │
+│ Dardena S.A.                   │ 2008-07-14   │
+│ Dardena S.A.                   │ 2008-08-01   │
+│ Camunas Jardines S.L.          │ 2008-08-03   │
+│ El Jardin Viviente S.L         │ 2008-08-25   │
+│ Camunas Jardines S.L.          │ 2008-09-04   │
+│ Jardines y Mansiones Cactus SL │ 2008-10-01   │
+│ Tutifruti S.A                  │ 2008-10-08   │
+│ Dardena S.A.                   │ 2008-10-15   │
+│ Camunas Jardines S.L.          │ 2008-10-15   │
+│ Flores S.L.                    │ 2008-10-28   │
+│ Gerudo Valley                  │ 2008-11-03   │
+│ GoldFish Garden                │ 2008-11-09   │
+│ GoldFish Garden                │ 2008-11-09   │
+│ El Jardin Viviente S.L         │ 2008-11-10   │
+│ Jardin de Flores               │ 2008-11-15   │
+│ Flores S.L.                    │ 2008-11-29   │
+│ Jardines y Mansiones Cactus SL │ 2008-12-07   │
+│ Dardena S.A.                   │ 2008-12-10   │
+│ Jardin de Flores               │ 2008-12-15   │
+│ Camunas Jardines S.L.          │ 2008-12-19   │
+│ GoldFish Garden                │ 2008-12-22   │
+│ GoldFish Garden                │ 2008-12-22   │
+│ Flores Marivi                  │ 2008-12-28   │
+│ Flores Marivi                  │ 2008-12-28   │
+│ Tendo Garden                   │ 2008-12-30   │
+└────────────────────────────────┴──────────────┘
+**/
+
+--Devuelve el nombre, apellidos, puesto y teléfono de la oficina de aquellos empleados que no sean representante de ventas de ningún cliente.
+
+
+select e.nombre, e.apellido1, e.apellido2, e.puesto, o.telefono from empleado as e left join oficina as o on e.codigo_oficina = o.codigo_oficina
+where e.codigo_empleado not in (select distinct codigo_empleado_rep_ventas from cliente where codigo_empleado_rep_ventas is not null);
+
+/**
+┌─────────────┬────────────┬───────────┬───────────────────────┬─────────────────┐
+│   nombre    │ apellido1  │ apellido2 │        puesto         │    telefono     │
+├─────────────┼────────────┼───────────┼───────────────────────┼─────────────────┤
+│ Marcos      │ Magaña     │ Perez     │ Director General      │ +34 925 867231  │
+│ Ruben       │ López      │ Martinez  │ Subdirector Marketing │ +34 925 867231  │
+│ Alberto     │ Soria      │ Carrasco  │ Subdirector Ventas    │ +34 925 867231  │
+│ Maria       │ Solís      │ Jerez     │ Secretaria            │ +34 925 867231  │
+│ Juan Carlos │ Ortiz      │ Serrano   │ Representante Ventas  │ +34 925 867231  │
+│ Carlos      │ Soria      │ Jimenez   │ Director Oficina      │ +34 91 7514487  │
+│ Hilario     │ Rodriguez  │ Huertas   │ Representante Ventas  │ +34 91 7514487  │
+│ David       │ Palma      │ Aceituno  │ Representante Ventas  │ +34 93 3561182  │
+│ Oscar       │ Palma      │ Aceituno  │ Representante Ventas  │ +34 93 3561182  │
+│ Francois    │ Fignon     │           │ Director Oficina      │ +33 14 723 4404 │
+│ Laurent     │ Serra      │           │ Representante Ventas  │ +33 14 723 4404 │
+│ Hilary      │ Washington │           │ Director Oficina      │ +1 215 837 0825 │
+│ Marcus      │ Paxton     │           │ Representante Ventas  │ +1 215 837 0825 │
+│ Nei         │ Nishikori  │           │ Director Oficina      │ +81 33 224 5000 │
+│ Narumi      │ Riko       │           │ Representante Ventas  │ +81 33 224 5000 │
+│ Takuma      │ Nomura     │           │ Representante Ventas  │ +81 33 224 5000 │
+│ Amy         │ Johnson    │           │ Director Oficina      │ +44 20 78772041 │
+│ Larry       │ Westfalls  │           │ Representante Ventas  │ +44 20 78772041 │
+│ John        │ Walton     │           │ Representante Ventas  │ +44 20 78772041 │
+│ Kevin       │ Fallmer    │           │ Director Oficina      │ +61 2 9264 2451 │
+└─────────────┴────────────┴───────────┴───────────────────────┴─────────────────┘
+**/
+
+--Devuelve un listado indicando todas las ciudades donde hay oficinas y el número de empleados que tiene.
+
+select o.ciudad, count(e.codigo_empleado) as num_empleados from oficina as o left join empleado as e on o.codigo_oficina = e.codigo_oficina group by o.ciudad;
+
+/**
+┌──────────────────────┬───────────────┐
+│        ciudad        │ num_empleados │
+├──────────────────────┼───────────────┤
+│ Barcelona            │ 4             │
+│ Boston               │ 3             │
+│ Londres              │ 3             │
+│ Madrid               │ 4             │
+│ Paris                │ 3             │
+│ San Francisco        │ 2             │
+│ Sydney               │ 3             │
+│ Talavera de la Reina │ 6             │
+│ Tokyo                │ 3             │
+└──────────────────────┴───────────────┘
+**/
