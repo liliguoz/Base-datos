@@ -495,10 +495,23 @@ select c.id, c.nombre, c.apellido1, c.apellido2, p.total from pedido as p, clien
 
 --Devuelve un listado que muestre el identificador de cliente, nombre, primer apellido y el valor de la máxima cantidad del pedido realizado por cada uno de los clientes. El resultado debe mostrar aquellos clientes que no han realizado ningún pedido indicando que la máxima cantidad de sus pedidos realizados es 0.
 
-select c.id, c.nombre, c.apellido1, max(p.total) as max_cantidad from cliente as c, pedido as p where c.id = p.id_cliente and c.id not in (select id_cliente from pedido);
+select (c.id) as id_cliente, c.nombre, c.apellido1, c.apellido2, (select COUNT(*) from pedido p where p.id_cliente = c.id) as pedidos_totales from cliente c;
 
 /**
-
+┌────────────┬───────────┬───────────┬───────────┬─────────────────┐
+│ id_cliente │  nombre   │ apellido1 │ apellido2 │ pedidos_totales │
+├────────────┼───────────┼───────────┼───────────┼─────────────────┤
+│ 1          │ Aarón     │ Rivero    │ Gómez     │ 3               │
+│ 2          │ Adela     │ Salas     │ Díaz      │ 3               │
+│ 3          │ Adolfo    │ Rubio     │ Flores    │ 1               │
+│ 4          │ Adrián    │ Suárez    │           │ 1               │
+│ 5          │ Marcos    │ Loyola    │ Méndez    │ 2               │
+│ 6          │ María     │ Santana   │ Moreno    │ 2               │
+│ 7          │ Pilar     │ Ruiz      │           │ 1               │
+│ 8          │ Pepe      │ Ruiz      │ Santana   │ 3               │
+│ 9          │ Guillermo │ López     │ Gómez     │ 0               │
+│ 10         │ Daniel    │ Santana   │ Loyola    │ 0               │
+└────────────┴───────────┴───────────┴───────────┴─────────────────┘
 **/
 
 --Devuelve cuál ha sido el pedido de máximo valor que se ha realizado cada año.
@@ -601,4 +614,60 @@ select c.*, p.* from cliente c JOIN pedido p ON c.id = p.id_cliente where p.fech
 │ 4  │ Adrián │ Suárez    │           │ Jaén    │ 300       │ 8  │ 1983.43 │ 2017-10-10 │ 4          │ 6            │
 │ 2  │ Adela  │ Salas     │ Díaz      │ Granada │ 200       │ 12 │ 3045.6  │ 2017-04-25 │ 2          │ 1            │
 └────┴────────┴───────────┴───────────┴─────────┴───────────┴────┴─────────┴────────────┴────────────┴──────────────┘
+**/
+
+----------------Subconsultas con IN y NOT IN
+
+Devuelve un listado de los clientes que no han realizado ningún pedido. (Utilizando IN o NOT IN).
+
+select * from cliente where id not in (select id_cliente from pedido);
+
+/**
+┌────┬───────────┬───────────┬───────────┬─────────┬───────────┐
+│ id │  nombre   │ apellido1 │ apellido2 │ ciudad  │ categoria │
+├────┼───────────┼───────────┼───────────┼─────────┼───────────┤
+│ 9  │ Guillermo │ López     │ Gómez     │ Granada │ 225       │
+│ 10 │ Daniel    │ Santana   │ Loyola    │ Sevilla │ 125       │
+└────┴───────────┴───────────┴───────────┴─────────┴───────────┘
+**/
+
+Devuelve un listado de los comerciales que no han realizado ningún pedido. (Utilizando IN o NOT IN).
+
+select * from comercial where id not in (select id_comercial from pedido);
+
+/**
+┌────┬─────────┬───────────┬───────────┬───────────┐
+│ id │ nombre  │ apellido1 │ apellido2 │ categoria │
+├────┼─────────┼───────────┼───────────┼───────────┤
+│ 4  │ Marta   │ Herrera   │ Gil       │ 0.14      │
+│ 8  │ Alfredo │ Ruiz      │ Flores    │ 0.05      │
+└────┴─────────┴───────────┴───────────┴───────────┘
+**/
+
+---------------Subconsultas con EXISTS y NOT EXISTS
+
+--Devuelve un listado de los clientes que no han realizado ningún pedido. (Utilizando EXISTS o NOT EXISTS).
+
+select c.* from cliente as c where not exists (select p.id_cliente from pedido p where c.id = p.id_cliente);
+
+/**
+┌────┬───────────┬───────────┬───────────┬─────────┬───────────┐
+│ id │  nombre   │ apellido1 │ apellido2 │ ciudad  │ categoria │
+├────┼───────────┼───────────┼───────────┼─────────┼───────────┤
+│ 9  │ Guillermo │ López     │ Gómez     │ Granada │ 225       │
+│ 10 │ Daniel    │ Santana   │ Loyola    │ Sevilla │ 125       │
+└────┴───────────┴───────────┴───────────┴─────────┴───────────┘
+**/
+
+--Devuelve un listado de los comerciales que no han realizado ningún pedido. (Utilizando EXISTS o NOT EXISTS).
+
+select c.* from comercial as c where not exists(select p.id_comercial from pedido as p where c.id = p.id_comercial);
+
+/**
+┌────┬─────────┬───────────┬───────────┬───────────┐
+│ id │ nombre  │ apellido1 │ apellido2 │ categoria │
+├────┼─────────┼───────────┼───────────┼───────────┤
+│ 4  │ Marta   │ Herrera   │ Gil       │ 0.14      │
+│ 8  │ Alfredo │ Ruiz      │ Flores    │ 0.05      │
+└────┴─────────┴───────────┴───────────┴───────────┘
 **/
