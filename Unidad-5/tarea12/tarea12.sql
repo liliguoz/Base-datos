@@ -495,7 +495,8 @@ select c.id, c.nombre, c.apellido1, c.apellido2, p.total from pedido as p, clien
 
 --Devuelve un listado que muestre el identificador de cliente, nombre, primer apellido y el valor de la máxima cantidad del pedido realizado por cada uno de los clientes. El resultado debe mostrar aquellos clientes que no han realizado ningún pedido indicando que la máxima cantidad de sus pedidos realizados es 0.
 
-select c.id, c.nombre, c.apellido1, max(p.total) ans max_cantidad 
+select c.id, c.nombre, c.apellido1, max(p.total) as max_cantidad from cliente as c, pedido as p where c.id = p.id_cliente and c.id not in (select id_cliente from pedido);
+
 /**
 
 **/
@@ -528,4 +529,76 @@ select count(*) as num_pedido, substring(fecha, 1, 4) as año from pedido group 
 │ 6          │ 2017 │
 │ 3          │ 2019 │
 └────────────┴──────┘
+**/
+
+--------------------------------------------------Subconsultas---------------------------------------------------------
+
+-----------------Con operadores básicos de comparación
+
+--Devuelve un listado con todos los pedidos que ha realizado Adela Salas Díaz. (Sin utilizar INNER JOIN).
+
+select * from pedido WHERE id_cliente = (select id from cliente WHERE nombre = 'Adela' and apellido1 = 'Salas' and apellido2 = 'Díaz');
+
+/**
+┌────┬────────┬────────────┬────────────┬──────────────┐
+│ id │ total  │   fecha    │ id_cliente │ id_comercial │
+├────┼────────┼────────────┼────────────┼──────────────┤
+│ 3  │ 65.26  │ 2017-10-05 │ 2          │ 1            │
+│ 7  │ 5760.0 │ 2015-09-10 │ 2          │ 1            │
+│ 12 │ 3045.6 │ 2017-04-25 │ 2          │ 1            │
+└────┴────────┴────────────┴────────────┴──────────────┘
+**/
+
+Devuelve el número de pedidos en los que ha participado el comercial Daniel Sáez Vega. (Sin utilizar INNER JOIN)
+
+select * from pedido WHERE id_comercial = (select id from comercial WHERE nombre = 'Daniel' and apellido1 = 'Sáez' and apellido2 = 'Vega');
+
+/**
+┌────┬────────┬────────────┬────────────┬──────────────┐
+│ id │ total  │   fecha    │ id_cliente │ id_comercial │
+├────┼────────┼────────────┼────────────┼──────────────┤
+│ 3  │ 65.26  │ 2017-10-05 │ 2          │ 1            │
+│ 6  │ 2400.6 │ 2016-07-27 │ 7          │ 1            │
+│ 7  │ 5760.0 │ 2015-09-10 │ 2          │ 1            │
+│ 12 │ 3045.6 │ 2017-04-25 │ 2          │ 1            │
+│ 13 │ 545.75 │ 2019-01-25 │ 6          │ 1            │
+│ 14 │ 145.82 │ 2017-02-02 │ 6          │ 1            │
+└────┴────────┴────────────┴────────────┴──────────────┘
+**/
+
+Devuelve los datos del cliente que realizó el pedido más caro en el año 2019. (Sin utilizar INNER JOIN)
+
+select * from cliente where id = (select id_cliente from pedido where strftime('%Y', fecha) = '2019' order by total desc limit 1);
+
+/**
+┌────┬────────┬───────────┬───────────┬─────────┬───────────┐
+│ id │ nombre │ apellido1 │ apellido2 │ ciudad  │ categoria │
+├────┼────────┼───────────┼───────────┼─────────┼───────────┤
+│ 1  │ Aarón  │ Rivero    │ Gómez     │ Almería │ 100       │
+└────┴────────┴───────────┴───────────┴─────────┴───────────┘
+**/
+
+Devuelve la fecha y la cantidad del pedido de menor valor realizado por el cliente Pepe Ruiz Santana.
+
+select fecha, total from pedido where id_cliente = (select id from cliente where nombre = 'Pepe' and apellido1 = 'Ruiz' and apellido2 = 'Santana') order by total asc limit 1;
+
+/**
+┌────────────┬───────┐
+│   fecha    │ total │
+├────────────┼───────┤
+│ 2016-08-17 │ 110.5 │
+└────────────┴───────┘
+**/
+
+Devuelve un listado con los datos de los clientes y los pedidos, de todos los clientes que han realizado un pedido durante el año 2017 con un valor mayor o igual al valor medio de los pedidos realizados durante ese mismo año.
+
+select c.*, p.* from cliente c JOIN pedido p ON c.id = p.id_cliente where p.fecha regexp '2017' and p.total >= (select AVG(total) from pedido WHERE strftime('%Y', fecha) = '2017');
+
+/**
+┌────┬────────┬───────────┬───────────┬─────────┬───────────┬────┬─────────┬────────────┬────────────┬──────────────┐
+│ id │ nombre │ apellido1 │ apellido2 │ ciudad  │ categoria │ id │  total  │   fecha    │ id_cliente │ id_comercial │
+├────┼────────┼───────────┼───────────┼─────────┼───────────┼────┼─────────┼────────────┼────────────┼──────────────┤
+│ 4  │ Adrián │ Suárez    │           │ Jaén    │ 300       │ 8  │ 1983.43 │ 2017-10-10 │ 4          │ 6            │
+│ 2  │ Adela  │ Salas     │ Díaz      │ Granada │ 200       │ 12 │ 3045.6  │ 2017-04-25 │ 2          │ 1            │
+└────┴────────┴───────────┴───────────┴─────────┴───────────┴────┴─────────┴────────────┴────────────┴──────────────┘
 **/
