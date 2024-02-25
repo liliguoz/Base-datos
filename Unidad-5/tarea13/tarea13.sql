@@ -1,57 +1,71 @@
------------------------------------------------------------------Consultas multitabla (Join)-----------------------------------------------------------------
+-----------------------------------------------------------------Consultas de una tabla-----------------------------------------------------------------
 
 --Devuelve un listado con el primer apellido, segundo apellido y el nombre de todos los alumnos. El listado deberá estar ordenado alfabéticamente de menor a mayor por el primer apellido, segundo apellido y nombre.
 
-select p.nombre, p.apellido1, p.apellido2 from persona as p INNER JOIN alumno_se_matricula_asignatura as a ON p.id = a.id_alumno group by p.id order by apellido1 desc, apellido2 desc, nombre desc;
+select nombre, apellido1, apellido2  from persona where tipo = 'alumno' order by apellido1 desc, apellido2 desc, nombre desc;
 
 /**
 ┌──────────┬───────────┬───────────┐
 │  nombre  │ apellido1 │ apellido2 │
 ├──────────┼───────────┼───────────┤
 │ Salvador │ Sánchez   │ Pérez     │
+│ Ismael   │ Strosin   │ Turcotte  │
 │ Juan     │ Saez      │ Vega      │
 │ Inma     │ Lakin     │ Yundt     │
+│ José     │ Koss      │ Bayer     │
+│ Ramón    │ Herzog    │ Tremblay  │
 │ Irene    │ Hernández │ Martínez  │
+│ Daniel   │ Herman    │ Pacocha   │
 │ Pedro    │ Heller    │ Pagac     │
+│ Juan     │ Gutiérrez │ López     │
 │ Sonia    │ Gea       │ Ruiz      │
+│ Antonio  │ Domínguez │ Guerrero  │
 └──────────┴───────────┴───────────┘
 **/
 
 --Averigua el nombre y los dos apellidos de los alumnos que no han dado de alta su número de teléfono en la base de datos.
 
-select p.nombre, p.apellido1, p.apellido2 from persona as p INNER JOIN alumno_se_matricula_asignatura as a ON p.id = a.id_alumno where p.telefono not in (select id_alumno from alumno_se_matricula_asignatura) group by p.id;
-
+select nombre, apellido1, apellido2 from persona where tipo = 'alumno' and telefono is null;
 /**
-┌──────────┬───────────┬───────────┐
-│  nombre  │ apellido1 │ apellido2 │
-├──────────┼───────────┼───────────┤
-│ Salvador │ Sánchez   │ Pérez     │
-│ Juan     │ Saez      │ Vega      │
-│ Inma     │ Lakin     │ Yundt     │
-│ Irene    │ Hernández │ Martínez  │
-│ Sonia    │ Gea       │ Ruiz      │
-└──────────┴───────────┴───────────┘
+┌────────┬───────────┬───────────┐
+│ nombre │ apellido1 │ apellido2 │
+├────────┼───────────┼───────────┤
+│ Pedro  │ Heller    │ Pagac     │
+│ Ismael │ Strosin   │ Turcotte  │
+└────────┴───────────┴───────────┘
 **/
 
 --Devuelve el listado de los alumnos que nacieron en 1999.
 
-select p.* from persona as p INNER JOIN alumno_se_matricula_asignatura as a ON p.id = a.id_alumno where p.fecha_nacimiento REGEXP '1999';
+select * from persona where tipo = 'alumno' and fecha_nacimiento REGEXP '1999';
 
 /**
-no hay alumnos que hayan nacido en 1999
+┌────┬───────────┬─────────┬───────────┬───────────┬─────────┬─────────────────┬───────────┬──────────────────┬──────┬────────┐
+│ id │    nif    │ nombre  │ apellido1 │ apellido2 │ ciudad  │    direccion    │ telefono  │ fecha_nacimiento │ sexo │  tipo  │
+├────┼───────────┼─────────┼───────────┼───────────┼─────────┼─────────────────┼───────────┼──────────────────┼──────┼────────┤
+│ 7  │ 97258166K │ Ismael  │ Strosin   │ Turcotte  │ Almería │ C/ Neptuno      │           │ 1999/05/24       │ H    │ alumno │
+│ 22 │ 41491230N │ Antonio │ Domínguez │ Guerrero  │ Almería │ C/ Cabo de Gata │ 626652498 │ 1999/02/11       │ H    │ alumno │
+└────┴───────────┴─────────┴───────────┴───────────┴─────────┴─────────────────┴───────────┴──────────────────┴──────┴────────┘
 **/
 
 --Devuelve el listado de profesores que no han dado de alta su número de teléfono en la base de datos y además su nif termina en K.
 
-select p.nombre, p.apellido1, p.apellido2 from persona as p INNER JOIN profesor as prof ON p.id = prof.id_profesor where p.telefono not in (select id_profesor from profesor) and p.nif REGEXP 'K%' group by p.id;
-
+select * from persona where tipo = 'profesor' and telefono is null and nif REGEXP 'K$';
 /**
-no hay profesores con estas características
-**/
+┌────┬───────────┬───────────┬───────────┬───────────┬─────────┬───────────────────────────┬──────────┬──────────────────┬──────┬──────────┐
+│ id │    nif    │  nombre   │ apellido1 │ apellido2 │ ciudad  │         direccion         │ telefono │ fecha_nacimiento │ sexo │   tipo   │
+├────┼───────────┼───────────┼───────────┼───────────┼─────────┼───────────────────────────┼──────────┼──────────────────┼──────┼──────────┤
+│ 16 │ 10485008K │ Antonio   │ Fahey     │ Considine │ Almería │ C/ Sierra de los Filabres │          │ 1982/03/18       │ H    │ profesor │
+│ 17 │ 85869555K │ Guillermo │ Ruecker   │ Upton     │ Almería │ C/ Sierra de Gádor        │          │ 1973/05/05       │ H    │ profesor │
+└────┴───────────┴───────────┴───────────┴───────────┴─────────┴───────────────────────────┴──────────┴──────────────────┴──────┴──────────┘**/
 
 --Devuelve el listado de las asignaturas que se imparten en el primer cuatrimestre, en el tercer curso del grado que tiene el identificador 7.
 
-select a.* from asignatura 
+select * from asignatura where cuatrimestre = '1' and curso = '3' and id = '7';
+
+/**
+no hay resultado
+**/
 
 -----------------------------------------------------------------Consultas multitabla (Join)------------------------------------------------------------------
 --Devuelve un listado con los datos de todas las alumnas que se han matriculado alguna vez en el Grado en Ingeniería Informática (Plan 2015).
