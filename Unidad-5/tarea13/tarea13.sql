@@ -312,8 +312,11 @@ no ddevuelve nada
 
 --Devuelve un listado con los departamentos que no tienen profesores asociados.
 
-select dep.* from departamento dep, profesor prof where dep.id = prof.id_departamento and prof.id_departamento not in (select id from departamento);
+select DISTINCT(dep.*) from departamento dep, profesor prof where dep.id = prof.id_departamento and prof.id_departamento not exists(select id from departamento)
 
+select DISTINCT(id_departamento) from departamento dep, profesor prof
+where dep.id = prof.id_departamento and 
+not exists from prof.id_departamento; 
 /**
 no devuelve nada
 **/
@@ -486,14 +489,12 @@ select * from persona where fecha_nacimiento = (select MAX(fecha_nacimiento) fro
 
 --Devuelve un listado con los profesores que no están asociados a un departamento.
 
-select * from profesor where id_profesor not in (select id from departamento);
-
 select p.* from profesor p
 INNER JOIN departamento d ON p.id_departamento = d.id
 WHERE d.id IS NULL;
 
 /**
-
+no devuelve nada
 **/
 
 --Devuelve un listado con los departamentos que no tienen profesores asociados.
@@ -507,7 +508,18 @@ INNER JOIN profesor prof on dep.id = prof.id_departamento where dep.id not in (s
 
 --Devuelve un listado con los profesores que tienen un departamento asociado y que no imparten ninguna asignatura.
 
-select 
+select p.* from persona p 
+INNER JOIN profesor prof on p.id = prof.id_profesor
+INNER JOIN departamento dep on prof.id_departamento = dep.id
+where prof.id_profesor not in (select DISTINCT(id_profesor) from asignatura); 
+
 --Devuelve un listado con las asignaturas que no tienen un profesor asignado.
+
+select 
 --Devuelve un listado con todos los departamentos que no han impartido asignaturas en ningún curso escolar.
+
+select dep.* from departamento dep where dep.id not exists
+INNER JOIN profesor prof on dep.id = prof.id_departamento 
+INNER JOIN asignatura asig on prof.id_profesor = asig.id_profesor;
+
 
