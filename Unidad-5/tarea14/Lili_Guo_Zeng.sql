@@ -488,8 +488,23 @@ from producto p, fabricante f where p.codigo_fabricante = f.codigo and f.nombre 
 
 --Muestra el número total de productos que tiene cada uno de los fabricantes. El listado también debe incluir los fabricantes que no tienen ningún producto. El resultado mostrará dos columnas, una con el nombre del fabricante y otra con el número de productos que tiene. Ordene el resultado descendentemente por el número de productos.
 
-/**
+select f.nombre, count(p.nombre) as num_productos from producto p, fabricante f 
+where p.codigo_fabricante = f.codigo or p.codigo_fabricante is null
+group by f.nombre
+order by num_productos desc;
 
+/**
+┌─────────────────┬───────────────┐
+│     nombre      │ num_productos │
+├─────────────────┼───────────────┤
+│ Lenovo          │ 2             │
+│ Hewlett-Packard │ 2             │
+│ Crucial         │ 2             │
+│ Asus            │ 2             │
+│ Seagate         │ 1             │
+│ Samsung         │ 1             │
+│ Gigabyte        │ 1             │
+└─────────────────┴───────────────┘
 **/
 
 --Muestra el precio máximo, precio mínimo y precio medio de los productos de cada uno de los fabricantes. El resultado mostrará el nombre del fabricante junto con los datos que se solicitan.
@@ -566,6 +581,324 @@ group by f.nombre;
 **/
 
 --Lista los nombres de los fabricantes cuyos productos tienen un precio medio mayor o igual a 150€.
-Devuelve un listado con los nombres de los fabricantes que tienen 2 o más productos.
-Devuelve un listado con los nombres de los fabricantes y el número de productos que tiene cada uno con un precio superior o igual a 220 €. No es necesario mostrar el nombre de los fabricantes que no tienen productos que cumplan la condición.
 
+select f.nombre from fabricante f, producto p 
+where f.codigo = p.codigo_fabricante and p.precio >= 150;
+
+/**
+┌─────────────────┐
+│     nombre      │
+├─────────────────┤
+│ Samsung         │
+│ Gigabyte        │
+│ Crucial         │
+│ Asus            │
+│ Asus            │
+│ Lenovo          │
+│ Lenovo          │
+│ Hewlett-Packard │
+└─────────────────┘
+**/
+
+--Devuelve un listado con los nombres de los fabricantes que tienen 2 o más productos.
+
+select f.nombre, count(p.codigo) as num_productos from fabricante f, producto p
+where p.codigo_fabricante = f.codigo 
+group by f.nombre
+having count(p.codigo) >= 2;
+
+/**
+┌─────────────────┬───────────────┐
+│     nombre      │ num_productos │
+├─────────────────┼───────────────┤
+│ Asus            │ 2             │
+│ Crucial         │ 2             │
+│ Hewlett-Packard │ 2             │
+│ Lenovo          │ 2             │
+└─────────────────┴───────────────┘
+**/
+
+--Devuelve un listado con los nombres de los fabricantes y el número de productos que tiene cada uno con un precio superior o igual a 220 €. No es necesario mostrar el nombre de los fabricantes que no tienen productos que cumplan la condición.
+
+select f.nombre, count(p.nombre) as total from fabricante f, producto p
+where p.codigo_fabricante = f.codigo and p.precio >= 220
+group by f.nombre;
+
+/**
+┌─────────┬───────┐
+│ nombre  │ total │
+├─────────┼───────┤
+│ Asus    │ 1     │
+│ Crucial │ 1     │
+│ Lenovo  │ 2     │
+└─────────┴───────┘
+**/
+
+--Devuelve un listado con los nombres de los fabricantes y el número de productos que tiene cada uno con un precio superior o igual a 220 €. El listado debe mostrar el nombre de todos los fabricantes, es decir, si hay algún fabricante que no tiene productos con un precio superior o igual a 220€ deberá aparecer en el listado con un valor igual a 0 en el número de productos.
+
+select f.nombre,count(f.nombre) 
+from fabricante as f left join producto as p 
+on p.codigo_fabricante = f.codigo 
+where p.precio >= 220 group by f.nombre;
+
+/**
+┌─────────┬─────────────────┐
+│ nombre  │ count(f.nombre) │
+├─────────┼─────────────────┤
+│ Asus    │ 1               │
+│ Crucial │ 1               │
+│ Lenovo  │ 2               │
+└─────────┴─────────────────┘
+**/
+
+--Devuelve un listado con los nombres de los fabricantes donde la suma del precio de todos sus productos es superior a 1000 €.
+
+select f.nombre, sum(p.precio) as total from producto p, fabricante f 
+where p.codigo_fabricante = f.codigo
+group by f.nombre
+having sum(p.precio) > 1000;
+
+/**
+┌────────┬────────┐
+│ nombre │ total  │
+├────────┼────────┤
+│ Lenovo │ 1003.0 │
+└────────┴────────┘
+**/
+
+--Devuelve un listado con el nombre del producto más caro que tiene cada fabricante. El resultado debe tener tres columnas: nombre del producto, precio y nombre del fabricante. El resultado tiene que estar ordenado alfabéticamente de menor a mayor por el nombre del fabricante.
+
+select f.nombre, p.precio from fabricante f, producto p 
+where f.codigo = p.codigo_fabricante 
+group by f.nombre
+having max(p.precio);
+
+/**
+┌─────────────────┬────────┐
+│     nombre      │ precio │
+├─────────────────┼────────┤
+│ Asus            │ 245.99 │
+│ Crucial         │ 755.0  │
+│ Gigabyte        │ 185.0  │
+│ Hewlett-Packard │ 180.0  │
+│ Lenovo          │ 559.0  │
+│ Samsung         │ 150.99 │
+│ Seagate         │ 86.99  │
+└─────────────────┴────────┘
+**/
+
+---------------------------------Subconsultas (En la cláusula WHERE)(Sin utilizar INNER JOIN)---------------------------------------------
+
+--Devuelve todos los productos del fabricante Lenovo. (Sin utilizar INNER JOIN).
+
+select p.* from producto p, fabricante f where p.codigo_fabricante = f.codigo and f.nombre in ('Levono');
+
+/**
+┌────────┬─────────────────────┬────────┬───────────────────┐
+│ codigo │       nombre        │ precio │ codigo_fabricante │
+├────────┼─────────────────────┼────────┼───────────────────┤
+│ 8      │ Portátil Yoga 520   │ 559.0  │ 2                 │
+│ 9      │ Portátil Ideapd 320 │ 444.0  │ 2                 │
+└────────┴─────────────────────┴────────┴───────────────────┘
+**/
+
+--Devuelve todos los datos de los productos que tienen el mismo precio que el producto más caro del fabricante Lenovo. (Sin utilizar INNER JOIN).
+
+select p.nombre, MAX(p.precio) from fabricante f , producto p where f.nombre ='Lenovo' and p.codigo_fabricante = f.codigo; 
+
+/**
+┌───────────────────┬───────────────┐
+│      nombre       │ MAX(p.precio) │
+├───────────────────┼───────────────┤
+│ Portátil Yoga 520 │ 559.0         │
+└───────────────────┴───────────────┘
+**/
+
+--Lista el nombre del producto más caro del fabricante Lenovo.
+
+select p.nombre, max(p.precio) from producto p, fabricante f
+where p.codigo_fabricante = f.codigo and f.nombre in('Lenovo');
+
+/**
+┌───────────────────┬───────────────┐
+│      nombre       │ max(p.precio) │
+├───────────────────┼───────────────┤
+│ Portátil Yoga 520 │ 559.0         │
+└───────────────────┴───────────────┘
+**/
+
+--Lista el nombre del producto más barato del fabricante Hewlett-Packard.
+
+select p.nombre, min(p.precio) from producto p, fabricante f
+where p.codigo_fabricante = f.codigo and f.nombre in('Hewlett-Packard');
+
+/**
+┌───────────────────────────┬───────────────┐
+│          nombre           │ min(p.precio) │
+├───────────────────────────┼───────────────┤
+│ Impresora HP Deskjet 3720 │ 59.99         │
+└───────────────────────────┴───────────────┘
+**/
+
+--Devuelve todos los productos de la base de datos que tienen un precio mayor o igual al producto más caro del fabricante Lenovo.
+
+select p.* from producto as p, fabricante as f 
+where f.codigo = p.codigo_fabricante and f.nombre in ("Lenovo") and p.precio >= (select max(p.precio) from producto as p, fabricante as f where f.codigo = p.codigo_fabricante and f.nombre in ("Lenovo"));
+
+--Lista todos los productos del fabricante Asus que tienen un precio superior al precio medio de todos sus productos.
+
+select p.* from producto p, fabricante f 
+where f.codigo = p.codigo_fabricante and f.nombre in ('Asus') and p.precio > (select avg(p.precio) from producto p, fabricante f where p.codigo_fabricante = f.codigo and f.nombre in ('Asus'));
+
+/**
+┌────────┬────────────────────────┬────────┬───────────────────┐
+│ codigo │         nombre         │ precio │ codigo_fabricante │
+├────────┼────────────────────────┼────────┼───────────────────┤
+│ 7      │ Monitor 27 LED Full HD │ 245.99 │ 1                 │
+└────────┴────────────────────────┴────────┴───────────────────┘
+**/
+
+------------------------------------------------------Subconsultas con IN y NOT IN-------------------------------------------------------------
+
+--Devuelve los nombres de los fabricantes que tienen productos asociados. (Utilizando IN o NOT IN).
+
+select f.nombre from fabricante f inner join producto p 
+on p.codigo_fabricante = f.codigo and f.codigo in (select codigo_fabricante from producto)
+group by f.nombre;
+
+/**
+┌─────────────────┐
+│     nombre      │
+├─────────────────┤
+│ Asus            │
+│ Crucial         │
+│ Gigabyte        │
+│ Hewlett-Packard │
+│ Lenovo          │
+│ Samsung         │
+│ Seagate         │
+└─────────────────┘
+**/
+
+--Devuelve los nombres de los fabricantes que no tienen productos asociados. (Utilizando IN o NOT IN).
+
+select nombre from fabricante where codigo not in (select codigo_fabricante from producto);
+
+/**
+┌────────┐
+│ nombre │
+├────────┤
+│ Huawei │
+│ Xiaomi │
+└────────┘
+**/
+
+------------------------------------------------------Subconsultas con EXISTS y NOT EXISTS---------------------------------------------------
+
+--Devuelve los nombres de los fabricantes que tienen productos asociados. (Utilizando EXISTS o NOT EXISTS).
+
+select nombre from fabricante f where exists (select * from producto p where f.codigo = p.codigo_fabricante);
+
+/**
+┌─────────────────┐
+│     nombre      │
+├─────────────────┤
+│ Asus            │
+│ Lenovo          │
+│ Hewlett-Packard │
+│ Samsung         │
+│ Seagate         │
+│ Crucial         │
+│ Gigabyte        │
+└─────────────────┘
+**/
+
+--Devuelve los nombres de los fabricantes que no tienen productos asociados. (Utilizando EXISTS o NOT EXISTS).
+
+select f.nombre from fabricante f where not exists (select * from producto p where p.codigo_fabricante = f.codigo);
+
+/**
+┌────────┐
+│ nombre │
+├────────┤
+│ Huawei │
+│ Xiaomi │
+└────────┘
+**/
+
+------------------------------------------------------Subconsultas correlacionadas------------------------------------------------------------
+
+--Lista el nombre de cada fabricante con el nombre y el precio de su producto más caro.
+
+select f.nombre, max(p.precio) as max_precio from producto p, fabricante f 
+where f.codigo = p.codigo_fabricante 
+group by f.nombre;
+
+/**
+┌─────────────────┬────────────┐
+│     nombre      │ max_precio │
+├─────────────────┼────────────┤
+│ Asus            │ 245.99     │
+│ Crucial         │ 755.0      │
+│ Gigabyte        │ 185.0      │
+│ Hewlett-Packard │ 180.0      │
+│ Lenovo          │ 559.0      │
+│ Samsung         │ 150.99     │
+│ Seagate         │ 86.99      │
+└─────────────────┴────────────┘
+**/
+
+--Devuelve un listado de todos los productos que tienen un precio mayor o igual a la media de todos los productos de su mismo fabricante.
+
+select f.nombre, p.nombre, p.precio from producto p, fabricante f 
+where p.codigo_fabricante = f.codigo
+group by f.nombre
+having avg(p.precio) >= (select precio from producto where p.codigo_fabricante = f.codigo);
+
+/**
+┌─────────────────┬───────────────────────────┬────────┐
+│     nombre      │          nombre           │ precio │
+├─────────────────┼───────────────────────────┼────────┤
+│ Asus            │ Monitor 24 LED Full HD    │ 202.0  │
+│ Crucial         │ Memoria RAM DDR4 8GB      │ 120.0  │
+│ Gigabyte        │ GeForce GTX 1050Ti        │ 185.0  │
+│ Hewlett-Packard │ Impresora HP Deskjet 3720 │ 59.99  │
+│ Lenovo          │ Portátil Yoga 520         │ 559.0  │
+│ Samsung         │ Disco SSD 1 TB            │ 150.99 │
+│ Seagate         │ Disco duro SATA3 1TB      │ 86.99  │
+└─────────────────┴───────────────────────────┴────────┘
+**/
+
+--Lista el nombre del producto más caro del fabricante Lenovo.
+
+select p.nombre, max(p.precio) as max_precio
+from producto p, fabricante f 
+where p.codigo_fabricante = f.codigo and f.nombre=(SELECT nombre from fabricante where nombre='Lenovo');
+
+/**
+┌───────────────────┬────────────┐
+│      nombre       │ max_precio │
+├───────────────────┼────────────┤
+│ Portátil Yoga 520 │ 559.0      │
+└───────────────────┴────────────┘
+**/
+
+------------------------------------------------------Subconsultas (En la cláusula HAVING)-----------------------------------------------------
+
+--Devuelve un listado con todos los nombres de los fabricantes que tienen el mismo número de productos que el fabricante Lenovo.
+
+select f.nombre, count(p.nombre) 
+from fabricante as f, producto as p 
+where p.codigo_fabricante=f.codigo 
+group by f.nombre having count(p.nombre) = (select count(p.nombre) from fabricante as f, producto as p where p.codigo_fabricante=f.codigo and f.nombre = "Lenovo");
+
+/**
+┌─────────────────┬─────────────────┐
+│     nombre      │ count(p.nombre) │
+├─────────────────┼─────────────────┤
+│ Asus            │ 2               │
+│ Crucial         │ 2               │
+│ Hewlett-Packard │ 2               │
+│ Lenovo          │ 2               │
+└─────────────────┴─────────────────┘
+**/
