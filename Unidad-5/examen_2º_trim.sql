@@ -724,5 +724,19 @@ select con.* from consumidor con inner join compra c on c.id_consumidor = con.id
 -- 7. Devuelve un listado de los suministradores que no han realizado ningún compra. (Utilizando IN o NOT IN).;
 
 select s.* from suministrador s, compra c where s.id = c.id_suministrador and s.id not in (select c.id_suministrador from compra c where );
+
 -- 8. Devuelve un listado de los consumidores que no han realizado ningún compra. (Utilizando EXISTS o NOT EXISTS).
+
+select * from consumidor as con 
+where not exists(select id_consumidor from compra as c where c.id_consumidor = con.id);
+
+select * from consumidor as con 
+where con.id not in(select distinct(id_consumidor) from compra as c);  
+
 -- 9. Devuelve un listado de los suministradores que no han realizado ningún compra. (Utilizando EXISTS o NOT EXISTS).
+
+select * from suministrador as s 
+where not exists(select id_suministrador from compra as c where c.id_suministrador = s.id);  
+
+select * from suministrador as s 
+where s.id not in(select distinct(id_suministrador) from compra as c);  
