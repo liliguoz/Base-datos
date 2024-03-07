@@ -30,13 +30,16 @@ INSERT INTO usuarios (nombre, edad, correo) VALUES
 ('Pedro', 28, 'pedro@example.com');
 ```
 
+Se crea otra tabla llamada productos.
 
+```sql
 CREATE TABLE IF NOT EXISTS productos (
     id INT AUTO_INCREMENT PRIMARY KEY,
-    nombre TEXT,
-    precio NUMERIC(10, 2),
+    nombre VARCHAR(50),
+    precio DECIMAL(10, 2),
     cantidad INT
 );
+```
 
 INSERT INTO productos (nombre, precio, cantidad) VALUES
 ('Camisa', 25.99, 100),
