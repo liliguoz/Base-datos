@@ -306,5 +306,111 @@ select * from productos order by precio desc;
 |           2 | Producto 2  |     21 |
 |           1 | Producto 1  |     11 |
 +-------------+-------------+--------+
-
 ```
+
+
+
+#### Consultas de ejemplo para practicar joins
+
+1. Seleccionar todos los clientes y sus órdenes, incluso si no tienen órdenes
+
+```sql
+select c.* , o.* from clientes c left join ordenes o on c.id_cliente=o.id_cliente;
++------------+------------+---------------+----------+------------+-------------+----------+
+| id_cliente | nombre     | direccion     | id_orden | id_cliente | id_producto | cantidad |
++------------+------------+---------------+----------+------------+-------------+----------+
+|          1 | Cliente 1  | Dirección 1   |        1 |          1 |           1 |        2 |
+|          2 | Cliente 2  | Dirección 2   |        2 |          2 |           2 |        1 |
+|          3 | Cliente 3  | Dirección 3   |        3 |          3 |           3 |        3 |
+|          4 | Cliente 4  | Dirección 4   |        4 |          4 |           4 |        2 |
+|          5 | Cliente 5  | Dirección 5   |        5 |          5 |           5 |        1 |
+|          6 | Cliente 6  | Dirección 6   |        6 |          6 |           6 |        2 |
+|          7 | Cliente 7  | Dirección 7   |        7 |          7 |           7 |        3 |
+|          8 | Cliente 8  | Dirección 8   |        8 |          8 |           8 |        2 |
+|          9 | Cliente 9  | Dirección 9   |        9 |          9 |           9 |        1 |
+|         10 | Cliente 10 | Dirección 10  |       10 |         10 |          10 |        2 |
+|         11 | Cliente 11 | Dirección 11  |       11 |         11 |          11 |        3 |
+|         12 | Cliente 12 | Dirección 12  |       12 |         12 |          12 |        2 |
+|         13 | Cliente 13 | Dirección 13  |       13 |         13 |          13 |        1 |
+|         14 | Cliente 14 | Dirección 14  |       14 |         14 |          14 |        2 |
+|         15 | Cliente 15 | Dirección 15  |       15 |         15 |          15 |        3 |
+|         16 | Cliente 16 | Dirección 16  |       16 |         16 |          16 |        2 |
+|         17 | Cliente 17 | Dirección 17  |       17 |         17 |          17 |        1 |
+|         18 | Cliente 18 | Dirección 18  |       18 |         18 |          18 |        2 |
+|         19 | Cliente 19 | Dirección 19  |       19 |         19 |          19 |        3 |
+|         20 | Cliente 20 | Dirección 20  |       20 |         20 |          20 |        2 |
++------------+------------+---------------+----------+------------+-------------+----------+
+```
+2. Seleccionar todas las órdenes junto con los productos correspondientes
+
+```sql
+select o.*, p.* from ordenes o inner join productos p on o.id_producto=p.id_producto;
++----------+------------+-------------+----------+-------------+-------------+--------+
+| id_orden | id_cliente | id_producto | cantidad | id_producto | nombre      | precio |
++----------+------------+-------------+----------+-------------+-------------+--------+
+|        1 |          1 |           1 |        2 |           1 | Producto 1  |     11 |
+|        2 |          2 |           2 |        1 |           2 | Producto 2  |     21 |
+|        3 |          3 |           3 |        3 |           3 | Producto 3  |     31 |
+|        4 |          4 |           4 |        2 |           4 | Producto 4  |     41 |
+|        5 |          5 |           5 |        1 |           5 | Producto 5  |     51 |
+|        6 |          6 |           6 |        2 |           6 | Producto 6  |     61 |
+|        7 |          7 |           7 |        3 |           7 | Producto 7  |     71 |
+|        8 |          8 |           8 |        2 |           8 | Producto 8  |     81 |
+|        9 |          9 |           9 |        1 |           9 | Producto 9  |     91 |
+|       10 |         10 |          10 |        2 |          10 | Producto 10 |    101 |
+|       11 |         11 |          11 |        3 |          11 | Producto 11 |    111 |
+|       12 |         12 |          12 |        2 |          12 | Producto 12 |    121 |
+|       13 |         13 |          13 |        1 |          13 | Producto 13 |    131 |
+|       14 |         14 |          14 |        2 |          14 | Producto 14 |    141 |
+|       15 |         15 |          15 |        3 |          15 | Producto 15 |    151 |
+|       16 |         16 |          16 |        2 |          16 | Producto 16 |    161 |
+|       17 |         17 |          17 |        1 |          17 | Producto 17 |    171 |
+|       18 |         18 |          18 |        2 |          18 | Producto 18 |    181 |
+|       19 |         19 |          19 |        3 |          19 | Producto 19 |    191 |
+|       20 |         20 |          20 |        2 |          20 | Producto 20 |    201 |
++----------+------------+-------------+----------+-------------+-------------+--------+
+```
+
+3. Mostrar el nombre de los clientes que han realizado órdenes de productos que cuestan más de 50
+
+```sql
+select c.nombre, p.precio from clientes c inner join ordenes o on c.id_cliente=o.id_cliente
+inner join productos p on o.id_producto=p.id_producto where p.precio > 50;
++------------+--------+
+| nombre     | precio |
++------------+--------+
+| Cliente 5  |     51 |
+| Cliente 6  |     61 |
+| Cliente 7  |     71 |
+| Cliente 8  |     81 |
+| Cliente 9  |     91 |
+| Cliente 10 |    101 |
+| Cliente 11 |    111 |
+| Cliente 12 |    121 |
+| Cliente 13 |    131 |
+| Cliente 14 |    141 |
+| Cliente 15 |    151 |
+| Cliente 16 |    161 |
+| Cliente 17 |    171 |
+| Cliente 18 |    181 |
+| Cliente 19 |    191 |
+| Cliente 20 |    201 |
++------------+--------+
+```
+
+4. Obtener el nombre de los productos que no se han ordenado aún
+
+```sql
+select p.nombre from productos p inner join ordenados o on o.id_producto=p.id_producto where p.id_producto not in o.id_producto;
+7. Mostrar el nombre del cliente, el producto y la cantidad para todas las órdenes
+8. Obtener el nombre de los productos junto con los nombres de los clientes que han realizado órdenes de esos productos
+9. Mostrar todas las órdenes con sus clientes y productos, incluso si no hay órdenes
+10. Obtener el nombre de los clientes junto con el número total de órdenes que han realizado
+11. Mostrar todas las órdenes junto con el nombre del cliente y el nombre del producto
+12. Mostrar todas las órdenes con sus productos y clientes, incluso si no hay información de cliente.
+13. Obtener el nombre de los productos junto con el nombre de los clientes que han realizado órdenes de esos productos, incluyendo los productos que no han sido ordenados
+14. Mostrar todas las órdenes junto con el nombre del cliente y el nombre del producto, incluyendo las órdenes sin productos
+15. Obtener el nombre de los clientes junto con el número total de órdenes que han realizado, incluyendo los clientes que no han realizado órdenes.
+16. Mostrar todas las órdenes con sus clientes y productos, incluyendo las órdenes y productos que no tienen información.
+
+
