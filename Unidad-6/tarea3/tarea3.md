@@ -1,3 +1,11 @@
+<h1 align="center"> TAREA 3 MYSQL </h1>
+
+<div align="center">
+<img src="https://cdn.clever-cloud.com/uploads/2023/03/mysql.svg" width="500" />
+</div>
+
+___
+
 ```sql
 CREATE DATABASE IF NOT EXISTS tarea3;
 
