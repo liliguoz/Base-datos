@@ -229,12 +229,54 @@ Empty set (0,08 sec)
 
 ```sql
 select c.nombre_cliente, p.nombre_producto, do.cantidad from clientes c
-inner join ordenes o on o.id_orden=c.id_orden
-inner join productos p on p.id_producto=o.id_productos
-inner join detalles_ordenes do on o.id_orden=do.id_orden;
-    Obtener el nombre de los productos junto con los nombres de los clientes que han realizado órdenes de esos productos.
-    Mostrar todas las órdenes con sus clientes y productos, incluso si no hay órdenes.
-    Obtener el nombre de los clientes junto con el número total de órdenes que han realizado.
+inner join ordenes o on c.id_cliente=o.id_cliente
+inner join detalles_ordenes do on o.id_orden=do.id_orden
+inner join productos p on do.id_producto=p.id_producto;
++----------------+-----------------+----------+
+| nombre_cliente | nombre_producto | cantidad |
++----------------+-----------------+----------+
+| Juan           | Producto A      |        2 |
+| María          | Producto B      |        1 |
+| Pedro          | Producto C      |        3 |
++----------------+-----------------+----------+
+```
+
+16. Obtener el nombre de los productos junto con los nombres de los clientes que han realizado órdenes de esos productos.
+
+```sql
+select p.nombre_producto, c.nombre_cliente from clientes c
+inner join ordenes o on c.id_cliente=o.id_cliente
+inner join detalles_ordenes do on o.id_orden=do.id_orden
+inner join productos p on do.id_producto=p.id_producto;
++-----------------+----------------+
+| nombre_producto | nombre_cliente |
++-----------------+----------------+
+| Producto A      | Juan           |
+| Producto B      | María          |
+| Producto C      | Pedro          |
++-----------------+----------------+
+```
+
+17. Mostrar todas las órdenes con sus clientes y productos, incluso si no hay órdenes.
+
+```sql
+select o.*, c.*, p.* from clientes c
+left join ordenes o on c.id_cliente=o.id_cliente
+inner join detalles_ordenes do on o.id_orden=do.id_orden
+right join productos p on do.id_producto=p.id_producto;
++----------+------------+-------------+------------+----------------+----------------+-------------+-----------------+-----------------+
+| id_orden | id_cliente | fecha_orden | id_cliente | nombre_cliente | ciudad_cliente | id_producto | nombre_producto | precio_producto |
++----------+------------+-------------+------------+----------------+----------------+-------------+-----------------+-----------------+
+|        1 |          1 | 2024-03-01  |          1 | Juan           | Ciudad A       |           1 | Producto A      |           50.00 |
+|        2 |          2 | 2024-03-02  |          2 | María          | Ciudad B       |           2 | Producto B      |           75.00 |
+|        3 |          3 | 2024-03-03  |          3 | Pedro          | Ciudad C       |           3 | Producto C      |          100.00 |
++----------+------------+-------------+------------+----------------+----------------+-------------+-----------------+-----------------+
+```
+
+18. Obtener el nombre de los clientes junto con el número total de órdenes que han realizado.
+
+```sql
+select c.nombre_cliente, count(
     Mostrar todas las órdenes junto con el nombre del cliente y el nombre del producto.
     Mostrar todas las órdenes con sus productos y clientes, incluso si no hay información de cliente.
     Obtener el nombre de los productos junto con los nombres de los clientes que han realizado órdenes de esos productos, incluyendo los productos que no han sido ordenados.
