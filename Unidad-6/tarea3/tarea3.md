@@ -277,10 +277,60 @@ right join productos p on do.id_producto=p.id_producto;
 
 ```sql
 select c.nombre_cliente, count(
-    Mostrar todas las órdenes junto con el nombre del cliente y el nombre del producto.
-    Mostrar todas las órdenes con sus productos y clientes, incluso si no hay información de cliente.
-    Obtener el nombre de los productos junto con los nombres de los clientes que han realizado órdenes de esos productos, incluyendo los productos que no han sido ordenados.
-    Mostrar todas las órdenes junto con el nombre del cliente y el nombre del producto, incluyendo las órdenes sin productos.
+```
+
+19. Mostrar todas las órdenes junto con el nombre del cliente y el nombre del producto.
+
+```sql
+select o.*, c.nombre_cliente, p.nombre_producto from clientes c
+inner join ordenes o on c.id_cliente=o.id_cliente
+inner join detalles_ordenes do on o.id_orden=do.id_orden
+inner join productos p on do.id_producto=p.id_producto;
++----------+------------+-------------+----------------+-----------------+
+| id_orden | id_cliente | fecha_orden | nombre_cliente | nombre_producto |
++----------+------------+-------------+----------------+-----------------+
+|        1 |          1 | 2024-03-01  | Juan           | Producto A      |
+|        2 |          2 | 2024-03-02  | María          | Producto B      |
+|        3 |          3 | 2024-03-03  | Pedro          | Producto C      |
++----------+------------+-------------+----------------+-----------------+
+```
+
+20. Mostrar todas las órdenes con sus productos y clientes, incluso si no hay información de cliente.
+
+```sql
+select o.*, c.nombre_cliente, p.nombre_producto from clientes c
+right join ordenes o on c.id_cliente=o.id_cliente
+inner join detalles_ordenes do on o.id_orden=do.id_orden
+inner join productos p on do.id_producto=p.id_producto;
++----------+------------+-------------+----------------+-----------------+
+| id_orden | id_cliente | fecha_orden | nombre_cliente | nombre_producto |
++----------+------------+-------------+----------------+-----------------+
+|        1 |          1 | 2024-03-01  | Juan           | Producto A      |
+|        2 |          2 | 2024-03-02  | María          | Producto B      |
+|        3 |          3 | 2024-03-03  | Pedro          | Producto C      |
++----------+------------+-------------+----------------+-----------------+
+```
+
+21. Obtener el nombre de los productos junto con los nombres de los clientes que han realizado órdenes de esos productos, incluyendo los productos que no han sido ordenados.
+
+```sql
+select p.nombre_producto, c.nombre_cliente from clientes c
+inner join ordenes o on c.id_cliente=o.id_cliente
+inner join detalles_ordenes do on o.id_orden=do.id_orden
+right join productos p on do.id_producto=p.id_producto;
++-----------------+----------------+
+| nombre_producto | nombre_cliente |
++-----------------+----------------+
+| Producto A      | Juan           |
+| Producto B      | María          |
+| Producto C      | Pedro          |
++-----------------+----------------+
+```
+
+22. Mostrar todas las órdenes junto con el nombre del cliente y el nombre del producto, incluyendo las órdenes sin productos.
+
+```sql
+select 
     Obtener el nombre de los clientes junto con el número total de órdenes que han realizado, incluyendo los clientes que no han realizado órdenes.
     Mostrar todas las órdenes con sus clientes y productos, incluyendo las órdenes y productos que no tienen información.
     Realizar un inner join entre clientes y órdenes.
