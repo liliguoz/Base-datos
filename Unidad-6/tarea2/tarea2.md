@@ -255,6 +255,7 @@ select * from ordenes where id_cliente = 1;
 +----------+------------+-------------+----------+
 |        1 |          1 |           1 |        2 |
 +----------+------------+-------------+----------+
+```
 
 7. Mostrar los clientes cuyos nombres comienzan con la letra "M".
 
@@ -307,8 +308,6 @@ select * from productos order by precio desc;
 |           1 | Producto 1  |     11 |
 +-------------+-------------+--------+
 ```
-
-
 
 #### Consultas de ejemplo para practicar joins
 
@@ -695,7 +694,7 @@ GROUP BY c.nombre;
 +------------+---------------+
 ```
 
-13. Mostrar todas las órdenes con sus clientes y productos, incluyendo las órdenes y productos que no tienen información.
+14. Mostrar todas las órdenes con sus clientes y productos, incluyendo las órdenes y productos que no tienen información.
 
 ```sql
 select c.nombre, p.nombre from ordenes o
