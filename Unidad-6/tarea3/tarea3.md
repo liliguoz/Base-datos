@@ -389,7 +389,8 @@ left join productos p on do.id_producto=p.id_producto;
 | María          | Producto B      |
 | Pedro          | Producto C      |
 +----------------+-----------------+
- 
+```
+
 25. Realizar un inner join entre clientes y órdenes.
 
 ```sql
