@@ -405,7 +405,7 @@ inner join clientes c on o.id_cliente=c.id_cliente;
 +------------+----------------+----------------+----------+------------+-------------+
 ```   
 
-25. Realizar un left join entre órdenes y detalles de órdenes.
+26. Realizar un left join entre órdenes y detalles de órdenes.
 
 ```sql
 select * from ordenes o
@@ -419,7 +419,7 @@ left join detalles_ordenes do ON o.id_orden = do.id_orden;
 +----------+------------+-------------+------------+----------+-------------+----------+
 ```
 
-26. Realizar un right join entre productos y detalles de órdenes.
+27. Realizar un right join entre productos y detalles de órdenes.
 
 ```sql
 select * from productos p
@@ -433,7 +433,7 @@ right join detalles_ordenes do on p.id_producto = do.id_producto;
 +-------------+-----------------+-----------------+------------+----------+-------------+----------+
 ```
 
-27. Realizar un full join entre clientes y órdenes.
+28. Realizar un full join entre clientes y órdenes.
 
 ```sql
 select * from clientes c
@@ -453,7 +453,7 @@ left join clientes c on c.id_cliente=o.id_cliente;
 +------------+----------------+----------------+----------+------------+-------------+
 ```
 
-28. Realizar un full join entre órdenes y detalles de órdenes.
+29. Realizar un full join entre órdenes y detalles de órdenes.
 
 ```sql
 select * from ordenes o
@@ -473,7 +473,7 @@ left join ordenes o on o.id_orden=do.id_orden;
 +----------+------------+-------------+------------+----------+-------------+------------+
 ```
 
-29. Realizar un full join entre productos y detalles de órdenes.
+30. Realizar un full join entre productos y detalles de órdenes.
 
 ```sql
 select * from productos p
