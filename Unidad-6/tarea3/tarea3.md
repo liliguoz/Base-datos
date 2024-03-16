@@ -431,6 +431,63 @@ right join detalles_ordenes do on p.id_producto = do.id_producto;
 |           3 | Producto C      |          100.00 |          3 |        3 |           3 |        3 |
 +-------------+-----------------+-----------------+------------+----------+-------------+----------+
 ```
-    Realizar un full join entre clientes y órdenes.
-    Realizar un full join entre órdenes y detalles de órdenes.
-    Realizar un full join entre productos y detalles de órdenes.
+
+27. Realizar un full join entre clientes y órdenes.
+
+```sql
+select * from clientes c
+left join ordenes o on o.id_cliente=c.id_cliente
+UNION ALL
+select * from ordenes o
+left join clientes c on c.id_cliente=o.id_cliente;
++------------+----------------+----------------+----------+------------+-------------+
+| id_cliente | nombre_cliente | ciudad_cliente | id_orden | id_cliente | fecha_orden |
++------------+----------------+----------------+----------+------------+-------------+
+|          1 | Juan           | Ciudad A       |        1 | 1          | 2024-03-01  |
+|          2 | María          | Ciudad B       |        2 | 2          | 2024-03-02  |
+|          3 | Pedro          | Ciudad C       |        3 | 3          | 2024-03-03  |
+|          1 | 1              | 2024-03-01     |        1 | Juan       | Ciudad A    |
+|          2 | 2              | 2024-03-02     |        2 | María      | Ciudad B    |
+|          3 | 3              | 2024-03-03     |        3 | Pedro      | Ciudad C    |
++------------+----------------+----------------+----------+------------+-------------+
+```
+
+28. Realizar un full join entre órdenes y detalles de órdenes.
+
+```sql
+select * from ordenes o
+left join detalles_ordenes do on do.id_orden=o.id_orden
+UNION ALL
+select * from detalles_ordenes do
+left join ordenes o on o.id_orden=do.id_orden;
++----------+------------+-------------+------------+----------+-------------+------------+
+| id_orden | id_cliente | fecha_orden | id_detalle | id_orden | id_producto | cantidad   |
++----------+------------+-------------+------------+----------+-------------+------------+
+|        1 |          1 | 2024-03-01  |          1 |        1 |           1 | 2          |
+|        2 |          2 | 2024-03-02  |          2 |        2 |           2 | 1          |
+|        3 |          3 | 2024-03-03  |          3 |        3 |           3 | 3          |
+|        1 |          1 | 1           |          2 |        1 |           1 | 2024-03-01 |
+|        2 |          2 | 2           |          1 |        2 |           2 | 2024-03-02 |
+|        3 |          3 | 3           |          3 |        3 |           3 | 2024-03-03 |
++----------+------------+-------------+------------+----------+-------------+------------+
+```
+
+29. Realizar un full join entre productos y detalles de órdenes.
+
+```sql
+select * from productos p
+left join detalles_ordenes do on do.id_producto=p.id_producto
+UNION ALL
+select * from detalles_ordenes do
+left join productos p on do.id_producto=p.id_producto;
++-------------+-----------------+-----------------+------------+----------+-------------+----------+
+| id_producto | nombre_producto | precio_producto | id_detalle | id_orden | id_producto | cantidad |
++-------------+-----------------+-----------------+------------+----------+-------------+----------+
+|           1 | Producto A      |           50.00 |          1 |        1 | 1           |     2.00 |
+|           2 | Producto B      |           75.00 |          2 |        2 | 2           |     1.00 |
+|           3 | Producto C      |          100.00 |          3 |        3 | 3           |     3.00 |
+|           1 | 1               |            1.00 |          2 |        1 | Producto A  |    50.00 |
+|           2 | 2               |            2.00 |          1 |        2 | Producto B  |    75.00 |
+|           3 | 3               |            3.00 |          3 |        3 | Producto C  |   100.00 |
++-------------+-----------------+-----------------+------------+----------+-------------+----------+
+```
