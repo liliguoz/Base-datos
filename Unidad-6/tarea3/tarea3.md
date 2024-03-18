@@ -440,8 +440,9 @@ right join detalles_ordenes do on p.id_producto = do.id_producto;
 select * from clientes c
 left join ordenes o on o.id_cliente=c.id_cliente
 UNION ALL
-select * from ordenes o
-left join clientes c on c.id_cliente=o.id_cliente;
+select * from clientes c
+right join ordenes o on o.id_cliente=c.id_cliente
+where c.id_cliente is null;
 +------------+----------------+----------------+----------+------------+-------------+
 | id_cliente | nombre_cliente | ciudad_cliente | id_orden | id_cliente | fecha_orden |
 +------------+----------------+----------------+----------+------------+-------------+
@@ -460,8 +461,9 @@ left join clientes c on c.id_cliente=o.id_cliente;
 select * from ordenes o
 left join detalles_ordenes do on do.id_orden=o.id_orden
 UNION ALL
-select * from detalles_ordenes do
-left join ordenes o on o.id_orden=do.id_orden;
+select * from ordenes o
+right join detalles_ordenes do on do.id_orden=o.id_orden
+where o.id_orden is null;
 +----------+------------+-------------+------------+----------+-------------+------------+
 | id_orden | id_cliente | fecha_orden | id_detalle | id_orden | id_producto | cantidad   |
 +----------+------------+-------------+------------+----------+-------------+------------+
@@ -480,8 +482,9 @@ left join ordenes o on o.id_orden=do.id_orden;
 select * from productos p
 left join detalles_ordenes do on do.id_producto=p.id_producto
 UNION ALL
-select * from detalles_ordenes do
-left join productos p on do.id_producto=p.id_producto;
+select * from productos p
+right join detalles_ordenes do on do.id_producto=p.id_producto
+where p.id_producto is null;
 +-------------+-----------------+-----------------+------------+----------+-------------+----------+
 | id_producto | nombre_producto | precio_producto | id_detalle | id_orden | id_producto | cantidad |
 +-------------+-----------------+-----------------+------------+----------+-------------+----------+
