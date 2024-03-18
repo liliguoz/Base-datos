@@ -154,7 +154,8 @@ select * from ordenes where id_cliente=1;
 ```sql
 select * from clientes where nombre_cliente regexp '^A';
 Empty set (0,01 sec)
-``
+```
+
 9. Mostrar las órdenes que contienen más de 2 productos.
 
 ```sql
