@@ -702,6 +702,10 @@ select * from ordenes o
 LEFT JOIN productos p ON o.id_producto = p.id_producto UNION all
 select * from ordenes o RIGHT JOIN productos p ON o.id_producto = p.id_producto
 where o.id_producto IS NULL union all select * from ordenes o join clientes as c on c.id_cliente=o.id_cliente;
+
+select * from clientes c inner join ordenes o on c.id_cliente = o.id_cliente inner join productos p on p.id_producto = o.id_producto;
+
+
 +----------+------------+-------------+----------+-------------+-------------+---------------+
 | id_orden | id_cliente | id_producto | cantidad | id_producto | nombre      | precio        |
 +----------+------------+-------------+----------+-------------+-------------+---------------+
