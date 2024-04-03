@@ -97,7 +97,7 @@ ERROR 1062 (23000): Duplicate entry '1-2024' for key 'alumnos.PRIMARY'
 
 ```sql
 insert into alumnos (numero_inscripcion, anio_inscripcion, nombre, dni) values (2, 2024, "sara", "123456789A");
-ERROR 1062 (23000): Duplicate entry '123456789A' for key 'alumnos.idx_doc'
+ERROR 1062 (23000): Duplicate entry '123456789A' for key 'alumnos.idx_dni'
 ```
 
 - Ingrese varios alumnos de la misma ciudad y provincia.
