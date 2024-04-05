@@ -134,16 +134,16 @@ Explain select identificador from MOVIMIENTO where identificador = 3;
 
 
 Explain select identificador from MOVIMIENTO_BIS where identificador = 3;
-+----+-------------+----------------+------------+------+------------------+------------------+---------+-------+------+----------+-------------+
-| id | select_type | table          | partitions | type | possible_keys    | key              | key_len | ref   | rows | filtered | Extra       |
-+----+-------------+----------------+------------+------+------------------+------------------+---------+-------+------+----------+-------------+
-|  1 | SIMPLE      | MOVIMIENTO_BIS | NULL       | ref  | IX_IDENTIFICADOR | IX_IDENTIFICADOR | 4       | const |    1 |   100.00 | Using index |
-+----+-------------+----------------+------------+------+------------------+------------------+---------+-------+------+----------+-------------+
++----+-------------+----------------+------------+------+---------------+------+---------+------+------+----------+-------------+
+| id | select_type | table          | partitions | type | possible_keys | key  | key_len | ref  | rows | filtered | Extra       |
++----+-------------+----------------+------------+------+---------------+------+---------+------+------+----------+-------------+
+|  1 | SIMPLE      | MOVIMIENTO_BIS | NULL       | ALL  | NULL          | NULL | NULL    | NULL | 3588 |    10.00 | Using where |
++----+-------------+----------------+------------+------+---------------+------+---------+------+------+----------+-------------+
 1 row in set, 1 warning (0,01 sec)
-
 ```
 
-En la consulta de la tabla de MOVIMIENTO se está itul
+En la tabla MOVIMIENTO el select se dirige directamente a la columna que tiene primary key, sin embargo, en la tabla MOVIMIENTO_BIS tiene que recorrer toda la tabla al no tener primary key.
+
 - Supongamos que las consultas de rango que se van a hacer en nuestra tabla son frecuentes y además no por el identificador, sino por la fecha. Este es motivo suficiente para que sea la fecha un índice de tabla y así mejorar el tiempo de respuesta de nuestras consultas.
 En la tabla MOVIMIENTO_BIS creamos un índice para la fecha (IX_FECHA_BIS) y otro índice para el identificador (IX_IDENTIFICADOR).
 
@@ -158,7 +158,7 @@ Query OK, 0 rows affected (0,18 sec)
 Records: 0  Duplicates: 0  Warnings: 0
 ```
 
-- 8.- Analiza el plan de ejecución de las siguientes consultas y observa la diferencia:
+- Analiza el plan de ejecución de las siguientes consultas y observa la diferencia:
 Consulta1
 
 ```sql
@@ -186,6 +186,8 @@ explain select identificador from MOVIMIENTO_BIS where identificador=3;
 Fíjata en que en la consulta 1 pedimos todos los campos. ¿A través de que indice se busca? ¿Por qué crees que lo hace así?
 En la consulta 2 solo pedimos el identificador. ¿A través de que índice busca? ¿Por qué crees que lo hace así? Analiza la ejecución.
 
+En la Consulta 1, pedimos todos los campos de la tabla MOVIMIENTO que tengan como identificador un 3. Sin embargo, en la Consulta 2 pedimos la columna del identificador en la tabla MOVIMIENTO_BIS utiliza el índice IX_IDENTIFICADOR para buscar con eficiencia los registros que coincidan con el valor del identificador.
+
 - Analiza el plan de ejecución de las siguientes consultas y observa la diferencia:
 
 Consulta 1:
@@ -204,20 +206,22 @@ Consulta 2
 
 ```sql
 explain SELECT * FROM MOVIMIENTO_BIS WHERE fecha BETWEEN 01/01/2012 and 01/03/2012;
-+----+-------------+----------------+------------+------+---------------+--------------+---------+-------+------+----------+-------+
-| id | select_type | table          | partitions | type | possible_keys | key          | key_len | ref   | rows | filtered | Extra |
-+----+-------------+----------------+------------+------+---------------+--------------+---------+-------+------+----------+-------+
-|  1 | SIMPLE      | MOVIMIENTO_BIS | NULL       | ref  | IX_FECHA_BIS  | IX_FECHA_BIS | 3       | const |    1 |   100.00 | NULL  |
-+----+-------------+----------------+------------+------+---------------+--------------+---------+-------+------+----------+-------+
++----+-------------+----------------+------------+------+---------------+------+---------+------+------+----------+-------------+
+| id | select_type | table          | partitions | type | possible_keys | key  | key_len | ref  | rows | filtered | Extra       |
++----+-------------+----------------+------------+------+---------------+------+---------+------+------+----------+-------------+
+|  1 | SIMPLE      | MOVIMIENTO_BIS | NULL       | ALL  | IX_FECHA_BIS  | NULL | NULL    | NULL | 3583 |    10.00 | Using where |
++----+-------------+----------------+------------+------+---------------+------+---------+------+------+----------+-------------+
 1 row in set, 1 warning (0,00 sec)
 ```
 
 Fijate que en la consulta 2 pedimos todos los campos. ¿A través de que índice busca? ¿Por qué crees que lo hace así?
 En la consulta 1 solo pedimos la fecha. ¿A través de que índice busca? ¿Por qué crees que lo hace así? Analiza la ejecución.
 
+Ambas consultas recorren todos los registros de información usando el where. En el caso de MOVIMIENTO_BIS.
+
 - Vamos a crear un índice por fecha (IX_FECHA) en la tabla MOVIMIENTO, puesto que no lo tenía, en este caso la tabla ya tenía un indice, la clave primaria.
 - Visualiza los indices de las tablas MOVIMIENTO y MOVIMIENTO_BIS.
-- - Analiza el plan de ejecución de las siguientes consultas y observa la diferencia:
+ - Analiza el plan de ejecución de las siguientes consultas y observa la diferencia:
 
 ```sql
 create index IX_FECHA on MOVIMIENTO(Fecha);
@@ -240,6 +244,8 @@ show index from MOVIMIENTO_BIS;
 +----------------+------------+------------------+--------------+---------------+-----------+-------------+----------+--------+------+------------+---------+---------------+---------+------------+
 2 rows in set (0,01 sec)
 ```
+
+Se crean índices en el campo fecha de la tabla MOVIMIENTO para mejorar el rendimiento de las consultas que se relacionan con el filtrado por fecha.
 
 Consulta 1:
 
@@ -289,4 +295,5 @@ explain SELECT * FROM MOVIMIENTO_BIS WHERE fecha BETWEEN 01/01/2012 AND 01/03/20
 1 row in set, 1 warning (0,00 sec)
 ```
 
+En la consulta 1 y 2 la diferencia es que una selecciona toda las columnas de la tabla y otra solo la columna de fecha, haciendo que se filtre por el índice y la otra no. Lo mismo pasa con la consulta 3 y 4.
 </div>
