@@ -4,12 +4,6 @@
 
 Vamos a realizar el trabajo con una BBDD existente en la documentación  oficial de MySql. Su nombre es __Sakila__.
 
-El __diagrama ER__ de esta BBDD es el siguiente:
-
-<div align="center">
-<img width="700" src="../../img/sakila-er.png"/>
-</div>
-
 Se pide:
 - Realiza la carga de la BBDD de Sakila, tal y como se muestra en los enlaces proporcionados.
 - Realiza cada una de las siguientes consultas:
