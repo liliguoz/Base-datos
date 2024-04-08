@@ -9,25 +9,139 @@ Se pide:
 - Realiza cada una de las siguientes consultas:
     - Actores que tienen de primer nombre __Scarlett__.
 
-      ```sql
-      select * from actor where primer_nombre '^Scarlett';
-      ```
+```sql
+select * from actor where first_name = 'Scarlett';
++----------+------------+-----------+---------------------+
+| actor_id | first_name | last_name | last_update         |
++----------+------------+-----------+---------------------+
+|       81 | SCARLETT   | DAMON     | 2006-02-15 04:34:33 |
+|      124 | SCARLETT   | BENING    | 2006-02-15 04:34:33 |
++----------+------------+-----------+---------------------+
+2 rows in set (0,00 sec)
+```
       
     - Actores que tienen de apellido __Johansson__.
  
-      ```sql
-      select * from actor where apellido = 'Johansson';
-      ```
+```sql
+select * from actor where last_name = 'Johansson';
++----------+------------+-----------+---------------------+
+| actor_id | first_name | last_name | last_update         |
++----------+------------+-----------+---------------------+
+|        8 | MATTHEW    | JOHANSSON | 2006-02-15 04:34:33 |
+|       64 | RAY        | JOHANSSON | 2006-02-15 04:34:33 |
+|      146 | ALBERT     | JOHANSSON | 2006-02-15 04:34:33 |
++----------+------------+-----------+---------------------+
+3 rows in set (0,01 sec)
+```
       
     - Actores que contengan una __O__ en su nombre.
  
-      ```sql
-      select * from actor where nombre regexp 'o';
-      ```
+```sql
+select * from actor where first_name regexp 'o';
++----------+-------------+--------------+---------------------+
+| actor_id | first_name  | last_name    | last_update         |
++----------+-------------+--------------+---------------------+
+|        1 | PENELOPE    | GUINESS      | 2006-02-15 04:34:33 |
+|        5 | JOHNNY      | LOLLOBRIGIDA | 2006-02-15 04:34:33 |
+|        9 | JOE         | SWANK        | 2006-02-15 04:34:33 |
+|       11 | ZERO        | CAGE         | 2006-02-15 04:34:33 |
+|       19 | BOB         | FAWCETT      | 2006-02-15 04:34:33 |
+|       24 | CAMERON     | STREEP       | 2006-02-15 04:34:33 |
+|       28 | WOODY       | HOFFMAN      | 2006-02-15 04:34:33 |
+|       38 | TOM         | MCKELLEN     | 2006-02-15 04:34:33 |
+|       39 | GOLDIE      | BRODY        | 2006-02-15 04:34:33 |
+|       40 | JOHNNY      | CAGE         | 2006-02-15 04:34:33 |
+|       41 | JODIE       | DEGENERES    | 2006-02-15 04:34:33 |
+|       42 | TOM         | MIRANDA      | 2006-02-15 04:34:33 |
+|       54 | PENELOPE    | PINKETT      | 2006-02-15 04:34:33 |
+|       63 | CAMERON     | WRAY         | 2006-02-15 04:34:33 |
+|       78 | GROUCHO     | SINATRA      | 2006-02-15 04:34:33 |
+|       82 | WOODY       | JOLIE        | 2006-02-15 04:34:33 |
+|       91 | CHRISTOPHER | BERRY        | 2006-02-15 04:34:33 |
+|      104 | PENELOPE    | CRONYN       | 2006-02-15 04:34:33 |
+|      106 | GROUCHO     | DUNST        | 2006-02-15 04:34:33 |
+|      111 | CAMERON     | ZELLWEGER    | 2006-02-15 04:34:33 |
+|      113 | MORGAN      | HOPKINS      | 2006-02-15 04:34:33 |
+|      114 | MORGAN      | MCDORMAND    | 2006-02-15 04:34:33 |
+|      115 | HARRISON    | BALE         | 2006-02-15 04:34:33 |
+|      120 | PENELOPE    | MONROE       | 2006-02-15 04:34:33 |
+|      137 | MORGAN      | WILLIAMS     | 2006-02-15 04:34:33 |
+|      140 | WHOOPI      | HURT         | 2006-02-15 04:34:33 |
+|      151 | GEOFFREY    | HESTON       | 2006-02-15 04:34:33 |
+|      162 | OPRAH       | KILMER       | 2006-02-15 04:34:33 |
+|      163 | CHRISTOPHER | WEST         | 2006-02-15 04:34:33 |
+|      171 | OLYMPIA     | PFEIFFER     | 2006-02-15 04:34:33 |
+|      172 | GROUCHO     | WILLIAMS     | 2006-02-15 04:34:33 |
+|      176 | JON         | CHASE        | 2006-02-15 04:34:33 |
+|      188 | ROCK        | DUKAKIS      | 2006-02-15 04:34:33 |
+|      191 | GREGORY     | GOODING      | 2006-02-15 04:34:33 |
+|      192 | JOHN        | SUVARI       | 2006-02-15 04:34:33 |
+|      200 | THORA       | TEMPLE       | 2006-02-15 04:34:33 |
++----------+-------------+--------------+---------------------+
+36 rows in set (0,00 sec)
+```
     - Actores que contengan una __O__ en su nombre y en una __A__ en su apellido.
+
+```sql
+select * from actor where first_name regexp 'o' and last_name regexp 'a';
++----------+------------+--------------+---------------------+
+| actor_id | first_name | last_name    | last_update         |
++----------+------------+--------------+---------------------+
+|        5 | JOHNNY     | LOLLOBRIGIDA | 2006-02-15 04:34:33 |
+|        9 | JOE        | SWANK        | 2006-02-15 04:34:33 |
+|       11 | ZERO       | CAGE         | 2006-02-15 04:34:33 |
+|       19 | BOB        | FAWCETT      | 2006-02-15 04:34:33 |
+|       28 | WOODY      | HOFFMAN      | 2006-02-15 04:34:33 |
+|       40 | JOHNNY     | CAGE         | 2006-02-15 04:34:33 |
+|       42 | TOM        | MIRANDA      | 2006-02-15 04:34:33 |
+|       63 | CAMERON    | WRAY         | 2006-02-15 04:34:33 |
+|       78 | GROUCHO    | SINATRA      | 2006-02-15 04:34:33 |
+|      114 | MORGAN     | MCDORMAND    | 2006-02-15 04:34:33 |
+|      115 | HARRISON   | BALE         | 2006-02-15 04:34:33 |
+|      137 | MORGAN     | WILLIAMS     | 2006-02-15 04:34:33 |
+|      172 | GROUCHO    | WILLIAMS     | 2006-02-15 04:34:33 |
+|      176 | JON        | CHASE        | 2006-02-15 04:34:33 |
+|      188 | ROCK       | DUKAKIS      | 2006-02-15 04:34:33 |
+|      192 | JOHN       | SUVARI       | 2006-02-15 04:34:33 |
++----------+------------+--------------+---------------------+
+16 rows in set (0,00 sec)
+```
     - Actores que contengan dos __O__ en su nombre y en una __A__ en su apellido.
+
+```sql
+select * from actor where first_name regexp '.*o.*o.*' and last_name regexp '.*a.*';
++----------+------------+-----------+---------------------+
+| actor_id | first_name | last_name | last_update         |
++----------+------------+-----------+---------------------+
+|       28 | WOODY      | HOFFMAN   | 2006-02-15 04:34:33 |
+|       78 | GROUCHO    | SINATRA   | 2006-02-15 04:34:33 |
+|      172 | GROUCHO    | WILLIAMS  | 2006-02-15 04:34:33 |
++----------+------------+-----------+---------------------+
+3 rows in set (0,00 sec)
+```
+
     - Actores donde su tercera letra sea __B__.
+
+```sql
+select * from actor where first_name regexp '..b';
++----------+------------+-----------+---------------------+
+| actor_id | first_name | last_name | last_update         |
++----------+------------+-----------+---------------------+
+|       15 | CUBA       | OLIVIER   | 2006-02-15 04:34:33 |
+|       19 | BOB        | FAWCETT   | 2006-02-15 04:34:33 |
+|      118 | CUBA       | ALLEN     | 2006-02-15 04:34:33 |
+|      125 | ALBERT     | NOLTE     | 2006-02-15 04:34:33 |
+|      146 | ALBERT     | JOHANSSON | 2006-02-15 04:34:33 |
+|      182 | DEBBIE     | AKROYD    | 2006-02-15 04:34:33 |
+|      189 | CUBA       | BIRCH     | 2006-02-15 04:34:33 |
++----------+------------+-----------+---------------------+
+7 rows in set (0,00 sec)
+```
+
     - Ciudades que empiezan por __a__.
+
+```sql
+```
     - Ciudades que acaban por __s__.
     - Ciudades del country __61__.
     - Ciudades del country __Spain__.
