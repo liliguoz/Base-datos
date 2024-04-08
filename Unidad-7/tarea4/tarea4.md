@@ -2843,9 +2843,33 @@ select title, rating, length from film where rating = 'PG' and length > 120;
 82 rows in set (0,00 sec)
 ```
 
-    - ¿Cuantos actores hay?
-    - ¿Cuántas ciudades tiene el country __Spain__?
-    - ¿Cuántos countries hay que empiezan por __a__?
+18. ¿Cuantos actores hay?
+
+```sql
+select count(*) as num_actores from actor;
++-------------+
+| num_actores |
++-------------+
+|         200 |
++-------------+
+1 row in set (0,00 sec)
+```
+
+19. ¿Cuántas ciudades tiene el country __Spain__?
+
+```sql
+select count(ci.city) from city ci
+inner join country co on ci.country_id = co.country_id
+where co.country = 'Spain';
++----------------+
+| count(ci.city) |
++----------------+
+|              5 |
++----------------+
+1 row in set (0,00 sec)
+```
+
+20. ¿Cuántos countries hay que empiezan por __a__?
     - Media de duración de peliculas con __PG__.
     - Suma de __rental_rate__ de todas las peliculas.
     - Pelicula con mayor duración.
