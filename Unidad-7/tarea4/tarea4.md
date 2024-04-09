@@ -2870,12 +2870,97 @@ where co.country = 'Spain';
 ```
 
 20. ¿Cuántos countries hay que empiezan por __a__?
-    - Media de duración de peliculas con __PG__.
-    - Suma de __rental_rate__ de todas las peliculas.
-    - Pelicula con mayor duración.
-    - Película con menor duración.
-    - Mostrar las ciudades del country __Spain__ (multitabla).
-    - Mostrar el nombre de la película y el nombre de los actores.
+
+```sql
+select * from country where country regexp '^a';
++------------+----------------+---------------------+
+| country_id | country        | last_update         |
++------------+----------------+---------------------+
+|          1 | Afghanistan    | 2006-02-15 04:44:00 |
+|          2 | Algeria        | 2006-02-15 04:44:00 |
+|          3 | American Samoa | 2006-02-15 04:44:00 |
+|          4 | Angola         | 2006-02-15 04:44:00 |
+|          5 | Anguilla       | 2006-02-15 04:44:00 |
+|          6 | Argentina      | 2006-02-15 04:44:00 |
+|          7 | Armenia        | 2006-02-15 04:44:00 |
+|          8 | Australia      | 2006-02-15 04:44:00 |
+|          9 | Austria        | 2006-02-15 04:44:00 |
+|         10 | Azerbaijan     | 2006-02-15 04:44:00 |
++------------+----------------+---------------------+
+10 rows in set (0,01 sec)
+```
+
+21. Media de duración de peliculas con __PG__.
+
+```sql
+select avg(length) from film where rating = 'PG';
++-------------+
+| avg(length) |
++-------------+
+|    112.0052 |
++-------------+
+1 row in set (0,00 sec)
+```
+
+22. Suma de __rental_rate__ de todas las peliculas.
+
+```sql
+select sum(rental_rate) from film;
++------------------+
+| sum(rental_rate) |
++------------------+
+|          2980.00 |
++------------------+
+1 row in set (0,00 sec)
+```
+
+23. Pelicula con mayor duración.
+
+```sql
+select max(length) from film;
++-------------+
+| max(length) |
++-------------+
+|         185 |
++-------------+
+1 row in set (0,00 sec)
+```
+
+24. Película con menor duración.
+
+```sql
+select min(length) from film;
++-------------+
+| min(length) |
++-------------+
+|          46 |
++-------------+
+1 row in set (0,00 sec)
+```
+
+25. Mostrar las ciudades del country __Spain__ (multitabla).
+
+```sql
+select ci.city from city ci
+inner join country co
+on ci.country_id = co.country_id
+where co.country = 'Spain';
++-------------------------+
+| city                    |
++-------------------------+
+| A Coruña (La Coruña)    |
+| Donostia-San Sebastián  |
+| Gijón                   |
+| Ourense (Orense)        |
+| Santiago de Compostela  |
++-------------------------+
+5 rows in set (0,00 sec)
+```
+
+26. Mostrar el nombre de la película y el nombre de los actores.
+
+```sql
+select 
     - Mostrar el nombre de la película y el de sus categorías.
     - Mostrar el country, la ciudad y dirección de cada miembro del staff.
     - Mostrar el country, la ciudad y dirección de cada customer.
