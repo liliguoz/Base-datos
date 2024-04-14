@@ -33,7 +33,6 @@ show index from producto;
 |  1 | SIMPLE      | producto | NULL       | const | PRIMARY       | PRIMARY | 62      | const |    1 |   100.00 | NULL  |
 +----+-------------+----------+------------+-------+---------------+---------+---------+-------+------+----------+-------+
 1 row in set, 1 warning (0,00 sec)
-
 ```
 
 ```sql
@@ -52,40 +51,39 @@ show index from producto;
 
 - Suponga que estamos trabajando con la base de datos jardineria y queremos saber optimizar las siguientes consultas. ¿Cuál de las dos sería más eficiente?. Se recomienda hacer uso de EXPLAIN para obtener información sobre cómo se están realizando las consultas.
 
-  ```sql
-  explain SELECT AVG(total)
-  FROM pago
-  WHERE YEAR(fecha_pago) = 2008;
+```sql
+explain SELECT AVG(total)
+FROM pago
+WHERE YEAR(fecha_pago) = 2008;
 +----+-------------+-------+------------+------+---------------+------+---------+------+------+----------+-------------+
 | id | select_type | table | partitions | type | possible_keys | key  | key_len | ref  | rows | filtered | Extra       |
 +----+-------------+-------+------------+------+---------------+------+---------+------+------+----------+-------------+
 |  1 | SIMPLE      | pago  | NULL       | ALL  | NULL          | NULL | NULL    | NULL |   26 |   100.00 | Using where |
 +----+-------------+-------+------------+------+---------------+------+---------+------+------+----------+-------------+
 1 row in set, 1 warning (0,00 sec)
+```
 
-  ```
-
-  ```sql
-  explain SELECT AVG(total)
-  FROM pago
-  WHERE fecha_pago >= '2008-01-01' AND fecha_pago <= '2008-12-31';
+```sql
+explain SELECT AVG(total)
+FROM pago
+WHERE fecha_pago >= '2008-01-01' AND fecha_pago <= '2008-12-31';
 +----+-------------+-------+------------+------+---------------+------+---------+------+------+----------+-------------+
 | id | select_type | table | partitions | type | possible_keys | key  | key_len | ref  | rows | filtered | Extra       |
 +----+-------------+-------+------------+------+---------------+------+---------+------+------+----------+-------------+
 |  1 | SIMPLE      | pago  | NULL       | ALL  | NULL          | NULL | NULL    | NULL |   26 |    11.11 | Using where |
 +----+-------------+-------+------------+------+---------------+------+---------+------+------+----------+-------------+
 1 row in set, 1 warning (0,00 sec)
-  ```
+```
 
   >En la primera consulta de la tabla pago esta tendrá que rercorrer 26 row, muentras q
 
 - Optimiza la siguiente consulta creando índices cuando sea necesario. Se recomienda hacer uso de EXPLAIN para obtener información sobre cómo se están realizando las consultas.
 
-  ```sql
-  explain SELECT *
-  FROM cliente INNER JOIN pedido
-  ON cliente.codigo_cliente = pedido.codigo_cliente
-  WHERE cliente.nombre_cliente LIKE 'A%';
+```sql
+explain SELECT *
+FROM cliente INNER JOIN pedido
+ON cliente.codigo_cliente = pedido.codigo_cliente
+WHERE cliente.nombre_cliente LIKE 'A%';
 +----+-------------+---------+------------+------+----------------+----------------+---------+-----------------------------------+------+----------+-------------+
 | id | select_type | table   | partitions | type | possible_keys  | key            | key_len | ref                               | rows | filtered | Extra       |
 +----+-------------+---------+------------+------+----------------+----------------+---------+-----------------------------------+------+----------+-------------+
@@ -93,16 +91,15 @@ show index from producto;
 |  1 | SIMPLE      | pedido  | NULL       | ref  | codigo_cliente | codigo_cliente | 4       | jardineria.cliente.codigo_cliente |    1 |   100.00 | NULL        |
 +----+-------------+---------+------------+------+----------------+----------------+---------+-----------------------------------+------+----------+-------------+
 2 rows in set, 1 warning (0,00 sec)
-
-  ```
+```
 
 - ¿Por qué no es posible optimizar el tiempo de ejecución de las siguientes consultas, incluso haciendo uso de índices?
 
-  ```sql
-  explain SELECT *
-  FROM cliente INNER JOIN pedido
-  ON cliente.codigo_cliente = pedido.codigo_cliente
-  WHERE cliente.nombre_cliente LIKE '%A%';
+```sql
+explain SELECT *
+FROM cliente INNER JOIN pedido
+ON cliente.codigo_cliente = pedido.codigo_cliente
+WHERE cliente.nombre_cliente LIKE '%A%';
 +----+-------------+---------+------------+------+----------------+----------------+---------+-----------------------------------+------+----------+-------------+
 | id | select_type | table   | partitions | type | possible_keys  | key            | key_len | ref                               | rows | filtered | Extra       |
 +----+-------------+---------+------------+------+----------------+----------------+---------+-----------------------------------+------+----------+-------------+
@@ -110,17 +107,17 @@ show index from producto;
 |  1 | SIMPLE      | pedido  | NULL       | ref  | codigo_cliente | codigo_cliente | 4       | jardineria.cliente.codigo_cliente |    1 |   100.00 | NULL        |
 +----+-------------+---------+------------+------+----------------+----------------+---------+-----------------------------------+------+----------+-------------+
 
-  SELECT *
-  FROM cliente INNER JOIN pedido
-  ON cliente.codigo_cliente = pedido.codigo_cliente
-  WHERE cliente.nombre_cliente LIKE '%A';
+SELECT *
+FROM cliente INNER JOIN pedido
+ON cliente.codigo_cliente = pedido.codigo_cliente
+WHERE cliente.nombre_cliente LIKE '%A';
 +----+-------------+---------+------------+------+----------------+----------------+---------+-----------------------------------+------+----------+-------------+
 | id | select_type | table   | partitions | type | possible_keys  | key            | key_len | ref                               | rows | filtered | Extra       |
 +----+-------------+---------+------------+------+----------------+----------------+---------+-----------------------------------+------+----------+-------------+
 |  1 | SIMPLE      | cliente | NULL       | ALL  | PRIMARY        | NULL           | NULL    | NULL                              |   36 |    11.11 | Using where |
 |  1 | SIMPLE      | pedido  | NULL       | ref  | codigo_cliente | codigo_cliente | 4       | jardineria.cliente.codigo_cliente |    1 |   100.00 | NULL        |
 +----+-------------+---------+------------+------+----------------+----------------+---------+-----------------------------------+------+----------+-------------+
-  ```
+```
 
 - Crea un índice de tipo FULLTEXT sobre las columnas nombre y descripcion de la tabla producto.
 
