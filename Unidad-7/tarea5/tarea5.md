@@ -717,7 +717,7 @@ show indez from cliente;
 
   - Una vez creado el índice del ejercicio anterior realice las siguientes consultas haciendo uso de EXPLAIN:
 
-    1. Busca el cliente Javier Villar. ¿Cuántas filas se han examinado hasta encontrar el resultado?
+  1. Busca el cliente Javier Villar. ¿Cuántas filas se han examinado hasta encontrar el resultado?
   
 ```sql
 EXPLAIN SELECT *
@@ -734,7 +734,7 @@ WHERE apellido_contacto = 'Villar' AND nombre_contacto = 'Javier';
 
   > Se ha examinado una columna.
 
-    2. Busca el cliente anterior utilizando solamente el apellido Villar.
+  2. Busca el cliente anterior utilizando solamente el apellido Villar.
 
 ```sql
 EXPLAIN SELECT *
@@ -748,11 +748,11 @@ WHERE apellido_contacto = 'Villar';
 +----+-------------+---------+------------+------+------------------------------+------------------------------+---------+-------+------+----------+-------+
 1 row in set, 1 warning (0,00 sec)
 ```
-    3. ¿Cuántas filas se han examinado hasta encontrar el resultado?
+  3. ¿Cuántas filas se han examinado hasta encontrar el resultado?
 
   > Se han examinado en la anterior consulta 1 fila.
 
-    4. Busca el cliente anterior utilizando solamente el nombre Javier. ¿Cuántas filas se han examinado hasta encontrar el resultado? ¿Qué ha ocurrido en este caso?
+  4. Busca el cliente anterior utilizando solamente el nombre Javier. ¿Cuántas filas se han examinado hasta encontrar el resultado? ¿Qué ha ocurrido en este caso?
 
 ```sql
 EXPLAIN SELECT *
