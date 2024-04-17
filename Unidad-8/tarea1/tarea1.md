@@ -47,12 +47,109 @@ Pasos:
 
 - 3. Crea __procedimientos almacenados__ para realizar operaciones como __insertar un nuevo usuario, actualizar el nombre de un usuario__, etc.
   - Procedimiento para insertar un nuevo usuario.
+
+```sql
+DELIMITER //
+create PROCEDURE nuevo_usuario
+(in nombre varchar(50), in correo varchar(50))
+BEGIN
+  INSERT INTO Users (UserName, Email) values (nombre, correo);
+end //
+Query OK, 0 rows affected (0,01 sec)
+
+CALL nuevo_usuario('Sara', 'sara@example.com');
+Query OK, 1 row affected (0,00 sec)
+
+select * from Users;
++--------+----------+-------------------+
+| UserID | UserName | Email             |
++--------+----------+-------------------+
+|      1 | Juan     | juan@example.com  |
+|      2 | María    | maria@example.com |
+|      3 | Pedro    | pedro@example.com |
+|      4 | Ana      | ana@example.com   |
+|      5 | Lola     | lola@example.com  |
+|      6 | Lili     | liliexample.com   |
+|      7 | Sara     | sara@example.com  |
++--------+----------+-------------------+
+7 rows in set (0,00 sec)
+```
+
   - Procedimiento para actualizar el nombre de un usuario.
-  
+
+```sql
+DELIMITER //
+DROP PROCEDURE if exists actualizar_usuario (
+    IN nombre VARCHAR(50),
+    IN nombre_real VARCHAR(50)
+)
+BEGIN
+    UPDATE Users SET UserName = nombre WHERE UserName = nombre_real;
+END //
+Query OK, 0 rows affected (0,02 sec)
+
+CALL actualizar_usuario('Juano', 'Juan');
+Query OK, 0 rows affected (0,01 sec)
+
+select * from Users;
++--------+----------+-------------------+
+| UserID | UserName | Email             |
++--------+----------+-------------------+
+|      1 | Juano    | juan@example.com  |
+|      2 | María    | maria@example.com |
+|      3 | Pedro    | pedro@example.com |
+|      4 | Ana      | ana@example.com   |
+|      5 | Lola     | lola@example.com  |
+|      6 | Lili     | liliexample.com   |
+|      7 | Sara     | sara@example.com  |
++--------+----------+-------------------+
+7 rows in set (0,00 sec)
+```
+
 >__Nota__: _Realiza la invocación y la verificación de que ha funcionado correctamente_.
 
 - 4. Implementa funciones para realizar cálculos o consultas:
   - Función para calcular el precio total de un conjunto de productos.
+ 
+```sql
+DELIMITER //
+CREATE FUNCTION calc_precio_total() RETURNS FLOAT deterministic
+BEGIN
+    DECLARE total_precio FLOAT;
+    SELECT SUM(price) INTO total_precio FROM Products;
+    RETURN total_precio;
+END//
+DELIMITER ;
+
+Query OK, 0 rows affected (0,01 sec)
+
+select calc_precio_total();
++---------------------+
+| calc_precio_total() |
++---------------------+
+|              110.72 |
++---------------------+
+1 row in set (0,01 sec)
+```
+
   - Función para contar el número de usuarios.
+
+```sql
+DELIMITER //
+CREATE FUNCTION total_usuario() RETURNS int deterministic
+BEGIN
+    DECLARE total_usuario INT;
+    SELECT COUNT(*) INTO total_usuario FROM Users;
+    RETURN total_usuario;
+END//
+DELIMITER ;
+
+select * from total_usuario();
++-----------------+
+| total_usuario() |
++-----------------+
+|               7 |
++-----------------+
+1 row in set (0,00 sec)
 
 >__Nota__: _Realiza la invocación y la verificación de que ha funcionado correctamente_.
