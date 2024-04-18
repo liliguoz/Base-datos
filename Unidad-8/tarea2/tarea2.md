@@ -12,20 +12,30 @@ Realice los siguientes procedimientos y funciones sobre la base de datos jardine
 ```sql
 DELIMITER //
 
-CREATE FUNCTION calcular_precio_total_pedido(
-    IN total DECIMAL(15, 2)
-)
-RETURNS DECIMAL(15, 2)
-BEGIN
-    DECLARE total_pedido DECIMAL(15, 2);
-    
-    SELECT SUM(total) INTO total_pedido
-    FROM pago
-    RETURN total_pedido;
+DROP FUNCTION IF EXISTS calcular_precio_total_pedido;
+DELIMITER //
 
-END//
+CREATE FUNCTION calcular_precio_total_pedido(
+    codigo_pedido INT
+)
+RETURNS FLOAT
+BEGIN
+    DECLARE total_pedido FLOAT deterministic;
+
+    SELECT SUM(precio_unidad * cantidad) INTO total_pedido
+    FROM detalles_pedido
+    WHERE codigo_pedido = codigo_pedido;
+
+    RETURN total_pedido;
+END //
 
 DELIMITER ;
+
+Query OK, 0 rows affected (0,02 sec)
+
+DELIMITER ;
+
+select calcular_precio_total_pedido();
 
   >__Nota__:Dado un código de pedido la función debe calcular la suma total del pedido. Tenga en cuenta que un pedido puede contener varios productos diferentes y varias cantidades de cada producto.
    - Parámetros de entrada: codigo_pedido (INT)
