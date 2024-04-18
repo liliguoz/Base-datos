@@ -8,6 +8,25 @@ Se pide realizar los procedimientos y funciones:
 
 Realice los siguientes procedimientos y funciones sobre la base de datos jardineria.
 - Función  __calcular_precio_total_pedido__
+
+```sql
+DELIMITER //
+
+CREATE FUNCTION calcular_precio_total_pedido(
+    IN total DECIMAL(15, 2)
+)
+RETURNS DECIMAL(15, 2)
+BEGIN
+    DECLARE total_pedido DECIMAL(15, 2);
+    
+    SELECT SUM(total) INTO total_pedido
+    FROM pago
+    RETURN total_pedido;
+
+END//
+
+DELIMITER ;
+
   >__Nota__:Dado un código de pedido la función debe calcular la suma total del pedido. Tenga en cuenta que un pedido puede contener varios productos diferentes y varias cantidades de cada producto.
    - Parámetros de entrada: codigo_pedido (INT)
    - Parámetros de salida: El precio total del pedido (FLOAT)
