@@ -9,37 +9,39 @@ Se pide realizar los procedimientos y funciones:
 Realice los siguientes procedimientos y funciones sobre la base de datos jardineria.
 - Función  __calcular_precio_total_pedido__
 
-```sql
-DELIMITER //
-
-DROP FUNCTION IF EXISTS calcular_precio_total_pedido;
-DELIMITER //
-
-CREATE FUNCTION calcular_precio_total_pedido(
-    codigo_pedido INT
-)
-RETURNS FLOAT
-BEGIN
-    DECLARE total_pedido FLOAT deterministic;
-
-    SELECT SUM(precio_unidad * cantidad) INTO total_pedido
-    FROM detalles_pedido
-    WHERE codigo_pedido = codigo_pedido;
-
-    RETURN total_pedido;
-END //
-
-DELIMITER ;
-
-Query OK, 0 rows affected (0,02 sec)
-
-DELIMITER ;
-
-select calcular_precio_total_pedido();
-
   >__Nota__:Dado un código de pedido la función debe calcular la suma total del pedido. Tenga en cuenta que un pedido puede contener varios productos diferentes y varias cantidades de cada producto.
    - Parámetros de entrada: codigo_pedido (INT)
    - Parámetros de salida: El precio total del pedido (FLOAT)
+
+```sql
+DELIMITER //
+
+DROP FUNCTION IF EXISTS calcular_precio_total_pedido //
+
+CREATE FUNCTION calcular_precio_total_pedido(codigo_pedido INTEGER)
+RETURNS FLOAT DETERMINISTIC
+BEGIN
+    DECLARE total_precio FLOAT;
+    
+    SELECT SUM(cantidad * precio_unidad) INTO total_precio
+    FROM detalle_pedido
+    WHERE codigo_pedido = codigo_pedido;
+    
+    RETURN total_precio;
+END //
+
+DELIMITER ;
+Query OK, 0 rows affected (0,01 sec)
+
+select calcular_precio_total_pedido(10);
++----------------------------------+
+| calcular_precio_total_pedido(10) |
++----------------------------------+
+|                           217738 |
++----------------------------------+
+1 row in set (0,00 sec)
+```
+
 - Función  __calcular_suma_pedidos_cliente__
   >__Nota__:Dado un código de cliente la función debe calcular la suma total de todos los pedidos realizados por el cliente. Deberá hacer uso de la función calcular_precio_total_pedido que ha desarrollado en el apartado anterior.
   - Parámetros de entrada: codigo_cliente (INT)
