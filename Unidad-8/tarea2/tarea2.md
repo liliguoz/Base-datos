@@ -110,4 +110,6 @@ select calcular_suma_pagos_cliente(10);
 - Procedimiento __calcular_pagos_pendientes__
   >__Nota__:Deberá calcular los pagos pendientes de todos los clientes. Para saber si un cliente tiene algún pago pendiente deberemos calcular cuál es la cantidad de todos los pedidos y los pagos que ha realizado. Si la cantidad de los pedidos es mayor que la de los pagos entonces ese cliente tiene pagos pendientes.
 
+```sql
+```
 </div>
