@@ -48,13 +48,15 @@ DELIMITER ;
 CALL copia_nombres(3000);
 
 SELECT * from empleados_destino;
-/**
 +----+--------+
 | id | nombre |
 +----+--------+
 |  1 | María  |
 |  2 | Pedro  |
 +----+--------+
-**/
 ```
 
+2. Escribe un procedimiento almacenado que seleccione los empleados cuyos nombres contienen la letra 'a' y aumente sus salarios en un 10%.
+
+```sql
+```
