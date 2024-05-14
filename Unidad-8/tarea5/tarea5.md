@@ -28,7 +28,7 @@ CALL my_loop(5);
 
   1. Inserta cinco filas en la tabla empleados con nombres aleatorios generados usando la función CONCAT() junto con RAND().
 
-      ```sql
+```sql
 DELIMITER //
 
 CREATE PROCEDURE nombre_aleatorios(IN iterations INT)
@@ -49,7 +49,6 @@ DELIMITER ;
 call nombres_aleatorios(5);
 
 select * from empleados;
-select * from empleados;
 +----+-----------------------------+---------+
 | id | nombre                      | salario |
 +----+-----------------------------+---------+
@@ -63,11 +62,11 @@ select * from empleados;
 |  8 | Empleado0.5203358181941656  | 3105.00 |
 +----+-----------------------------+---------+
 8 rows in set (0,00 sec)
-      ```
+```
 
  2. Inserta tres filas en la tabla empleados con nombres aleatorios generados usando la función __UUID()__.
 
-    ```sql
+```sql
 DELIMITER //
 
 CREATE PROCEDURE aleatorio_nombre_uuid(IN iterations INT)
@@ -104,12 +103,11 @@ select * from empleados
 | 11 | fab06d07-1244-11ef-8117-080027f4f295 | 8306.00 |
 +----+--------------------------------------+---------+
 11 rows in set (0,00 sec)
-      ```
+```
 
   3. Inserta dos filas en la tabla empleados con nombres aleatorios generados usando la función RAND() junto con ORDER BY RAND().
 
-      ```sql
-
+```sql
   DELIMITER //
 
 CREATE PROCEDURE aleatorio_nombres(IN iterations INT)
@@ -151,11 +149,11 @@ select * from empleados;
 | 13 | Empleado0.8050510983961179           | 4588.00 |
 +----+--------------------------------------+---------+
 13 rows in set (0,00 sec)
-      ```
+```
 
  4. Inserta cuatro filas en la tabla empleados con nombres aleatorios generados usando la función SUBSTRING_INDEX(UUID(), '-', -1).
 
-    ```sql
+```sql
 DELIMITER //
 
 CREATE PROCEDURE substring_aleatorio(IN iterations INT)
@@ -198,12 +196,11 @@ select * from empleados;
 | 18 | 080027f4f295                         | 7494.00 |
 +----+--------------------------------------+---------+
 17 rows in set (0,00 sec)
-    ```
+```
  
  5. Inserta seis filas en la tabla empleados con nombres aleatorios generados usando la función RAND() y una semilla diferente.
 
-    ```sql
-
+```sql
 DELIMITER //
 
 CREATE PROCEDURE al_nombres(IN iterations INT)
@@ -252,8 +249,7 @@ select * from empleados;
 | 24 | Empleado0.40540353712197724          | 5243.00 |
 +----+--------------------------------------+---------+
 23 rows in set (0,00 sec)
-
-    ```
+```
 
 Crea cada uno de los procedimientos, maximixando el número de parámetros de entrada necesarios, por ejemplo: ___nombre, salario, e id__.
 
