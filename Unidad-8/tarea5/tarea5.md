@@ -76,7 +76,6 @@ BEGIN
     WHILE counter < iterations DO
     INSERT INTO empleados (nombre, salario)
     VALUES (UUID(), FLOOR(RAND() * (10000 - 2000 + 1)) + 2000);
-        SELECT counter;
 
         SET counter = counter + 1;
     END WHILE;
@@ -120,7 +119,6 @@ BEGIN
       FROM (SELECT 1 UNION SELECT 2) AS sub
       ORDER BY RAND()
       LIMIT 2;
-        SELECT counter;
 
         SET counter = counter + 1;
     END WHILE;
@@ -163,7 +161,6 @@ BEGIN
     WHILE counter < iterations DO
     INSERT INTO empleados (nombre, salario)
     VALUES (SUBSTRING_INDEX(UUID(), '-', -1), FLOOR(RAND() * (10000 - 2000 + 1)) + 2000);
-        SELECT counter;
 
         SET counter = counter + 1;
     END WHILE;
@@ -210,7 +207,6 @@ BEGIN
     WHILE counter < iterations DO
     INSERT INTO empleados (nombre, salario)
     VALUES (CONCAT('Empleado', RAND(counter)), FLOOR(RAND(1) * (10000 - 2000 + 1)) + 2000);
-        SELECT counter;
 
         SET counter = counter + 1;
     END WHILE;
