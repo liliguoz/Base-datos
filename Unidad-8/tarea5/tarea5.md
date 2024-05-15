@@ -203,13 +203,13 @@ select * from empleados;
 ```sql
 DELIMITER //
 
-CREATE PROCEDURE al_nombres(IN iterations INT)
+CREATE PROCEDURE aleator_nombres(IN iterations INT)
 BEGIN
     DECLARE counter INT DEFAULT 0;
 
     WHILE counter < iterations DO
     INSERT INTO empleados (nombre, salario)
-    VALUES (CONCAT('Empleado', RAND(1)), FLOOR(RAND(1) * (10000 - 2000 + 1)) + 2000);
+    VALUES (CONCAT('Empleado', RAND(counter)), FLOOR(RAND(1) * (10000 - 2000 + 1)) + 2000);
         SELECT counter;
 
         SET counter = counter + 1;
@@ -218,7 +218,7 @@ END//
 
 DELIMITER ;
 
-call al_nombres(6);
+call aleator_nombres(6);
 
 select * from empleados;
 +----+--------------------------------------+---------+
@@ -241,12 +241,12 @@ select * from empleados;
 | 16 | 080027f4f295                         | 6237.00 |
 | 17 | 080027f4f295                         | 2441.00 |
 | 18 | 080027f4f295                         | 7494.00 |
-| 19 | Empleado0.40540353712197724          | 5243.00 |
-| 20 | Empleado0.40540353712197724          | 5243.00 |
-| 21 | Empleado0.40540353712197724          | 5243.00 |
-| 22 | Empleado0.40540353712197724          | 5243.00 |
-| 23 | Empleado0.40540353712197724          | 5243.00 |
-| 24 | Empleado0.40540353712197724          | 5243.00 |
+| 25 | Empleado0.15522042769493574          | 5243.00 |
+| 26 | Empleado0.40540353712197724          | 5243.00 |
+| 27 | Empleado0.6555866465490187           | 5243.00 |
+| 28 | Empleado0.9057697559760601           | 5243.00 |
+| 29 | Empleado0.15595286540310166          | 5243.00 |
+| 30 | Empleado0.40613597483014313          | 5243.00 |
 +----+--------------------------------------+---------+
 23 rows in set (0,00 sec)
 ```
