@@ -28,6 +28,23 @@ Teniendo en cuenta esta información se pide:
     - Bono(__Escoge el tipo de dato__).
     - Integral(__Escoge el tipo de dato__).
 
+```sql
+create database if not exists tarea6;
+
+use tarea6;
+
+create table if not exists salario (
+    id varchar(10) PRIMARY KEY,
+    nombre varchar(50),
+    salario_base int,
+    subsidio decimal,
+    salud varchar(10),
+    pension decimal,
+    bono decimal,
+    integral decimal
+);
+```
+
 - Creación de un __procedimiento__ de forma aleatoria con las siguientes características:
     - Parámetro de entrada el número de registros (_Mínimo 10, y realiza la prueba varias veces_). 
 
@@ -39,9 +56,6 @@ Teniendo en cuenta esta información se pide:
     - Función __integral__: El salario integral es la ___suma del salario básico - salud - pension + bono + sub de transporte___. _Actualiza el valor en la tabla_.
     - ___Crea cada uno de las funciones anteriores para una persona en específico___.
     - El parámetro de entrada debe de ser un identificar de la persona.
-## Referencias
 
-- [Tipos de Datos en MySql](https://dev.mysql.com/doc/refman/8.0/en/data-types.html).
-- [Sentencia Update](https://dev.mysql.com/doc/refman/8.0/en/update.html)
 
 </div>
