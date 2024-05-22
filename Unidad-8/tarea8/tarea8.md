@@ -113,15 +113,18 @@ select crear_email('LILI', 'guo', 'zeng', 'gmail.com');
   - Si el nuevo valor del email no es NULL se guardará en la tabla el valor del email.
 
 ```sql
-DROP TRIGGER If EXISTS crear_email_before_insert;
+DROP TRIGGER IF EXISTS trigger_crear_email_before_insert;
+
 DELIMITER //
-CREATE TRIGGER crear_email_before_insert
+
+CREATE TRIGGER trigger_crear_email_before_insert
 BEFORE INSERT ON alumnos
 FOR EACH ROW
 BEGIN
-  IF NEW.email IS NULL THEN
-      SET NEW.email = crear_email(NEW.nombre, NEW.apellido1, NEW.apellido2, 'nghj.com');
-  END IF;
+    IF NEW.email is NULL THEN
+        SET NEW.email = crear_email(NEW.nombre, NEW.apellido1, NEW.apellido2, 'pepito.com');
+    END IF;
+
 END //
 DELIMITER ;
 ```
@@ -160,21 +163,22 @@ DELIMITER ;
 
 call generar_alumnos(10, 'user');
 
-
-DROP TRIGGER IF EXISTS trigger_crear_email_before_insert;
-
-DELIMITER //
-
-CREATE TRIGGER trigger_crear_email_before_insert
-BEFORE INSERT ON alumnos
-FOR EACH ROW
-BEGIN
-    IF NEW.email is NULL THEN
-        SET NEW.email = crear_email(NEW.nombre, NEW.apellido1, NEW.apellido2, 'pepito.com');
-    END IF;
-
-END //
-DELIMITER ;
++----+--------------+--------------+--------------+--------------------+
+| id | nombre       | apellido1    | apellido2    | email              |
++----+--------------+--------------+--------------+--------------------+
+| 31 | user14f4d3cf | user14f4d415 | user14f4d439 | uuseuse@pepito.com |
+| 32 | user14f68ba3 | user14f68c86 | user14f68cc3 | uuseuse@pepito.com |
+| 33 | user14f73916 | user14f7399f | user14f739e0 | uuseuse@pepito.com |
+| 34 | user14f7e4e6 | user14f7e5b5 | user14f7e60b | uuseuse@pepito.com |
+| 35 | user14f8a580 | user14f8a623 | user14f8a661 | uuseuse@pepito.com |
+| 36 | user14f97e9f | user14f97f98 | user14f98011 | uuseuse@pepito.com |
+| 37 | user14fa8eb9 | user14fa90e6 | user14fa91dd | uuseuse@pepito.com |
+| 38 | user14fb5e3a | user14fb5ed6 | user14fb5f1b | uuseuse@pepito.com |
+| 39 | user14fc08cf | user14fc0962 | user14fc09a2 | uuseuse@pepito.com |
+| 40 | user14fcaab2 | user14fcab3c | user14fcab79 | uuseuse@pepito.com |
++----+--------------+--------------+--------------+--------------------+
+40 rows in set (0,00 sec)
+```
 
 
 </div>
