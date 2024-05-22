@@ -79,21 +79,20 @@ Una vez creada la tabla escriba un trigger con las siguientes características:
 ```SQL
 DROP FUNCTION IF EXISTS crear_email;
 DELIMITER //
-CREATE FUNCTION crear_email(nombre VARCHAR(30), apellido1 VARCHAR(30), apellido2 VARCHAR(30))
+CREATE FUNCTION crear_email(nombre VARCHAR(30), apellido1 VARCHAR(30), apellido2 VARCHAR(30), dominio VARCHAR(10))
 RETURNS VARCHAR(100) DETERMINISTIC
 BEGIN
     DECLARE nombre_char VARCHAR(1);
     DECLARE apellido1_char VARCHAR(3);
     DECLARE apellido2_char VARCHAR(3);
     DECLARE email VARCHAR(20);
-    DECLARE dominio VARCHAR(25);
 
     SET nombre_char = SUBSTRING(nombre, 1, 1);
     SET apellido1_char = SUBSTRING(apellido1, 1, 3);
     SET apellido2_char = SUBSTRING(apellido2, 1, 3);
 
-    SET email = LCASE(CONCAT(nombre_char, apellido1_char, apellido2_char, '@', dominio);
-RETURN eliminar_acentos(email);
+    SET email = LCASE(CONCAT(nombre_char, apellido1_char, apellido2_char, '@', dominio));
+RETURN email;
 END //
 
 DELIMITER ;
