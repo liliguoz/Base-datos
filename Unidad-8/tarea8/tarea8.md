@@ -161,4 +161,20 @@ DELIMITER ;
 call generar_alumnos(10, 'user');
 
 
+DROP TRIGGER IF EXISTS trigger_crear_email_before_insert;
+
+DELIMITER //
+
+CREATE TRIGGER trigger_crear_email_before_insert
+BEFORE INSERT ON alumnos
+FOR EACH ROW
+BEGIN
+    IF NEW.email is NULL THEN
+        SET NEW.email = crear_email(NEW.nombre, NEW.apellido1, NEW.apellido2, 'pepito.com');
+    END IF;
+
+END //
+DELIMITER ;
+
+
 </div>
