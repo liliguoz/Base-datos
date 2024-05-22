@@ -17,12 +17,13 @@ CREATE DATABASE IF NOT EXISTS tarea8;
 
 USE tarea8;
 
+drop table if exists alumnos;
 CREATE TABLE alumnos(
   id INT PRIMARY KEY AUTO_INCREMENT,
   nombre VARCHAR(30),
   apellido1 VARCHAR(30),
   apellido2 VARCHAR(30),
-  nota VARCHAR(10)
+  email VARCHAR(10)
 );
 ```
 
@@ -62,7 +63,7 @@ BEGIN
     SET apellido2_char = SUBSTRING(apellido2, 1, 3);
 
     SET email = LCASE(CONCAT(nombre_char, apellido1_char, apellido2_char, '@', dominio));
-RETURN email;
+RETURN eliminar_acento(email);
 END //
 
 DELIMITER ;
@@ -147,7 +148,7 @@ SELECT crear_email('ángel', 'bautísta', 'pérez', 'gmail.com');
   - Si el nuevo valor del email no es NULL se guardará en la tabla el valor del email.
 
 ```sql
-DROP TRIGGER I EXISTS crear_email_before_insert;
+DROP TRIGGER If EXISTS crear_email_before_insert;
 DELIMITER //
 CREATE TRIGGER crear_email_before_insert
 BEFORE INSERT ON alumnos
@@ -155,7 +156,7 @@ FOR EACH ROW
 BEGIN
   IF NEW.email IS NULL THEN
 
-  SET NEW.email = crear_email(NEW.nombre, NEW.apellido1, NEW.apellido2, CONCAT(SUBSTRING_INDEX(UUID(), '-', 1), '.com'));
+  SET NEW.email = crear_email(NEW.nombre, NEW.apellido1, NEW.apellido2, 'nghj.com');
   END IF;
 END //
 DELIMITER ;
@@ -169,7 +170,7 @@ DELIMITER ;
   
 ```sql
 DELIMITER //
-
+DROP PROCEDURE IF EXISTS generar_alumnos;
 CREATE PROCEDURE generar_alumnos(
     IN p_iteration INT, 
     IN p_prefix VARCHAR(10)
@@ -181,11 +182,11 @@ BEGIN
     DECLARE r_apellido2 VARCHAR(20);
 
     WHILE counter < p_iteration DO
-        SET r_nombre = CONCAT(p_prefix, SUBSTRING_INDEX(UUID(), '-', -1));
-        SET r_apellido1 = CONCAT(p_prefix, SUBSTRING_INDEX(UUID(), '-', -1));
-        SET r_apellido2 = CONCAT(p_prefix, SUBSTRING_INDEX(UUID(), '-', -1));
+        SET r_nombre = CONCAT(p_prefix, SUBSTRING_INDEX(UUID(), '-', 1));
+        SET r_apellido1 = CONCAT(p_prefix, SUBSTRING_INDEX(UUID(), '-', 1));
+        SET r_apellido2 = CONCAT(p_prefix, SUBSTRING_INDEX(UUID(), '-', 1));
 
-        INSERT INTO alumnos (nombre, apellido1, apellido2) VALUES (r_nombre, r_apellido1, r_apellido2);
+        INSERT INTO alumnos (nombre, apellido1, apellido2, email) VALUES (r_nombre, r_apellido1, r_apellido2, NULL);
 
         SET counter = counter + 1;
     END WHILE;
