@@ -23,7 +23,7 @@ CREATE TABLE alumnos(
   nombre VARCHAR(30),
   apellido1 VARCHAR(30),
   apellido2 VARCHAR(30),
-  email VARCHAR(10)
+  email VARCHAR(25)
 );
 ```
 
@@ -50,17 +50,19 @@ El email devuelve una dirección de correo electrónico con el siguiente formato
 ```SQL
 DROP FUNCTION IF EXISTS crear_email;
 DELIMITER //
-CREATE FUNCTION crear_email(nombre VARCHAR(30), apellido1 VARCHAR(30), apellido2 VARCHAR(30), dominio VARCHAR(30))
+CREATE FUNCTION crear_email(nombre VARCHAR(30), apellido1 VARCHAR(30), apellido2 VARCHAR(30))
 RETURNS VARCHAR(100) DETERMINISTIC
 BEGIN
     DECLARE nombre_char VARCHAR(1);
     DECLARE apellido1_char VARCHAR(3);
     DECLARE apellido2_char VARCHAR(3);
     DECLARE email VARCHAR(20);
+    DECLARE dominio VARCHAR(25);
 
     SET nombre_char = SUBSTRING(nombre, 1, 1);
     SET apellido1_char = SUBSTRING(apellido1, 1, 3);
     SET apellido2_char = SUBSTRING(apellido2, 1, 3);
+    SET dominio = 'pepito.com';
 
     SET email = LCASE(CONCAT(nombre_char, apellido1_char, apellido2_char, '@', dominio));
 RETURN eliminar_acento(email);
@@ -155,8 +157,7 @@ BEFORE INSERT ON alumnos
 FOR EACH ROW
 BEGIN
   IF NEW.email IS NULL THEN
-
-  SET NEW.email = crear_email(NEW.nombre, NEW.apellido1, NEW.apellido2, 'nghj.com');
+      SET NEW.email = crear_email(NEW.nombre, NEW.apellido1, NEW.apellido2, 'nghj.com');
   END IF;
 END //
 DELIMITER ;
