@@ -102,6 +102,6 @@ Select * from log_alumnos_eliminados;
 |  1 |        34 | 2024-05-22 23:24:35 | user14f7e4e6 | user14f7e5b5 | user14f7e60b | uuseuse@pepito.com |
 +----+-----------+---------------------+--------------+--------------+--------------+--------------------+
 1 row in set (0,00 sec)
-
+```
 
 </div>
