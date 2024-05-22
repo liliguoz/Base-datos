@@ -23,7 +23,7 @@ CREATE TABLE alumnos(
   nombre VARCHAR(30),
   apellido1 VARCHAR(30),
   apellido2 VARCHAR(30),
-  email VARCHAR(25)
+  email VARCHAR(100)
 );
 ```
 
@@ -46,38 +46,6 @@ El email devuelve una dirección de correo electrónico con el siguiente formato
 - El carácter @.
 - El dominio pasado como parámetro.
 - La dirección de email debe estar en minúsculas.
-
-```SQL
-DROP FUNCTION IF EXISTS crear_email;
-DELIMITER //
-CREATE FUNCTION crear_email(nombre VARCHAR(30), apellido1 VARCHAR(30), apellido2 VARCHAR(30))
-RETURNS VARCHAR(100) DETERMINISTIC
-BEGIN
-    DECLARE nombre_char VARCHAR(1);
-    DECLARE apellido1_char VARCHAR(3);
-    DECLARE apellido2_char VARCHAR(3);
-    DECLARE email VARCHAR(20);
-    DECLARE dominio VARCHAR(25);
-
-    SET nombre_char = SUBSTRING(nombre, 1, 1);
-    SET apellido1_char = SUBSTRING(apellido1, 1, 3);
-    SET apellido2_char = SUBSTRING(apellido2, 1, 3);
-    SET dominio = 'pepito.com';
-
-    SET email = LCASE(CONCAT(nombre_char, apellido1_char, apellido2_char, '@', dominio));
-RETURN eliminar_acento(email);
-END //
-
-DELIMITER ;
-   
-select crear_email('LILI', 'guo', 'zeng', 'gmail.com');
-+-------------------------------------------------+
-| crear_email('LILI', 'guo', 'zeng', 'gmail.com') |
-+-------------------------------------------------+
-| lguozen@gmail.com                               |
-+-------------------------------------------------+
-1 row in set (0,00 sec)
-```
 
 - También crea una función llamada __eliminar_acentos__ que reciba una cadena de caracteres y devuelva la misma cadena sin acentos. La función tendrá que reemplazar todas las vocales que tengan acento por la misma vocal pero sin acento. Por ejemplo, si la función recibe como parámetro de entrada la cadena María la función debe devolver la cadena Maria.
 
@@ -111,37 +79,33 @@ Una vez creada la tabla escriba un trigger con las siguientes características:
 ```SQL
 DROP FUNCTION IF EXISTS crear_email;
 DELIMITER //
-
-CREATE FUNCTION crear_email(
-    nombre VARCHAR(30), 
-    apellido1 VARCHAR(30), 
-    apellido2 VARCHAR(30), 
-    dominio VARCHAR(30)
-)
-RETURNS VARCHAR(100)
-DETERMINISTIC
+CREATE FUNCTION crear_email(nombre VARCHAR(30), apellido1 VARCHAR(30), apellido2 VARCHAR(30))
+RETURNS VARCHAR(100) DETERMINISTIC
 BEGIN
     DECLARE nombre_char VARCHAR(1);
     DECLARE apellido1_char VARCHAR(3);
     DECLARE apellido2_char VARCHAR(3);
-    DECLARE email VARCHAR(100);
+    DECLARE email VARCHAR(20);
+    DECLARE dominio VARCHAR(25);
 
     SET nombre_char = SUBSTRING(nombre, 1, 1);
     SET apellido1_char = SUBSTRING(apellido1, 1, 3);
     SET apellido2_char = SUBSTRING(apellido2, 1, 3);
 
-    SET email = LCASE(CONCAT(nombre_char, apellido1_char, apellido2_char, '@', dominio));
-    SET email = eliminar_acentos(email);  -- Eliminación de acentos
-
-    RETURN email;
+    SET email = LCASE(CONCAT(nombre_char, apellido1_char, apellido2_char, '@', dominio);
+RETURN eliminar_acentos(email);
 END //
 
 DELIMITER ;
-
-SELECT crear_email('ángel', 'bautísta', 'pérez', 'gmail.com');
-
+   
+select crear_email('LILI', 'guo', 'zeng', 'gmail.com');
++-------------------------------------------------+
+| crear_email('LILI', 'guo', 'zeng', 'gmail.com') |
++-------------------------------------------------+
+| lguozen@gmail.com                               |
++-------------------------------------------------+
+1 row in set (0,00 sec)
 ```
-
 - Trigger:
   - __trigger_crear_email_before_insert__.
   - Se ejecuta sobre la tabla alumnos.
