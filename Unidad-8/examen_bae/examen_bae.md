@@ -19,20 +19,19 @@ Crea una tabla llamada persona con los siguientes campos:
 - Fecha Última Donación.
 
 ```sql
- Crear la base de datos donación
-CREATE DATABASE donacion;
+DROP DATABASE IF EXISTS examen;
 
- Usar la base de datos donación
-USE donacion;
+CREATE DATABASE examen;
 
- Crear la tabla persona con los campos especificados
-CREATE TABLE persona (
+USE examen;
+
+CREATE TABLE IF NOT EXISTS persona (
     id INT AUTO_INCREMENT PRIMARY KEY,
-    identificador VARCHAR(255),
-    peso INT,
-    admitido ENUM('Si', 'No'),
-    sexo ENUM('H', 'M'),
-    fecha_ultima_donacion DATE
+    identificador VARCHAR(255) NOT NULL,
+    peso INT NOT NULL,
+    admitido ENUM('Si', 'No') NOT NULL,
+    sexo ENUM('H', 'M') NOT NULL,
+    fecha DATE NOT NULL
 );
 ```
 
