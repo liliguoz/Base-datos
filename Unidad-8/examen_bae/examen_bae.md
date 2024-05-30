@@ -1,3 +1,7 @@
+# EXAMEN 
+
+![image](https://github.com/liliguoz/Base-datos/assets/145054491/1ea7a05a-5765-4263-8d86-8ad1bc861825)
+
 ¿Sabías que la mayoría de los adultos sanos pueden ser donantes? Aunque existen ciertas condiciones que debes cumplir para realizar con éxito una donación. Descubre los requisitos básicos para donar sangre.
 
 Para la poder donar sangre se deben cumplir varias condiciones:
@@ -27,7 +31,7 @@ USE examen;
 
 CREATE TABLE IF NOT EXISTS persona (
     id INT AUTO_INCREMENT PRIMARY KEY,
-    identificador VARCHAR(255) NOT NULL,
+    identificador VARCHAR(40) NOT NULL,
     peso INT NOT NULL,
     admitido ENUM('Si', 'No') NOT NULL,
     sexo ENUM('H', 'M') NOT NULL,
@@ -39,80 +43,109 @@ Se pide:
 
 ## Procedimientos:
 
-1. Realizar un procedimiento que realice la inserción de datos aleatorios en la tabla. El procedimiento debe de recibir como parámetro de entrada, al menos, el número de registros que se desea insertar y se debe de lanzar, al menos, en dos ocasiones, para verificar su correcto funcionamiento. Los datos deben de ser aleatorios, es decir, en cada inserción de debe de auto generar o seleccionar uno al azar, de los campos requeridos.
+1. Realizar un procedimiento que realice la inserción de datos aleatorios en la tabla. 
+El procedimiento debe de recibir como parámetro de entrada, al menos, 
+el número de registros que se desea insertar y se debe de lanzar, al menos, en dos ocasiones, 
+para verificar su correcto funcionamiento. Los datos deben de ser aleatorios, es decir, 
+en cada inserción de debe de auto generar o seleccionar uno al azar, de los campos requeridos.
 
 ```sql
+DROP PROCEDURE IF EXISTS insercion_tabla;
+
 DELIMITER //
 
-CREATE PROCEDURE insertar_datos_aleatorios(IN num_registros INT)
+CREATE PROCEDURE insercion_tabla(IN iteracion INT)
 BEGIN
-    DECLARE i INT DEFAULT 0;
-    DECLARE identificador_aleatorio VARCHAR(255);
-    DECLARE peso_aleatorio INT;
-    DECLARE admitido_aleatorio ENUM('Si', 'No');
-    DECLARE sexo_aleatorio ENUM('H', 'M');
-    DECLARE fecha_aleatoria DATE;
-
-     --Loop para insertar registros aleatorios
-    WHILE i < num_registros DO
-        SET identificador_aleatorio = CONCAT('ID', LPAD(FLOOR(RAND() * 10000), 4, '0'));
-        SET peso_aleatorio = FLOOR(50 + (RAND() * 50));  Peso entre 50 y 100 kg
-        SET admitido_aleatorio = IF(RAND() > 0.5, 'Si', 'No');
-        SET sexo_aleatorio = IF(RAND() > 0.5, 'H', 'M');
-        SET fecha_aleatoria = DATE_SUB(CURDATE(), INTERVAL FLOOR(RAND() * 365) DAY);  Fecha dentro del último año
-
-        INSERT INTO persona (identificador, peso, admitido, sexo, fecha_ultima_donacion)
-        VALUES (identificador_aleatorio, peso_aleatorio, admitido_aleatorio, sexo_aleatorio, fecha_aleatoria);
-
-        SET i = i + 1;
+    DECLARE counter INT DEFAULT 0;
+    DECLARE p_identificador VARCHAR(40);
+    DECLARE p_peso INT;
+    DECLARE p_admitido ENUM('Si', 'No');
+    DECLARE p_sexo ENUM('H', 'M');
+    DECLARE p_fecha DATE;
+    DECLARE prefix VARCHAR(30);
+    
+    WHILE counter < iteracion DO
+        SET p_identificador = UUID();
+        SET p_peso = FLOOR(RAND() * (100 - 50 + 1)) + 50;
+        SET p_admitido = IF(RAND() > 0.5, 'Si', 'No');
+        SET p_sexo = IF(RAND() > 0.5, 'H', 'M');
+        SET p_fecha = DATE_SUB(CURDATE(), INTERVAL FLOOR(RAND() * 365) DAY);
+        
+        INSERT INTO persona (identificador, peso, admitido, sexo, fecha)
+        VALUES (p_identificador, p_peso, p_admitido, p_sexo, p_fecha);
+        
+        SET counter = counter + 1;
     END WHILE;
 END //
 
 DELIMITER ;
+
+CALL insercion_tabla(10);
+
+SELECT FROM persona;
+
++----+--------------------------------------+------+----------+------+------------+
+| id | identificador                        | peso | admitido | sexo | fecha      |
++----+--------------------------------------+------+----------+------+------------+
+|  1 | 337b25da-1e8a-11ef-857e-080027f4f295 |   56 | No       | M    | 2023-09-09 |
+|  2 | 337c4e9f-1e8a-11ef-857e-080027f4f295 |   62 | No       | H    | 2023-12-19 |
+|  3 | 337cbb76-1e8a-11ef-857e-080027f4f295 |   84 | No       | M    | 2023-09-11 |
+|  4 | 337d2602-1e8a-11ef-857e-080027f4f295 |   55 | No       | M    | 2023-07-17 |
+|  5 | 337d8291-1e8a-11ef-857e-080027f4f295 |   62 | Si       | M    | 2024-02-09 |
+|  6 | 337db589-1e8a-11ef-857e-080027f4f295 |   95 | Si       | H    | 2024-03-28 |
+|  7 | 337de9a2-1e8a-11ef-857e-080027f4f295 |   51 | Si       | H    | 2024-05-13 |
+|  8 | 337e3291-1e8a-11ef-857e-080027f4f295 |   66 | No       | M    | 2023-09-06 |
+|  9 | 337e647f-1e8a-11ef-857e-080027f4f295 |   52 | No       | M    | 2023-09-10 |
+| 10 | 337eb893-1e8a-11ef-857e-080027f4f295 |   52 | No       | M    | 2023-07-28 |
++----+--------------------------------------+------+----------+------+------------+
+10 rows in set (0,00 sec)
+
 ```
 
-2. Realiza un procedimiento que permita actualizar el la fecha de última donación, teniendo como parámetro de entrada el identificador de la persona, y una fecha.
+2. Realiza un procedimiento que permita actualizar el la fecha de última donación, 
+teniendo como parámetro de entrada el identificador de la persona, y una fecha.
 
 ```sql
+DROP PROCEDURE IF EXISTS actualizacion_fecha;
+
 DELIMITER //
-
-CREATE PROCEDURE actualizar_fecha_donacion(
-    IN p_identificador VARCHAR(255),
-    IN p_nueva_fecha DATE
-)
+CREATE PROCEDURE actualizacion_fecha(IN p_id INT, IN p_fecha DATE)
 BEGIN
-    UPDATE persona
-    SET fecha_ultima_donacion = p_nueva_fecha
-    WHERE identificador = p_identificador;
+    UPDATE persona SET fecha = p_fecha where id = p_id;
 END //
-
 DELIMITER ;
 
 
-CALL actualizar_fecha_donacion('ID0001', '2024-05-27');
+CALL actualizacion_fecha(1, '2030-01-01');
 
-SELECT * FROM persona WHERE identificador = 'ID0001';
+select * from persona where id = 1;
++----+--------------------------------------+------+----------+------+------------+
+| id | identificador                        | peso | admitido | sexo | fecha      |
++----+--------------------------------------+------+----------+------+------------+
+|  1 | 337b25da-1e8a-11ef-857e-080027f4f295 |   56 | No       | M    | 2030-01-01 |
++----+--------------------------------------+------+----------+------+------------+
+1 row in set (0,00 sec)
 ```
 
-3. Crea un procedimiento llamado CalcularTotalDonaciones que calcule la cantidad total de donaciones realizadas por cada persona y la almacene en una tabla llamada total_donaciones. La tabla total_donaciones debe tener dos columnas: id_persona (texto) y cantidad_total (integer).
+
+3. Crea un procedimiento llamado CalcularTotalDonaciones que calcule la cantidad total de donaciones realizadas por cada persona 
+y la almacene en una tabla llamada total_donaciones. 
+La tabla total_donaciones debe tener dos columnas: id_persona (texto) y cantidad_total (integer).
 
 ```sql
-drop table if exists total_donaciones;
-
- Crear la tabla total_donaciones
-CREATE TABLE total_donaciones (
-    id_persona VARCHAR(255) PRIMARY KEY,
-    cantidad_total INT
-);
+DROP PROCEDURE IF EXISTS CalcularTotalDonaciones;
 
 DELIMITER //
 
 CREATE PROCEDURE CalcularTotalDonaciones()
 BEGIN
-     --Eliminar los registros existentes en la tabla total_donaciones
-    TRUNCATE TABLE total_donaciones;
-    
-     Insertar los registros calculados en la tabla total_donaciones
+    DROP TABLE IF EXISTS total_donaciones;
+
+    CREATE TABLE total_donaciones (
+        id_persona VARCHAR(40) NOT NULL PRIMARY KEY,
+        cantidad_total INT NOT NULL
+    );
+
     INSERT INTO total_donaciones (id_persona, cantidad_total)
     SELECT identificador, COUNT(*) AS cantidad_total
     FROM persona
@@ -123,98 +156,141 @@ DELIMITER ;
 
 CALL CalcularTotalDonaciones();
 
-SELECT * FROM total_donaciones;
+select * from total_donaciones;
++--------------------------------------+----------------+
+| id_persona                           | cantidad_total |
++--------------------------------------+----------------+
+| 337b25da-1e8a-11ef-857e-080027f4f295 |              1 |
+| 337c4e9f-1e8a-11ef-857e-080027f4f295 |              1 |
+| 337cbb76-1e8a-11ef-857e-080027f4f295 |              1 |
+| 337d2602-1e8a-11ef-857e-080027f4f295 |              1 |
+| 337d8291-1e8a-11ef-857e-080027f4f295 |              1 |
+| 337db589-1e8a-11ef-857e-080027f4f295 |              1 |
+| 337de9a2-1e8a-11ef-857e-080027f4f295 |              1 |
+| 337e3291-1e8a-11ef-857e-080027f4f295 |              1 |
+| 337e647f-1e8a-11ef-857e-080027f4f295 |              1 |
+| 337eb893-1e8a-11ef-857e-080027f4f295 |              1 |
++--------------------------------------+----------------+
+10 rows in set (0,00 sec)
 ```
 
 4. Crea un procedimiento que me permita eliminar una persona de la tabla total_donaciones.
 
 ```sql
+DROP PROCEDURE IF EXISTS eliminar_persona;
+
 DELIMITER //
-
-CREATE PROCEDURE EliminarPersonaTotalDonaciones(
-    IN p_identificador VARCHAR(255)
-)
+CREATE PROCEDURE eliminar_persona(IN p_id VARCHAR(40))
 BEGIN
-    DELETE FROM total_donaciones
-    WHERE id_persona = p_identificador;
+    DELETE FROM total_donaciones WHERE id_persona = p_id;
 END //
-
 DELIMITER ;
 
-CALL EliminarPersonaTotalDonaciones('ID0001');
+call eliminar_persona('337b25da-1e8a-11ef-857e-080027f4f295');
 
-SELECT * FROM total_donaciones WHERE id_persona = 'ID0001';
+select * from total_donaciones;
++--------------------------------------+----------------+
+| id_persona                           | cantidad_total |
++--------------------------------------+----------------+
+| 337c4e9f-1e8a-11ef-857e-080027f4f295 |              1 |
+| 337cbb76-1e8a-11ef-857e-080027f4f295 |              1 |
+| 337d2602-1e8a-11ef-857e-080027f4f295 |              1 |
+| 337d8291-1e8a-11ef-857e-080027f4f295 |              1 |
+| 337db589-1e8a-11ef-857e-080027f4f295 |              1 |
+| 337de9a2-1e8a-11ef-857e-080027f4f295 |              1 |
+| 337e3291-1e8a-11ef-857e-080027f4f295 |              1 |
+| 337e647f-1e8a-11ef-857e-080027f4f295 |              1 |
+| 337eb893-1e8a-11ef-857e-080027f4f295 |              1 |
++--------------------------------------+----------------+
+9 rows in set (0,00 sec)
 ```
 
 ## Funciones:
 
-1. Realiza una función que determine si una persona almacenada en la tabla persona puede realizar una donación. Para ello la función recibe como parámetro de entrada el identificador de esta persona, y una fecha de donación. Revisa las condiciones para que una persona pueda o no donar. Posteriormente actualice el valor de la última donación de la persona indicada con el parámetro de entrada.
+1. Realiza una función que determine si una persona almacenada en la tabla persona puede realizar una donación. 
+Para ello la función recibe como parámetro de entrada el identificador de esta persona, y una fecha de donación. 
+Revisa las condiciones para que una persona pueda o no donar. Posteriormente actualice el valor de la última donación de la persona indicada con el parámetro de entrada.
 
 ```sql
 DELIMITER //
 
-CREATE FUNCTION PuedeDonar(
-    p_identificador VARCHAR(255),
-    p_fecha_donacion DATE
-) RETURNS BOOLEAN
+CREATE FUNCTION apto_donar(p_id INT, p_fecha_donacion DATE) RETURNS BOOLEAN DETERMINISTIC
 BEGIN
-    DECLARE v_peso INT;
-    DECLARE v_sexo ENUM('H', 'M');
-    DECLARE v_fecha_ultima_donacion DATE;
-    DECLARE v_dias_desde_ultima_donacion INT;
+    DECLARE p_sexo ENUM('H', 'M');
+    DECLARE p_peso INT;
+    DECLARE p_dias_ultima_donacion INT;
+    DECLARE p_fecha_ultima_donacion DATE;
 
-     --Obtener los detalles de la persona
-    SELECT peso, sexo, fecha_ultima_donacion
-    INTO v_peso, v_sexo, v_fecha_ultima_donacion
-    FROM persona
-    WHERE identificador = p_identificador;
+    -- Obtener peso, sexo y fecha de la última donación de la persona
+    SELECT peso, sexo, fecha 
+    INTO p_peso, p_sexo, p_fecha_ultima_donacion 
+    FROM persona 
+    WHERE id = p_id;
 
-     --Verificar si la persona cumple con los requisitos de peso
-    IF v_peso < 50 THEN
+    -- Verificar si el peso es menor a 50 kg
+    IF p_peso < 50 THEN
         RETURN FALSE;
     END IF;
 
-     --Calcular los días desde la última donación
-    SET v_dias_desde_ultima_donacion = DATEDIFF(p_fecha_donacion, v_fecha_ultima_donacion);
+    -- Calcular los días desde la última donación
+    SET p_dias_ultima_donacion = DATEDIFF(p_fecha_donacion, p_fecha_ultima_donacion);
 
-     Verificar el tiempo mínimo desde la última donación
-    IF (v_sexo = 'H' AND v_dias_desde_ultima_donacion < 90) OR 
-       (v_sexo = 'M' AND v_dias_desde_ultima_donacion < 120) THEN
+    -- Verificar el tiempo desde la última donación según el sexo
+    IF (p_sexo = 'H' AND p_dias_ultima_donacion < 90) OR 
+       (p_sexo = 'M' AND p_dias_ultima_donacion < 120) THEN
         RETURN FALSE;
     END IF;
 
-     --Actualizar la fecha de última donación si cumple con los requisitos
+    -- Actualizar la fecha de la última donación
     UPDATE persona
-    SET fecha_ultima_donacion = p_fecha_donacion
-    WHERE identificador = p_identificador;
+    SET fecha = p_fecha_donacion
+    WHERE id = p_id;
 
     RETURN TRUE;
 END //
 
 DELIMITER ;
+
+SELECT apto_donar(2, '2023-12-19');
++-----------------------------+
+| apto_donar(2, '2023-12-19') |
++-----------------------------+
+|                           0 |
++-----------------------------+
+1 row in set (0,00 sec)
+
+SELECT apto_donar(3, '2023-09-11');
++-----------------------------+
+| apto_donar(3, '2023-09-11') |
++-----------------------------+
+|                           0 |
++-----------------------------+
+1 row in set (0,00 sec)
+
+
 ```
    	 
 2. Realiza una función que determine que persona es la que más donaciones ha realizado.
 
 ```sql
 DELIMITER //
-
-CREATE FUNCTION PersonaConMasDonaciones() RETURNS VARCHAR(255)
+DROP FUNCTION IF EXISTS maximo_donador;
+CREATE FUNCTION maximo_donador() RETURNS VARCHAR(100) DETERMINISTIC 
 BEGIN
-    DECLARE v_id_persona VARCHAR(255);
-
-     --Encontrar la persona con más donaciones
-    SELECT id_persona
-    INTO v_id_persona
-    FROM donaciones
-    GROUP BY id_persona
-    ORDER BY COUNT(*) DESC
-    LIMIT 1;
-
-    RETURN v_id_persona;
+    DECLARE p_identificador VARCHAR(100);
+    SELECT id_persona INTO p_identificador FROM total_donaciones ORDER BY cantidad_total DESC LIMIT 1; 
+    RETURN p_identificador;
 END //
-
 DELIMITER ;
+
+select maximo_donador();
++--------------------------------------+
+| maximo_donador()                     |
++--------------------------------------+
+| 337c4e9f-1e8a-11ef-857e-080027f4f295 |
++--------------------------------------+
+1 row in set (0,00 sec)
+
 ```
 
 
@@ -223,58 +299,67 @@ DELIMITER ;
 1. Realiza un trigger que actualiza total_donaciones con cada una de las inserciones que se realicen en la tabla Persona.
 
 ```sql
-
- Crear la tabla total_donaciones si no existe
-CREATE TABLE IF NOT EXISTS total_donaciones (
-    id_persona VARCHAR(255) PRIMARY KEY,
-    cantidad_total INT
-);
-
 DELIMITER //
-
- --Crear el trigger para actualizar total_donaciones después de insertar en persona
-CREATE TRIGGER after_insert_persona
+DROP TRIGGER IF EXISTS actualizacion_persona;
+CREATE TRIGGER actualizacion_persona
 AFTER INSERT ON persona
 FOR EACH ROW
 BEGIN
-    DECLARE v_count INT;
+    IF NEW.identificador IN (SELECT identificador FROM persona) THEN
+        UPDATE total_donaciones SET cantidad_total = cantidad_total + 1 WHERE id_persona = NEW.identificador;
+    ELSE
+        INSERT INTO total_donaciones(id_persona, cantidad_total) VALUES (NEW.identificador, 1);
+    END IF;
+END;//
+DELIMITER ; 
 
-     --Contar el número de donaciones actuales de la persona en la tabla persona
-    SELECT COUNT(*)
-    INTO v_count
-    FROM persona
-    WHERE identificador = NEW.identificador;
+CALL insercion_tabla(10);
 
-     --Insertar o actualizar la tabla total_donaciones con la cantidad total de donaciones
-    INSERT INTO total_donaciones (id_persona, cantidad_total)
-    VALUES (NEW.identificador, v_count)
-    ON DUPLICATE KEY UPDATE cantidad_total = v_count;
-END //
+select * from total_donaciones where id_persona = '337c4e9f-1e8a-11ef-857e-080027f4f295';
++--------------------------------------+----------------+
+| id_persona                           | cantidad_total |
++--------------------------------------+----------------+
+| 337c4e9f-1e8a-11ef-857e-080027f4f295 |              1 |
++--------------------------------------+----------------+
+1 row in set (0,00 sec)
 
-DELIMITER ;
+INSERT INTO persona(identificador, peso, admitido, sexo, fecha) VALUES('337c4e9f-1e8a-11ef-857e-080027f4f295', 85, 'Si', 'M', NOW());
 
- --Insertar registros en la tabla persona para verificar el trigger
-INSERT INTO persona (identificador, peso, admitido, sexo, fecha_ultima_donacion)
-VALUES ('ID0001', 60, 'Si', 'H', '2024-01-01'),
-       ('ID0002', 55, 'Si', 'M', '2024-02-01');
+select * from total_donaciones where id_persona = '337c4e9f-1e8a-11ef-857e-080027f4f295';
++--------------------------------------+----------------+
+| id_persona                           | cantidad_total |
++--------------------------------------+----------------+
+| 337c4e9f-1e8a-11ef-857e-080027f4f295 |              2 |
++--------------------------------------+----------------+
+1 row in set (0,00 sec)
 
- --Verificar el contenido de la tabla total_donaciones
-SELECT * FROM total_donaciones;
 ```
 
 2. Realiza un trigger que elimine todos los registros en la tabla persona cuando se elimine un registro de la tabla total_donaciones.
 
 ```sql
 DELIMITER //
-
-CREATE TRIGGER after_delete_total_donaciones
+DROP TRIGGER IF EXISTS eliminar_registros;
+CREATE TRIGGER eliminar_registros
 AFTER DELETE ON total_donaciones
 FOR EACH ROW
 BEGIN
-     --Eliminar todos los registros de la persona correspondiente en la tabla persona
-    DELETE FROM persona
-    WHERE identificador = OLD.id_persona;
+    DELETE FROM persona WHERE identificador = OLD.id_persona;
 END //
-
 DELIMITER ;
+
+select * from persona where identificador = '337c4e9f-1e8a-11ef-857e-080027f4f295';
++----+--------------------------------------+------+----------+------+------------+
+| id | identificador                        | peso | admitido | sexo | fecha      |
++----+--------------------------------------+------+----------+------+------------+
+|  2 | 337c4e9f-1e8a-11ef-857e-080027f4f295 |   62 | No       | H    | 2023-12-19 |
+| 21 | 337c4e9f-1e8a-11ef-857e-080027f4f295 |   85 | Si       | M    | 2024-05-30 |
++----+--------------------------------------+------+----------+------+------------+
+
+DELETE FROM total_donaciones where id_persona = '337c4e9f-1e8a-11ef-857e-080027f4f295';
+
+select * from persona where identificador = '337c4e9f-1e8a-11ef-857e-080027f4f295';
+Empty set (0,00 sec)
+
+
 ```
