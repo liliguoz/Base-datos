@@ -189,4 +189,100 @@ La instrucción `SET fecha_aleatoria = DATE_SUB(CURDATE(), INTERVAL FLOOR(RAND()
 
 Esto es útil para generar fechas aleatorias en aplicaciones que requieren datos de prueba o simulaciones dentro de un rango específico de tiempo.
 
-# 
+# DATEDIFF
+La función `DATEDIFF` en MySQL se utiliza para calcular la diferencia en días entre dos fechas. Es muy útil para comparar fechas y calcular el número de días entre ellas.
+
+### Sintaxis de `DATEDIFF`
+
+```sql
+DATEDIFF(expr1, expr2)
+```
+
+- **`expr1`**: La primera fecha.
+- **`expr2`**: La segunda fecha.
+
+La función devuelve la diferencia en días entre `expr1` y `expr2`. El resultado es `expr1 - expr2`.
+
+### Ejemplos de Uso
+
+#### Ejemplo 1: Diferencia en días entre dos fechas específicas
+
+```sql
+SELECT DATEDIFF('2024-05-30', '2024-01-01') AS dias_diferencia;
+```
+
+Este comando devuelve la diferencia en días entre el 30 de mayo de 2024 y el 1 de enero de 2024.
+
+#### Ejemplo 2: Diferencia en días entre una fecha y la fecha actual
+
+```sql
+SELECT DATEDIFF(CURDATE(), '2024-01-01') AS dias_diferencia;
+```
+
+Este comando devuelve la diferencia en días entre la fecha actual (`CURDATE()`) y el 1 de enero de 2024.
+
+#### Ejemplo 3: Uso en una consulta de tabla
+
+Supongamos que tienes una tabla `pedidos` con una columna `fecha_pedido` y deseas calcular cuántos días han pasado desde cada pedido hasta la fecha actual:
+
+```sql
+SELECT id_pedido, fecha_pedido, DATEDIFF(CURDATE(), fecha_pedido) AS dias_desde_pedido
+FROM pedidos;
+```
+
+### Incorporación en un Procedimiento Almacenado
+
+Supongamos que quieres usar `DATEDIFF` en un procedimiento almacenado para calcular la cantidad de días entre la fecha de hoy y una fecha aleatoria generada dentro del último año:
+
+```sql
+DELIMITER //
+
+CREATE PROCEDURE insertar_persona_aleatoria()
+BEGIN
+    DECLARE p_identificador VARCHAR(36);
+    DECLARE p_peso INT;
+    DECLARE p_admitido ENUM('Si', 'No');
+    DECLARE p_sexo ENUM('H', 'M');
+    DECLARE p_fecha DATE;
+    DECLARE p_dias_desde_hoy INT;
+
+    -- Generar identificador aleatorio único
+    SET p_identificador = UUID();
+
+    -- Generar peso aleatorio entre 50 y 100 kg
+    SET p_peso = FLOOR(50 + (RAND() * 50));
+
+    -- Generar valor admitido aleatorio
+    SET p_admitido = IF(RAND() > 0.5, 'Si', 'No');
+
+    -- Generar sexo aleatorio
+    SET p_sexo = IF(RAND() > 0.5, 'H', 'M');
+
+    -- Generar fecha aleatoria dentro del último año
+    SET p_fecha = DATE_SUB(CURDATE(), INTERVAL FLOOR(RAND() * 365) DAY);
+
+    -- Calcular días desde hoy hasta la fecha generada
+    SET p_dias_desde_hoy = DATEDIFF(CURDATE(), p_fecha);
+
+    -- Insertar datos en la tabla
+    INSERT INTO personas (identificador, peso, admitido, sexo, fecha)
+    VALUES (p_identificador, p_peso, p_admitido, p_sexo, p_fecha);
+
+    -- Mostrar el resultado (opcional, solo para verificación)
+    SELECT p_identificador, p_fecha, p_dias_desde_hoy;
+END //
+
+DELIMITER ;
+```
+
+### Llamada al Procedimiento
+
+Llama al procedimiento para insertar una nueva fila y calcular la diferencia de días:
+
+```sql
+CALL insertar_persona_aleatoria();
+```
+
+### Resumen
+
+La función `DATEDIFF` es útil para calcular la diferencia en días entre dos fechas. Puede ser utilizada en consultas SQL, procedimientos almacenados y otras operaciones que necesiten comparar fechas en MySQL.
