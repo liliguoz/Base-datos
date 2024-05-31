@@ -62,7 +62,6 @@ BEGIN
     DECLARE p_admitido ENUM('Si', 'No');
     DECLARE p_sexo ENUM('H', 'M');
     DECLARE p_fecha DATE;
-    DECLARE prefix VARCHAR(30);
     
     WHILE counter < iteracion DO
         SET p_identificador = UUID();
@@ -83,7 +82,6 @@ DELIMITER ;
 CALL insercion_tabla(10);
 
 SELECT FROM persona;
-
 +----+--------------------------------------+------+----------+------+------------+
 | id | identificador                        | peso | admitido | sexo | fecha      |
 +----+--------------------------------------+------+----------+------+------------+
@@ -99,7 +97,6 @@ SELECT FROM persona;
 | 10 | 337eb893-1e8a-11ef-857e-080027f4f295 |   52 | No       | M    | 2023-07-28 |
 +----+--------------------------------------+------+----------+------+------------+
 10 rows in set (0,00 sec)
-
 ```
 
 2. Realiza un procedimiento que permita actualizar el la fecha de última donación, 
